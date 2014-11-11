@@ -1,0 +1,7 @@
+td.dungen{
+  background-color: D6E5FF;
+}
+table#dungeon_key{ float:right;
+                  width:25%; }
+div#dungeon{float:left;
+           width: 74%;}
