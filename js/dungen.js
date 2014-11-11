@@ -20,16 +20,20 @@ var DG = {
 
   
   // Randomization Utilities -----------------------------------------------------------------
-  rollDie: function(min,max){return Math.floor((Math.random() * (max-min)) + min + 1);}, 
+  rollDie: function(min,size){return Math.floor(Math.random() * (size)) + min ;}, 
   rollOne: function(){ return Math.random() < 0.16667; },
   rollTwo: function(){ return Math.random() < 0.3334; },
   rollThree: function(){ return Math.random() <= 0.5; },
   rollFour: function() {return Math.random() < 0.66667;},
   rollFive: function() {return Math.random() < 0.83334;},
-  
+  rollOther: function(min,max,excludedRoll){
+    var roll = excludedRoll;
+    while (roll == excludedRoll){ roll = DG.rollDie(min,max);}
+    return roll;
+  },
   
   // Nodes and Linkage ------------------------------------------------------------------------
-  linkStrats: {}, // complex enough for a separate breakout below
+  linkStrats: {},  // complex enough for a separate breakout below
   allRoomIds: function(){ 
      var roomIds = [];
      DG.data.nodes.forEach(function(node){
