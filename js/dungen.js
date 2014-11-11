@@ -2,16 +2,42 @@
 // 
 
 var DG = {
-  container:  document.getElementById('dungeon'), 
+  // Arguments the Vis.Network creation call ----------------------------------------------
+  container:  document.getElementById('dungeon'),
+  drawOptions: { dataManipulation: true,
+                 height: '90%'
+  },
+  data: { nodes:[],
+          edges:[],},
+  
+  // Shared variables
   roomCount: 0,
   edgeCount: 0,
   minRooms: 5,
   maxRooms: 40,
   dungeonLevel: 0,
   monsterTreasureMultiplier: 1,
-  data: { nodes:[],
-          edges:[],},
-  makeNode: function(id,label) { return { id: id, 
+
+  
+  // Randomization Utilities -----------------------------------------------------------------
+  rollDie: function(min,max){return Math.floor((Math.random() * (max-min)) + min + 1);}, 
+  rollOne: function(){ return Math.random() < 0.16667; },
+  rollTwo: function(){ return Math.random() < 0.3334; },
+  rollThree: function(){ return Math.random() <= 0.5; },
+  rollFour: function() {return Math.random() < 0.66667;},
+  rollFive: function() {return Math.random() < 0.83334;},
+  
+  
+  // Nodes and Linkage ------------------------------------------------------------------------
+  linkStrats: {}, // complex enough for a separate breakout below
+  allRoomIds: function(){ 
+     var roomIds = [];
+     DG.data.nodes.forEach(function(node){
+       roomIds.push(node.id);
+     });
+     return roomIds;
+  },
+    makeNode: function(id,label) { return { id: id, 
                                           shape: "box", 
                                           label: label, 
                                           title: DG.makeTitle(DG.dungeonLevel), 
@@ -22,6 +48,43 @@ var DG = {
   makeEdge: function(startNode,endNode) { 
     return {from: startNode, to: endNode, label: this.randomEdgeLabel()};
   },
+  linksOnNode: function(nodeId) { return edges = DG.data.edges.filter(function( edge ) {
+   return (edge.from == nodeId || edge.to == nodeId); });
+  },
+  linkNodes: function(a,b){DG.data.edges.push(DG.makeEdge(a,b));},
+  setRandomRoomCount: function(){
+    DG.roomCount = DG.rollDie(DG.minRooms, DG.maxRooms);
+	return DG.roomCount;
+  },
+  makeRooms: function(){ 
+    for(var i = 0; i < DG.roomCount; i+=1){
+      DG.data.nodes[i] = DG.makeNode(i, DG.nameNode(i+1) );
+    }
+  },
+  shuffle: function(array) {
+      // Mike Bostock's Fisher Yates shuffle implementation
+      var m = array.length, t, i;
+      // While there remain elements to shuffle…
+      while (m) {
+        // Pick a remaining element…
+        i = Math.floor(Math.random() * m--);
+        // And swap it with the current element.
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+      }
+      return array;
+  },
+  drawOne: function(list){ return list[DG.rollDie(0, list.length -1)];}, 
+  //return DG.shuffle(list).pop();},
+  nameNode: function(nodeNum){ 
+    return "" + (nodeNum) + ": " + DG.randomNodeLabel()},  
+  randomNodeLabel: function(){
+    return this.drawOne(this.stock.nodeLabels)},
+  randomEdgeLabel: function(){
+    return this.drawOne(this.stock.edgeLabels)},
+    
+  // Node Content Randomization section ---------------------------------------------
   makeTitle: function(dungeonLevel){ 
     var title = "";
     var treasureRoll = 1;
@@ -112,50 +175,8 @@ var DG = {
   // will tie to dungeonLevel later
     return "Tp: " + DG.drawOne(DG.stock.traps) + "<br/>";
   },
-  rollDie: function(min,max){return Math.floor((Math.random() * (max-min)) + min + 1);}, 
-  rollOne: function(){ return Math.random() < 0.16667; },
-  rollTwo: function(){ return Math.random() < 0.3334; },
-  rollThree: function(){ return Math.random() <= 0.5; },
-  rollFour: function() {return Math.random() < 0.66667;},
-  rollFive: function() {return Math.random() < 0.83334;},
   
-  linksOnNode: function(nodeId) { return edges = DG.data.edges.filter(function( edge ) {
-   return (edge.from == nodeId || edge.to == nodeId); });
-  },
-  setRandomRoomCount: function(){
-    DG.roomCount = DG.rollDie(DG.minRooms, DG.maxRooms);
-	return DG.roomCount;
-  },
-  makeRooms: function(){ 
-    for(var i = 0; i < DG.roomCount; i+=1){
-      DG.data.nodes[i] = DG.makeNode(i, DG.nameNode(i+1) );
-    }
-  },
-  shuffle: function(array) {
-      // Mike Bostock's Fisher Yates shuffle implementation
-      var m = array.length, t, i;
-      // While there remain elements to shuffle…
-      while (m) {
-        // Pick a remaining element…
-        i = Math.floor(Math.random() * m--);
-        // And swap it with the current element.
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
-      }
-      return array;
-  },
-  drawOne: function(list){ return list[DG.rollDie(0, list.length -1)];}, 
-  //return DG.shuffle(list).pop();},
-  nameNode: function(nodeNum){ 
-    return "" + (nodeNum) + ": " + DG.randomNodeLabel()},  
-  randomNodeLabel: function(){
-    return this.drawOne(this.stock.nodeLabels)},
-  randomEdgeLabel: function(){
-    return this.drawOne(this.stock.edgeLabels)},
-  drawOptions: { dataManipulation: true,
-            height: '90%'
-  },
+  // Dungeon Key table -------------------------------------------------
   fillKey: function() { 
   var dungeonKey = "<thead>\n<tr><th>Location</th><th>Description</th></tr>\n</thead><tbody>"
   var tl = "<tr><td class='dungen'>";
@@ -174,11 +195,12 @@ var DG = {
   }
 };
 
+// link strategies
 DG.linkStrats = {
-  branchLink: function() {
-    var nodes = DG.data.nodes.length;
+  branchLink: function(roomIds) {
+    var nodes = roomIds.length;
     var linkedNodes = [];
-    var unlinkNodes =[];
+    var unlinkNodes =roomIds.slice();
     for (var i = 0; i < nodes; i +=1) {
       unlinkedNodes.push(i);
     }
@@ -189,51 +211,50 @@ DG.linkStrats = {
     var newEdge = {}
     while (unlinkedNodes.length > 0 ){
        currentNodeID = unlinkedNodes.pop();
-       
-       newEdge = DG.makeEdge(currentNodeID, toLink);
-       DG.data.edges.push(newEdge);
+       DG.linkNodes(currentNodeID, toLink);
        linkedNodes.push(currentNodeID);
        toLink = linkedNodes[DG.rollDie(0,linkedNodes.length-1)];        
     }
   },
-  linearLink: function(){
-    for (var i = 0; i < DG.roomCount -1; i+=1){
+  linearLink: function(roomIds){
+    for (var i = 0; i < roomIds.length -1; i+=1){
       var startEdge = i;
       var endEdge = startEdge + 1;
-      DG.data.edges[i] = DG.makeEdge(startEdge,endEdge);
+      DG.linkNodes(startEdge,endEdge);
     }
   },
   randomLink: function(linksToMake){
     for(var i = 0; i < linksToMake; i+=1){
      var startEdge = DG.rollDie(0,DG.roomCount-1);
      var endEdge = DG.rollDie(0,DG.roomCount-1);
-     DG.data.edges.push( DG.makeEdge(startEdge,endEdge));}
+     DG.linkNodes(startEdge,endEdge);}
   },
   trianglesLink: function(){
    var nodesCount = DG.data.nodes.length;
-   var unlinkedNodes = [];
-   DG.data.nodes.forEach(function(node){
-     unlinkedNodes.push(node.id);
-   });
+   var unlinkedNodes = DG.allRoomIds();
+   var linkedNodes = [];
+   
+
    var triangle = [];
    var triangles = [];
-   while(unlinkedNodes.length > 10){
+   while(unlinkedNodes.length > 2){
       triangle = unlinkedNodes.splice(0,3);
-      DG.data.edges.push( DG.makeEdge(triangle[0],triangle[1]));
-      DG.data.edges.push( DG.makeEdge(triangle[0],triangle[2]));
-      DG.data.edges.push( DG.makeEdge(triangle[1],triangle[2]));
+      linkedNodes += triangle;
+      DG.linkNodes(triangle[0],triangle[1]);
+      DG.linkNodes(triangle[0],triangle[2]);
+      DG.linkNodes(triangle[1],triangle[2]);
       triangles.push(triangle);
    }
    for(var i = triangles.length -1; i > 0; i-= 1){
-     DG.data.edges.push( DG.makeEdge(triangles[i][0],triangles[i-1][1]));
-     DG.data.edges.push( DG.makeEdge(triangles[i][0],triangles[i-1][2]));
-     DG.data.edges.push( DG.makeEdge(triangles[i][1],triangles[i-1][2]));
+     DG.linkNodes(triangles[i][0],triangles[i-1][1]);
+     //DG.linkNodes(triangles[i][0],triangles[i-1][2]);
+     //DG.linkNodes(triangles[i][1],triangles[i-1][2]);
    }
    
-   unlinkedNodes.map(function(node){DG.makeEdge(node,DG.shuffle(triangles).pop()[DG.rollDie(0,2)])});
+   unlinkedNodes.map(function(node){DG.linkNodes(node,node - 1)});
    
   },
-  gridLink: function(){
+  gridLink: function(){ // INCOMPLETE
     var rowLength = Math.floor(Math.sqrt(DG.roomCount)) + DG.rollDie(0,3);
 	var gridArray = [[]];
 	var gridRow = 0;
