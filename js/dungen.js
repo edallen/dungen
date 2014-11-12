@@ -20,7 +20,9 @@ var DG = {
 
   
   // Randomization Utilities -----------------------------------------------------------------
-  rollDie: function(min,size){return Math.floor(Math.random() * (size)) + min ;}, 
+  rollDie: function(min,size){ 
+    var roll = Math.floor(Math.random() * (size)) + min ;
+    return roll; }, 
   rollOne: function(){ return Math.random() < 0.16667; },
   rollTwo: function(){ return Math.random() < 0.3334; },
   rollThree: function(){ return Math.random() <= 0.5; },
@@ -42,10 +44,19 @@ var DG = {
      return roomIds;
   },
     makeNode: function(id,label) { return { id: id, 
-                                          shape: "box", 
-                                          label: label, 
-                                          title: DG.makeTitle(DG.dungeonLevel), 
-                                          group: ""};
+                                            shape: "box",
+                                            fontSize: 12,
+                                            color: {
+                                              background: 'lightgray',
+                                              border: 'gray',
+                                              highlight: {
+                                                background: 'lightgray',
+                                                border: 'black'
+                                              }
+                                            },                                          
+                                            label: label, 
+                                            title: DG.makeTitle(DG.dungeonLevel), 
+                                            group: ""};
 
 
   },
@@ -120,10 +131,9 @@ var DG = {
     }
     if (monsterLevel > 5) {
        monsterLevel = 5; }
-    if (monsterLevel == dungeonLevel) { monsterCount =+ DG.rollDie(0,8); }  
-    if (monsterLevel == dungeonLevel + 1){ monsterCount =+ DG.rollDie(0,3); }
-    if (monsterLevel == dungeonLevel + 2){ monsterCount =+ DG.rollDie(0,1); }
-    
+    if (monsterLevel == dungeonLevel) { monsterCount += DG.rollDie(0,8); }  
+    if (monsterLevel == dungeonLevel + 1){ monsterCount += DG.rollDie(0,3); }
+    if (monsterLevel == dungeonLevel + 2){ monsterCount += DG.rollDie(0,1); }
     // have a chance of a large horde of lower monsters
     if ( monsterLevel == dungeonLevel && DG.rollTwo() && monsterLevel > 0 ){ 
       monsterLevel = monsterLevel - 1; 
@@ -149,6 +159,7 @@ var DG = {
     // extract this
     newMonsterTreasureMultiplier = (monsterLevel * (monsterCount^0.75));
     DG.monsterTreasureMultiplier = Math.max(DG.monsterTreasureMultiplier,newMonsterTreasureMultiplier);
+    console.log ("monsterCount before string assembly " + monsterCount);
     var monsters = "M: " +  monsterCount + " " + monsterType + "<br/>";
   
   return monsters;
@@ -196,6 +207,7 @@ var DG = {
    //This function will render out the labels and descriptions from 
    //DG.data.nodes into table#dungeon_key
    document.getElementById("dungeon_key").innerHTML = dungeonKey
+   document.getElementById("dungeon_key_for_printing").innerHTML = dungeonKey
   }
 };
 
@@ -230,15 +242,13 @@ DG.linkStrats = {
   randomLink: function(linksToMake){
     for(var i = 0; i < linksToMake; i+=1){
      var startEdge = DG.rollDie(0,DG.roomCount-1);
-     var endEdge = DG.rollDie(0,DG.roomCount-1);
+     var endEdge = DG.rollOther(0,DG.roomCount-1,startEdge);
      DG.linkNodes(startEdge,endEdge);}
   },
-  trianglesLink: function(){
-   var nodesCount = DG.data.nodes.length;
-   var unlinkedNodes = DG.allRoomIds();
+  trianglesLink: function(roomIds){
+   var nodesCount = roomIds.length;
+   var unlinkedNodes = roomIds.slice();
    var linkedNodes = [];
-   
-
    var triangle = [];
    var triangles = [];
    while(unlinkedNodes.length > 2){

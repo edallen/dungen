@@ -12,10 +12,12 @@ DG.stock = {
   "centipede", 
   "stirge",
   "skeleton",
+  "orc",
+  "bandit",
+  "novice adventurer"
   ], //level 1
   ["zombie",
   "spirit",
-  "orc",
   "ooze",
   "jelly",
   "shadow",
@@ -24,13 +26,13 @@ DG.stock = {
   "crawling hand",
   "man ape",
   "ape man",
-  "bandit",
   "hobgoblin",
   "lizard",
   "lizard man",
   "berserker",
   "gnoll",
   "giant ant",
+  "adventurer",
   ], //level 2
   ["ghast",
   "giant weasel",
@@ -49,9 +51,10 @@ DG.stock = {
   "ogre",
   "slime",
   "demonic minion",
-  "devilspawn",
+  "devil spawn",
   "imp",
-  "wight"], //level 3
+  "wight",
+  "veteran adventurer"], //level 3
   [ "lesser demon",
   "servant devil",
   "cockatrice",
@@ -68,7 +71,8 @@ DG.stock = {
   "animated statue",
   "wraith",
   "mummy",
-  "gargoyle"], // level 4
+  "gargoyle",
+  "heroic adventurer"], // level 4
   ["medusa",
   "robot",
   "troll",
@@ -78,11 +82,13 @@ DG.stock = {
   "stalker",
   "wyvern",
   "dinosaur",
+  "mental squidman",
   "demon",
   "devil",
   "subadult or adult dragon",
   "ghost",
-  "golem"], //level 5
+  "golem",
+  "grizzled adventurer"], //level 5
   ["hydra",
   "demon lord",
   "devil prince",
@@ -94,7 +100,8 @@ DG.stock = {
   "basilisk",
   "vampire",
   "giant worm",
-  "old or very old dragon"] //level 6
+  "old or very old dragon",
+  "legendary adventurer"] //level 6
   ],
   treasure: [{label: "gold", value: 1},
              {label: "silver", value: 0.1},
@@ -110,8 +117,8 @@ DG.stock = {
              {label: "x 2000 GP gem", value: 2000}//,
              //{label: "jewelry", value: "roll", minValue: 10, maxValue: 10000}
             ],
-  magicItems: [ "potion",
-                "potion",
+  magicItems: [ "healing potion",
+                "healing potion",
                 "potion",
                 "potion",
                 "potion",
@@ -177,12 +184,12 @@ DG.stock = {
             "magic obstruction trap",
             "antimagic trap",
             "magic area damage trap",
-            "weird magic trap",
+            "weird magic trap"
             ],
   triggers:[ 
             "floor plate",
             "tripwire",
-  
+            ""
   
   ],
   disarms: [ 
