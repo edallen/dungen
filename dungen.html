@@ -10,21 +10,21 @@
   <p> Plans for expansion blogged about this project at 
     <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></p>
   <p> The edit button is only useful for removing connecting edges currently.</p>
-  <button id="redraw">Redraw</button>
-  <select> id="level">
-    <option>Level 1</option>
-    <option>Level 2</option>
-    <option>Level 3</option>
-    <option>Level 4</option>
-    <option>Level 5</option>
-    <option>Level 6</option>
+
+  <select id="level">
+    <option value = "0">Level 1</option>
+    <option value = "1">Level 2</option>
+    <option value = "2">Level 3</option>
+    <option value = "3">Level 4</option>
+    <option value = "4">Level 5</option>
+    <option value = "5">Level 6</option>
   </select>
-  <select> id="size">
-    <option>small (5 - 10)</option>
-    <option>medium (11 - 20)</option>
-    <option>large (21 - 40)</option>
-    <option>huge (41 - 60)</option>
-    <option>enormous (61 - 100)</option>
+  <select id="size">
+    <option value = "5,10">small (5 - 10)</option>
+    <option value = "11,20">medium (11 - 20)</option>
+    <option value = "21,40">large (21 - 40)</option>
+    <option value = "41,60">huge (41 - 60)</option>
+    <option value = "61,100">enormous (61 - 100)</option>
   </select>
   <select id="style">
     <option>Branched</option>
@@ -32,20 +32,23 @@
     <option>Mixed</option>
     <option>Grid</option>
   </select>
-  <button id="regenerate">Regenerate</button>
-  <button id="repopulate">Repopulate</button>
-  <button id="relabel">Relabel</button>
+  <button id="regenerate">Generate</button>
+    <button id="redraw">Redraw</button>
+  <button id="repopulate" style = "display:none">Repopulate</button>
+  <button id="relabel" style = "display:none">Relabel</button>
   <button id="save">Save</button>
   <input id="name" placeholder="Name"></input> 
   <select id="saved">
      <option>Saved Dungeons</option>
   </select>
   <button id="load">Load</button>
-  <button>Position Table for Printing</button>
-  <table id="dungeon_key"></table>
+  <button id="move_table">Move Table for Printing</button>
   <div id="dungeon"></div>
+  <table id="dungeon_key"></table>
   <table id="dungeon_key_for_printing" style = "display: none"></table>
   <script type="text/javascript" src="vis/vis.js"></script>
+  <script type="text/javascript" src="vendor/rivets.bundled.min.js"></script>
+  <!-- <script type="text/javascript" src="vendor/stapes.min.js"></script> -->
   <script type="text/javascript" src="js/dungen.js"></script>
   <script type="text/javascript" src="js/dungen_stock.js"></script>
   <script type="text/javascript" src="js/dungen_run.js"></script>

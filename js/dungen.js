@@ -14,7 +14,7 @@ var DG = {
   roomCount: 0,
   edgeCount: 0,
   minRooms: 5,
-  maxRooms: 40,
+  maxRooms: 10,
   dungeonLevel: 0,
   monsterTreasureMultiplier: 1,
 
@@ -33,19 +33,35 @@ var DG = {
     while (roll == excludedRoll){ roll = DG.rollDie(min,max);}
     return roll;
   },
+  drawOne: function(list){ return list[DG.rollDie(0, (list.length -1))];},
   
+  shuffle: function(array) {
+    // Mike Bostock's Fisher Yates shuffle implementation
+    var m = array.length, t, i;
+    // While there remain elements to shuffle…
+    while (m) {
+      // Pick a remaining element…
+      i = Math.floor(Math.random() * m--);
+      // And swap it with the current element.
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+    }
+    return array;
+  },
+   
   // Nodes and Linkage ------------------------------------------------------------------------
   linkStrats: {},  // complex enough for a separate breakout below
-  allRoomIds: function(){ 
-     var roomIds = [];
+  allNodeIds: function(){ 
+     var nodeIds = [];
      DG.data.nodes.forEach(function(node){
-       roomIds.push(node.id);
+       nodeIds.push(node.id);
      });
-     return roomIds;
+     return nodeIds;
   },
-    makeNode: function(id,label) { return { id: id, 
+  makeNode: function(id,label) { return { id: id, 
                                             shape: "box",
-                                            fontSize: 12,
+                                            fontSize: 14,
                                             color: {
                                               background: 'lightgray',
                                               border: 'gray',
@@ -68,7 +84,7 @@ var DG = {
   },
   linkNodes: function(a,b){DG.data.edges.push(DG.makeEdge(a,b));},
   setRandomRoomCount: function(){
-    DG.roomCount = DG.rollDie(DG.minRooms, DG.maxRooms);
+    DG.roomCount = DG.rollDie(DG.minRooms, (DG.maxRooms - DG.minRooms) );
 	return DG.roomCount;
   },
   makeRooms: function(){ 
@@ -76,22 +92,7 @@ var DG = {
       DG.data.nodes[i] = DG.makeNode(i, DG.nameNode(i+1) );
     }
   },
-  shuffle: function(array) {
-      // Mike Bostock's Fisher Yates shuffle implementation
-      var m = array.length, t, i;
-      // While there remain elements to shuffle…
-      while (m) {
-        // Pick a remaining element…
-        i = Math.floor(Math.random() * m--);
-        // And swap it with the current element.
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
-      }
-      return array;
-  },
-  drawOne: function(list){ return list[DG.rollDie(0, list.length -1)];}, 
-  //return DG.shuffle(list).pop();},
+
   nameNode: function(nodeNum){ 
     return "" + (nodeNum) + ": " + DG.randomNodeLabel()},  
   randomNodeLabel: function(){
@@ -121,7 +122,6 @@ var DG = {
   },
   randomOddities: function(dungeonLevel){ return ""; },
   randomMonsters: function(dungeonLevel){ 
-    console.log("dungeonLevel: " + dungeonLevel);
     var monsterLevel = dungeonLevel;
     var monsterCount = 1;
     var monsterType = "";
@@ -159,17 +159,15 @@ var DG = {
     // extract this
     newMonsterTreasureMultiplier = (monsterLevel * (monsterCount^0.75));
     DG.monsterTreasureMultiplier = Math.max(DG.monsterTreasureMultiplier,newMonsterTreasureMultiplier);
-    console.log ("monsterCount before string assembly " + monsterCount);
     var monsters = "M: " +  monsterCount + " " + monsterType + "<br/>";
   
   return monsters;
-
   },
   randomTreasure: function(dungeonLevel){
     var hoard = "Ts: ";
     var treasureType = {};
     var treasureCount = 1;
-    var treasureValue = (dungeonLevel^2.5) * 10;
+    var treasureValue = ((1+dungeonLevel)^2.5) * 10;
     if (DG.rollTwo()){ treasureValue *= 5 }
     if (DG.rollThree()){ treasureValue *= 5 }
     treasureValue *= DG.monsterTreasureMultiplier;
@@ -208,7 +206,31 @@ var DG = {
    //DG.data.nodes into table#dungeon_key
    document.getElementById("dungeon_key").innerHTML = dungeonKey
    document.getElementById("dungeon_key_for_printing").innerHTML = dungeonKey
+  },
+  // Dig a dungeon
+  digDungeon: function(){
+    var levelSelect = document.getElementById("level");
+	var sizeSelect = document.getElementById("size");
+	var selectedSize = "5,5";
+	
+	DG.data.nodes = [];
+	DG.data.edges = [];
+	DG.roomCount = 0,
+    DG.edgeCount = 0,
+    DG.dungeonLevel = parseInt(levelSelect.options[levelSelect.selectedIndex].value);
+    selectedSize = sizeSelect.options[sizeSelect.selectedIndex].value;
+    DG.minRooms = parseInt(selectedSize.split(",")[0]);
+    DG.maxRooms = parseInt(selectedSize.split(",")[1]);
+    DG.setRandomRoomCount();
+
+    DG.makeRooms();
+
+    DG.linkStrats.trianglesLink(DG.allNodeIds());
+    DG.linkStrats.randomLink(Math.floor(DG.roomCount/6) + 1);
+    DG.network = new vis.Network(DG.container, DG.data, DG.drawOptions);
+    DG.fillKey();
   }
+  
 };
 
 // link strategies

@@ -1,7 +1,8 @@
 //This file is the stocking data
 
 DG.stock = {
-  monsters: [ [
+  monsters: [ 
+  [
   "kobold", 
   "goblin", 
   "spider",
