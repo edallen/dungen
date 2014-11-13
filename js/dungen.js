@@ -33,7 +33,7 @@ var DG = {
     while (roll == excludedRoll){ roll = DG.rollDie(min,max);}
     return roll;
   },
-  drawOne: function(list){ return list[DG.rollDie(0, (list.length -1))];},
+  drawOne: function(list){ return list[DG.rollDie(0, list.length )];},
   
   shuffle: function(array) {
     // Mike Bostock's Fisher Yates shuffle implementation
