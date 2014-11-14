@@ -26,22 +26,24 @@
     <option value = "41,60">huge (41 - 60)</option>
     <option value = "61,100">enormous (61 - 100)</option>
   </select>
-  <select id="style">
-    <option>Branched</option>
-    <option>Branched with loops</option>
-    <option>Mixed</option>
-    <option>Grid</option>
+  <select id="pattern">
+    <option value="branch" >Branched</option>
+    <option value="branch_loops" >Branched with loops</option>
+    <!-- <option value="mixed" >Mixed</option>
+    <option value="grid" >Grid</option> -->
+	<option value="random" >Random</option>
+	<option value="triangles" >Triangles</option>
   </select>
   <button id="regenerate">Generate</button>
     <button id="redraw">Redraw</button>
   <button id="repopulate" style = "display:none">Repopulate</button>
   <button id="relabel" style = "display:none">Relabel</button>
-  <button id="save">Save</button>
-  <input id="name" placeholder="Name"></input> 
-  <select id="saved">
+  <button id="save" style = "display:none">Save</button>
+  <input id="name" placeholder="Name" style = "display:none"></input> 
+  <select id="saved" style = "display:none">
      <option>Saved Dungeons</option>
   </select>
-  <button id="load">Load</button>
+  <button id="load" style = "display:none">Load</button>
   <button id="move_table">Move Table for Printing</button>
   <div id="dungeon"></div>
   <table id="dungeon_key"></table>

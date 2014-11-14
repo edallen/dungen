@@ -1,5 +1,22 @@
 // Ed Allen, started November 08, 2014
 // 
+// utility added to Array, bad to change primitive prototypes but Array is
+// hard to subclass
+Array.prototype.remove= function(){
+	var what, L= arguments.length, ax;
+	while(L && this.length){
+		what= arguments[--L];
+		while((ax= this.indexOf(what))!= -1){
+			this.splice(ax, 1);
+		}
+	}
+	return this;
+}
+//to remove all of the elements of one array from another, apply the method:
+//var a1=[1,2,3,4,5,6], a2=[5,6,7,8,9];
+//a1.remove.apply(a1,a2);
+// cargo culted from mrhoo answer on Sitepoint:
+// http://community.sitepoint.com/t/remove-the-element-from-array-a-if-it-exists-in-array-b/5958
 
 var DG = {
   // Arguments the Vis.Network creation call ----------------------------------------------
@@ -20,17 +37,17 @@ var DG = {
 
   
   // Randomization Utilities -----------------------------------------------------------------
-  rollDie: function(min,size){ 
-    var roll = Math.floor(Math.random() * (size)) + min ;
+  rollDie: function(start,size){ 
+    var roll = Math.floor(Math.random() * (size)) + start ;
     return roll; }, 
   rollOne: function(){ return Math.random() < 0.16667; },
   rollTwo: function(){ return Math.random() < 0.3334; },
   rollThree: function(){ return Math.random() <= 0.5; },
   rollFour: function() {return Math.random() < 0.66667;},
   rollFive: function() {return Math.random() < 0.83334;},
-  rollOther: function(min,max,excludedRoll){
+  rollOther: function(start,size,excludedRoll){
     var roll = excludedRoll;
-    while (roll == excludedRoll){ roll = DG.rollDie(min,max);}
+    while (roll == excludedRoll){ roll = DG.rollDie(start,size);}
     return roll;
   },
   drawOne: function(list){ return list[DG.rollDie(0, list.length )];},
@@ -105,6 +122,7 @@ var DG = {
     var title = "";
     var treasureRoll = 1;
     DG.monsterTreasureMultiplier = 1;
+
     if (DG.rollOne()){ title += DG.randomOddities(dungeonLevel);}
     if (DG.rollOne()){ title += DG.randomTrap(dungeonLevel);
                       treasureRoll += 1;
@@ -117,15 +135,21 @@ var DG = {
                      treasureRoll += 2;
                      }
     if (DG.rollDie(1,6) <= treasureRoll){title += DG.randomTreasure(dungeonLevel)};
+    if (DG.rollOne()){ title += DG.randomHook();}
+
     if (title == "") {title = "Empty"}
     return title; 
   },
   randomOddities: function(dungeonLevel){ return ""; },
+  randomHook: function(){ 
+    var hook = "Hook: " + DG.drawOne(DG.stock.hook_items)  + "<br/>";
+    return hook},
   randomMonsters: function(dungeonLevel){ 
     var monsterLevel = dungeonLevel;
     var monsterCount = 1;
     var monsterType = "";
     var newMonsterTreasureMultiplier;
+    var monsters = "";
     for (var i = 0; i < 3; i +=1){
       if (DG.rollOne()){ monsterLevel += 1;}
     }
@@ -159,7 +183,7 @@ var DG = {
     // extract this
     newMonsterTreasureMultiplier = (monsterLevel * (monsterCount^0.75));
     DG.monsterTreasureMultiplier = Math.max(DG.monsterTreasureMultiplier,newMonsterTreasureMultiplier);
-    var monsters = "M: " +  monsterCount + " " + monsterType + "<br/>";
+    monsters = "M: " +  monsterCount + " " + monsterType + "<br/>";
   
   return monsters;
   },
@@ -196,37 +220,60 @@ var DG = {
   var tm = "</td><td class='dungen'>";
   var tr = "</td></tr>";
   var node = {};
-  var nodesLength = DG.data.nodes.length
+  var nodesLength = DG.data.nodes.length;
   for (i = 0; i < nodesLength; i +=1){
       node = DG.data.nodes[i];
-      dungeonKey = dungeonKey + ( tl + node["label"] + tm + node["title"] + tr )
+      dungeonKey = dungeonKey + ( tl + node["label"] + tm + node["title"] + tr );
    }
-   dungeonKey += "\n</tbody>"
+   dungeonKey += "\n</tbody>";
    //This function will render out the labels and descriptions from 
    //DG.data.nodes into table#dungeon_key
-   document.getElementById("dungeon_key").innerHTML = dungeonKey
-   document.getElementById("dungeon_key_for_printing").innerHTML = dungeonKey
+   document.getElementById("dungeon_key").innerHTML = dungeonKey;
+   document.getElementById("dungeon_key_for_printing").innerHTML = dungeonKey;
   },
   // Dig a dungeon
   digDungeon: function(){
     var levelSelect = document.getElementById("level");
 	var sizeSelect = document.getElementById("size");
+	var patternSelect = document.getElementById("pattern");
 	var selectedSize = "5,5";
-	
+	var selectedPattern = patternSelect.options[patternSelect.selectedIndex].value;
 	DG.data.nodes = [];
 	DG.data.edges = [];
-	DG.roomCount = 0,
-    DG.edgeCount = 0,
+	DG.roomCount = 0;
+    DG.edgeCount = 0;
     DG.dungeonLevel = parseInt(levelSelect.options[levelSelect.selectedIndex].value);
     selectedSize = sizeSelect.options[sizeSelect.selectedIndex].value;
     DG.minRooms = parseInt(selectedSize.split(",")[0]);
     DG.maxRooms = parseInt(selectedSize.split(",")[1]);
     DG.setRandomRoomCount();
-
+ 
     DG.makeRooms();
 
-    DG.linkStrats.trianglesLink(DG.allNodeIds());
-    DG.linkStrats.randomLink(Math.floor(DG.roomCount/6) + 1);
+	switch (selectedPattern) {
+    case "branch":
+	  DG.linkStrats.branchLink(DG.allNodeIds());
+	break;
+	case "branch_loops":
+	  DG.linkStrats.branchLink(DG.allNodeIds());
+	  DG.linkStrats.randomLink(Math.floor(DG.roomCount/5) + 1);
+	break;
+	case "triangles":
+	  DG.linkStrats.trianglesLink(DG.allNodeIds());
+	  DG.linkStrats.randomLink(Math.floor(DG.roomCount/6) + 1);
+	break;
+	case "grid":
+	break;
+	case "random":
+	  DG.linkStrats.randomAllLink(Math.floor(DG.roomCount) + 2);
+	break;
+	case "mixed":
+	
+	break;
+	default:
+
+	}
+
     DG.network = new vis.Network(DG.container, DG.data, DG.drawOptions);
     DG.fillKey();
   }
@@ -235,13 +282,11 @@ var DG = {
 
 // link strategies
 DG.linkStrats = {
-  branchLink: function(roomIds) {
+  branchLink: function(roomIds) { console.log("branch");
     var nodes = roomIds.length;
     var linkedNodes = [];
-    var unlinkNodes =roomIds.slice();
-    for (var i = 0; i < nodes; i +=1) {
-      unlinkedNodes.push(i);
-    }
+    var unlinkedNodes =roomIds.slice();
+
     unlinkedNodes = DG.shuffle(unlinkedNodes);
     var currentNodeID = unlinkedNodes.pop();
     linkedNodes.push(currentNodeID);
@@ -254,20 +299,32 @@ DG.linkStrats = {
        toLink = linkedNodes[DG.rollDie(0,linkedNodes.length-1)];        
     }
   },
-  linearLink: function(roomIds){
+  linearLink: function(roomIds){ console.log("linear");
     for (var i = 0; i < roomIds.length -1; i+=1){
       var startEdge = i;
       var endEdge = startEdge + 1;
       DG.linkNodes(startEdge,endEdge);
     }
   },
-  randomLink: function(linksToMake){
+  randomLink: function(linksToMake){ console.log("random");
     for(var i = 0; i < linksToMake; i+=1){
      var startEdge = DG.rollDie(0,DG.roomCount-1);
      var endEdge = DG.rollOther(0,DG.roomCount-1,startEdge);
      DG.linkNodes(startEdge,endEdge);}
   },
-  trianglesLink: function(roomIds){
+  randomAllLink: function(linksToMake){ console.log("randomAll");
+    DG.linkStrats.randomLink(linksToMake);
+    var nodes = DG.allNodeIds().slice();
+	  
+	var linkedNodes = [];
+	DG.data.edges.forEach(function(edge){linkedNodes.push(edge["from"])});
+	DG.data.edges.forEach(function(edge){linkedNodes.push(edge["to"])});
+    console.log(linkedNodes);
+	var unlinkedNodes = nodes.remove.apply(nodes,linkedNodes);
+ 
+	unlinkedNodes.map(function(node){DG.linkNodes(node,(linkedNodes.pop() || 1));});
+  },
+  trianglesLink: function(roomIds){ console.log("triangles");
    var nodesCount = roomIds.length;
    var unlinkedNodes = roomIds.slice();
    var linkedNodes = [];
@@ -290,7 +347,7 @@ DG.linkStrats = {
    unlinkedNodes.map(function(node){DG.linkNodes(node,node - 1)});
    
   },
-  gridLink: function(){ // INCOMPLETE
+  gridLink: function(){ console.log("grid"); // INCOMPLETE 
     var rowLength = Math.floor(Math.sqrt(DG.roomCount)) + DG.rollDie(0,3);
 	var gridArray = [[]];
 	var gridRow = 0;
