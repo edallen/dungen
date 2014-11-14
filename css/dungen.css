@@ -7,3 +7,8 @@ div#dungeon{float: left;
            width: 74%;}
 table#dungeon_key_for_printing{ clear: both;
                   width:74%; }
+				  
+/* h1 {
+  font: 700 36px/0.5 'Alegreya', Arial, serif;
+}
+p {font: 400 16px/0.5 'Alegreya', Arial, serif;} */
