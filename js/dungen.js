@@ -19,7 +19,7 @@ Array.prototype.remove= function(){
 // http://community.sitepoint.com/t/remove-the-element-from-array-a-if-it-exists-in-array-b/5958
 
 var DG = {
-  // Arguments the Vis.Network creation call ----------------------------------------------
+  // Arguments to the Vis.Network creation call ----------------------------------------------
   container:  document.getElementById('dungeon'),
   drawOptions: { 
     dataManipulation: true,
@@ -129,7 +129,44 @@ var DG = {
     }
     return array;
   },
-   
+  // ui handlers - move to ui file?
+  addOptionsToSelect: function(select,optionsList){
+    for(var i = 0; i < optionsList.length; i += 1) {
+     var opt = document.createElement('option');
+      opt.value = i;
+      opt.innerHTML = i;
+      select.appendChild(opt);
+	  
+	}
+  },
+  saveDungeon: function(){var key = document.getElementById("dungeon_name").value;
+                          var dungeonString = JSON.stringify(DG.data;)
+						  localStorage.setitem(key) = dungeonString;
+						  var dungeonSelect = document.getElementById("saved");
+						  },
+  loadDungeon: function(){
+    var dungeonSelect = document.getElementById("saved");
+	var selectedKey = "";
+	var dungeonData = "unloaded";
+	if (dungeonSelect.selectedIndex == -1)
+	    alert("No dungeon selected to load");
+        return null;
+	selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
+   	dungeonData = localStorage[selectedKey];
+	if (dungeonData !== "unloaded"){
+	  DG.data = JSON.parse(dungeonData);
+	  DG.network = new vis.Network(DG.container, DG.data, DG.drawOptions);
+      DG.fillKey();
+	  document.getElementById("dungeon_name").value = selected_key;
+	}
+	
+	
+	
+  },
+  deleteDungeon: function(){alert("This will remove the selected dungeon from localStorage after a confirm dialog")},
+  exportDungeon: function(){alert("This will export contents to a text file when done")},  // export a file with the data structure
+  importDungeon: function(){alert("This will import an exported data file and draw the dungeon when done")}, //import a file previously exported
+  
   // Nodes and Linkage ------------------------------------------------------------------------
   linkStrats: {},  // complex enough for a separate breakout below
   allNodeIds: function(){ 
@@ -326,6 +363,7 @@ var DG = {
 	  DG.linkStrats.randomLink(Math.floor(DG.roomCount/6) + 1);
 	break;
 	case "grid":
+	  DG.linkStrats.gridLink();
 	break;
 	case "random":
 	  DG.linkStrats.randomAllLink(Math.floor(DG.roomCount) + 2);
@@ -410,36 +448,37 @@ DG.linkStrats = {
    unlinkedNodes.map(function(node){DG.linkNodes(node,node - 1)});
    
   },
-  gridLink: function(){ console.log("grid"); // INCOMPLETE 
+  gridLink: function(){ console.log("grid");
     var rowLength = Math.floor(Math.sqrt(DG.roomCount)) + DG.rollDie(0,3);
 	var gridArray = [[]];
 	var gridRow = 0;
 	var nodes = DG.data.nodes.length;
 	var gridCol = 0;
 	// lay out room objects into a 2D grid array
-	for (i = 0; i < nodes; i+=1){
+	for (var i = 0; i < nodes; i+=1){
     
       gridArray[gridRow][gridCol] = DG.data.nodes[i].id;
-	  if (i < nodes) {
-		  if (gridCol == (rowLength -1)){
-			 gridCol = 0;
-			 gridRow += 1;
-             gridArray[gridRow] = [];
-		  } else {
-			 gridCol += 1;
-		  }
-      }	  
+	  if (gridCol == (rowLength -1)){
+		 gridCol = 0;
+		 gridRow += 1;
+		 gridArray[gridRow] = [];
+	  } else {
+		 gridCol += 1;
+	  }
+  
+
 	}  /* Should have a grid of references to node IDs at end of loop, accounting for all nodes. The last row may be short. */
-	DG.gridArray = gridArray;
-	// Pick a seed node
-	//var seedRow = DG.rollDie(0,gridRow -1); // not the last row that might be short
-	//var seedCol = DG.rollDie(0,rowLength -1);
-	function adjacentIDs(row,col){
-      var from = gridArray[row][col];
-      
-    }
-	// Iterate over nodes, looping outwards, each node gets a link or two inwards
-	// so that all end up linked to the seed node, and possibly a link to the next one to test
+
+	for(var r = 0; r < gridArray.length -1; r +=1){
+	  for (var c = 0; c < gridArray[r+1].length; c += 1){
+	     console.log(gridArray[r][c],gridArray[r+1][c]);
+         DG.linkNodes(gridArray[r][c],gridArray[r+1][c]);
+      }
+	  for (var c = 0; c < gridArray[r].length; c += 1){
+	    console.log(gridArray[r][c],gridArray[r][c+1]);
+         DG.linkNodes(gridArray[r][c],gridArray[r][c+1]);
+      }	  
+	}
 	
   }
 };

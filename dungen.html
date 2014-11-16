@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Hobby Hovel Dungeon Generator</title>
+  <title>DunGen Dungeon Generator</title>
 <!--   <script type="text/javascript">
   WebFontConfig = {
     google: { families: [ 'Alegreya:400italic,700italic,900italic,400,700,900:latin', 'Alegreya+SC:700,900:latin' ] }
@@ -14,16 +14,18 @@
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(wf, s);
   })(); </script> -->
-  <link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,900italic,400,700,900|Alegreya+SC:700,900' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,900italic,400,700,900|Alegreya+SC:700,900' rel='stylesheet' type='text/css'> -->
   <link href="vis/vis.css" rel="stylesheet" type="text/css" />
   <link href="css/dungen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-  <h1><a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> Dungeon Generator</h1>
+<h1>DunGen</h1>
+<h3>  The <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> Dungeon Generator</h3>
   <p> by Ed Allen </p>
   <p> Plans for expansion blogged about this project at 
     <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></p>
-  <p> The edit button is only useful for removing connecting edges currently.</p>
+  <p> Adding and removing works, though removing nodes does not yet remove them from the list. No edit yet. 
+  To save, copy the text of the room contents table and paste into another file, and right click the map to save the image as a PNG. Or move the table with the button and print. A restorable browser save is in the works. </p>
 
   <select id="level">
     <option value = "0">Level 1</option>
@@ -43,27 +45,32 @@
   <select id="pattern">
     <option value="branch" >Branched</option>
     <option value="branch_loops" >Branched with loops</option>
-    <!-- <option value="mixed" >Mixed</option>
-    <option value="grid" >Grid</option> -->
+    <!-- <option value="mixed" >Mixed</option> -->
+    <option value="grid" >Grid</option> 
 	<option value="random" >Random</option>
 	<option value="triangles" >Triangles</option>
   </select>
   <button id="regenerate">Generate</button>
-    <button id="redraw">Redraw</button>
+   <button id="redraw">Redraw</button>
   <button id="repopulate" style = "display:none">Repopulate</button>
   <button id="relabel" style = "display:none">Relabel</button>
-  <button id="save" style = "display:none">Save</button>
-  <input id="name" placeholder="Name" style = "display:none"></input> 
-  <select id="saved" style = "display:none">
+  <br/>
+  <label for="dungeon_name">Name for save </label><input id="dungeon_name" placeholder="Name the dungeon" ></input>
+  <button id="save" >Save</button>  
+  <select id="saved" >
      <option>Saved Dungeons</option>
   </select>
-  <button id="load" style = "display:none">Load</button>
+  <button id="load">Load</button>
+  <button id="delete">Delete from storage</button>
+  <button id="export">Export file</button>
+  <button id="import">Import file</button>
+
   <button id="move_table">Move Table for Printing</button>
   <div id="dungeon"></div>
   <table id="dungeon_key"></table>
   <table id="dungeon_key_for_printing" style = "display: none"></table>
   <script type="text/javascript" src="vis/vis.js"></script>
-  <script type="text/javascript" src="vendor/rivets.bundled.min.js"></script>
+  <!-- <script type="text/javascript" src="vendor/rivets.bundled.min.js"></script> -->
   <!-- <script type="text/javascript" src="vendor/stapes.min.js"></script> -->
   <script type="text/javascript" src="js/dungen.js"></script>
   <script type="text/javascript" src="js/dungen_stock.js"></script>

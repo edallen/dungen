@@ -8,7 +8,7 @@ Monsters will be objects with a treasure type property. Their size property or m
 
 The interface will offer the selection of tags and only rooms that have those tags or are untagged will be used (possibly do an exclusion to only rooms tagged with the right tag).
 
-Need more network arrangements, selectable in the UI. Concentric rings, town, warren, castle, branched, railroad, grid, gappy grid, linear, linked clusters, linked trinagles.
+Need more network arrangements, selectable in the UI. Concentric rings, town, warren, castle, branched, railroad, grid, gappy grid, linear, linked clusters, linked trinagles, polygon mesh.
 
 Need to expand for multiple levels.
 
