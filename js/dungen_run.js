@@ -13,4 +13,5 @@ else { document.getElementById("dungeon").innerHTML("Sorry, I'm not supporting o
 function postLoadInitialize(){
    DG.digDungeon();
    bindButtons();
+   populateUI();
 }

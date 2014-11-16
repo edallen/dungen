@@ -68,6 +68,7 @@ var DG = {
         */
         var newData = data; // alter the data as you want, except for the ID.
                             // all fields normally accepted by an edge can be used.
+		newData.label = window.prompt("Edited edges are not yet being saved by Save button. Enter new label.",data.label)
         callback(newData);  // call the callback with the new data to edit the edge.
     },
     onConnect: function(data,callback) {
@@ -75,6 +76,7 @@ var DG = {
 		 var newData = {};
          for (var attrname in data) { newData[attrname] = data[attrname]; }
 		 newData.label = DG.randomEdgeLabel();
+		 DG.data.edges.push(newData);
 		 // check or alter data as you see fit.
          callback(newData);       // call the callback to connect the nodes.
     },
@@ -131,33 +133,39 @@ var DG = {
   },
   // ui handlers - move to ui file?
   addOptionsToSelect: function(select,optionsList){
+    console.log('adding opts');
     for(var i = 0; i < optionsList.length; i += 1) {
-     var opt = document.createElement('option');
-      opt.value = i;
-      opt.innerHTML = i;
+      var opt = document.createElement('option');
+      opt.value = optionsList[i];
+      opt.innerHTML = optionsList[i];
+	  console.log(opt);
       select.appendChild(opt);
-	  
 	}
   },
   saveDungeon: function(){var key = document.getElementById("dungeon_name").value;
-                          var dungeonString = JSON.stringify(DG.data;)
-						  localStorage.setitem(key) = dungeonString;
+                          var dungeonString = JSON.stringify(DG.data);
+						  localStorage[key] = dungeonString;
 						  var dungeonSelect = document.getElementById("saved");
+						  DG.addOptionsToSelect(dungeonSelect,[key]);
 						  },
-  loadDungeon: function(){
+  loadDungeon: function(){ console.log("load function entered");
     var dungeonSelect = document.getElementById("saved");
 	var selectedKey = "";
 	var dungeonData = "unloaded";
-	if (dungeonSelect.selectedIndex == -1)
+	if (dungeonSelect.selectedIndex == -1) {
 	    alert("No dungeon selected to load");
         return null;
+	};
 	selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
+	console.log(selectedKey);
    	dungeonData = localStorage[selectedKey];
+    console.log(dungeonData);
 	if (dungeonData !== "unloaded"){
 	  DG.data = JSON.parse(dungeonData);
 	  DG.network = new vis.Network(DG.container, DG.data, DG.drawOptions);
       DG.fillKey();
-	  document.getElementById("dungeon_name").value = selected_key;
+	  document.getElementById("dungeon_name").text = selectedKey;
+	  document.getElementById("dungeon_name").value = selectedKey;
 	}
 	
 	
