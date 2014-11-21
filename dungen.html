@@ -1,31 +1,20 @@
 <html>
 <head>
   <title>DunGen Dungeon Generator</title>
-<!--   <script type="text/javascript">
-  WebFontConfig = {
-    google: { families: [ 'Alegreya:400italic,700italic,900italic,400,700,900:latin', 'Alegreya+SC:700,900:latin' ] }
-  };
-  (function() {
-    var wf = document.createElement('script');
-    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-    wf.type = 'text/javascript';
-    wf.async = 'true';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(wf, s);
-  })(); </script> -->
-  <!-- <link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,900italic,400,700,900|Alegreya+SC:700,900' rel='stylesheet' type='text/css'> -->
+
   <link href="vis/vis.css" rel="stylesheet" type="text/css" />
   <link href="css/dungen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <h1>DunGen</h1>
-<h3>  The <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> Dungeon Generator</h3>
+<h3>  Dungeon Generator from <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> </h3>
   <p> by Ed Allen </p>
   <p> Plans for expansion blogged about this project at 
     <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></p>
-  <p> Adding and removing works, though removing nodes does not yet remove them from the list. No edit yet. 
-  To save, copy the text of the room contents table and paste into another file, and right click the map to save the image as a PNG. Or move the table with the button and print. A restorable browser save is in the works. </p>
+  <p> Adding and removing works, though removing nodes does not yet remove them from the list. Save and load are working now, but are incomplete: edited edges and deleted nodes and edges do not save yet.
+Finishing those up, making the delete button work and adding full node content editing and saving are next on my list. Then probably fixing the canvas to resize with the window. Then expanding treasure generation.
+<br/>
+  To manually save, copy the text of the room contents table and paste into another file, and right click the map to save the image as a PNG. Print looks best after moving the table using the button. </p>
 
   <select id="level">
     <option value = "0">Level 1</option>
@@ -42,7 +31,7 @@
     <option value = "41,60">huge (41 - 60)</option>
     <option value = "61,100">enormous (61 - 100)</option>
   </select>
-  <select id="pattern">
+  <select id="pattern"> 
     <option value="branch" >Branched</option>
     <option value="branch_loops" >Branched with loops</option>
     <!-- <option value="mixed" >Mixed</option> -->
@@ -62,15 +51,16 @@
   </select>
   <button id="load">Load</button>
   <button id="delete">Delete from storage</button>
-  <button id="export">Export file</button>
-  <button id="import">Import file</button>
+  <button id="export" style="display:none">Export file</button>
+  <button id="import" style="display:none">Import file</button>
 
   <button id="move_table">Move Table for Printing</button>
   <div id="dungeon"></div>
   <table id="dungeon_key"></table>
   <table id="dungeon_key_for_printing" style = "display: none"></table>
-  <script type="text/javascript" src="vis/vis.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
   <!-- <script type="text/javascript" src="vendor/rivets.bundled.min.js"></script> -->
+  <script type="text/javascript" src="vis/vis.js"></script>
   <!-- <script type="text/javascript" src="vendor/stapes.min.js"></script> -->
   <script type="text/javascript" src="js/dungen.js"></script>
   <script type="text/javascript" src="js/dungen_stock.js"></script>

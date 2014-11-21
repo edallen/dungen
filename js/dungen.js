@@ -37,8 +37,8 @@ var DG = {
         var newData = DG.makeNode(i, DG.nameNode(i+1) ); // alter the data as you want.
                             // all fields normally accepted by a node can be used.
 		console.log(newData);
-		DG.data.nodes.push(newData);
-		DG.fillKey();
+		DG.nodesDataSet.add(newData);
+	
         callback(newData);  // call the callback to add a node.
     },
     onEdit: function(data,callback) {
@@ -56,8 +56,16 @@ var DG = {
         *           }
         *          };
         */
+		console.log(data);
+		
         var newData = data; // alter the data as you want.
                             // all fields normally accepted by a node can be used.
+	    newData.label = DG.nodesDataSet.get(newData.id).label;
+		newData.label = window.prompt("Edit Location name",newData.label);
+        newData.title = DG.nodesDataSet.get(newData.id).title;
+		newData.title = window.prompt("Edit Description",newData.title);
+
+	    DG.nodesDataSet.update(newData);
         callback(newData);  // call the callback with the new data to edit the node.
     },
     onEditEdge: function(data,callback) {
@@ -67,16 +75,19 @@ var DG = {
         *          };
         */
         var newData = data; // alter the data as you want, except for the ID.
-                            // all fields normally accepted by an edge can be used.
-		newData.label = window.prompt("Edited edges are not yet being saved by Save button. Enter new label.",data.label)
-        callback(newData);  // call the callback with the new data to edit the edge.
+                            // all fields normally accepted by an edge can be used.a
+        newData.label = DG.edgesDataSet.get(newData.id).label;	
+		newData.label = window.prompt("Change label",newData.label);
+        DG.edgesDataSet.update(newData);
+		callback(newData);  // call the callback with the new data to edit the edge.
     },
     onConnect: function(data,callback) {
         // data = {from: nodeId1, to: nodeId2};
 		 var newData = {};
          for (var attrname in data) { newData[attrname] = data[attrname]; }
 		 newData.label = DG.randomEdgeLabel();
-		 DG.data.edges.push(newData);
+		
+		 DG.edgesDataSet.add(newData);
 		 // check or alter data as you see fit.
          callback(newData);       // call the callback to connect the nodes.
     },
@@ -85,13 +96,16 @@ var DG = {
         var newData = data; // alter the data as you want.
                            //  the same data structure is required.
 							// WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
+		DG.edgesDataSet.remove(newData.edges);
+		DG.nodesDataSet.remove(newData.nodes);
         callback(newData);  // call the callback to delete the objects.
     },
     height: '90%'
   },
   data: { nodes:[],
           edges:[],},
-  
+  nodesDataSet:"uninitialized",
+  edgesDataSet:"uninitialized",
   // Shared variables
   roomCount: 0,
   edgeCount: 0,
@@ -99,7 +113,20 @@ var DG = {
   maxRooms: 10,
   dungeonLevel: 0,
   monsterTreasureMultiplier: 1,
-
+  initNetwork: function(){
+	  DG.nodesDataSet = new vis.DataSet(DG.data.nodes);
+	  DG.nodesDataSet.on('*', function (event, properties, senderId) {
+        DG.data.nodes = DG.nodesDataSet.get();
+	    DG.fillKey();
+      });
+	  DG.edgesDataSet = new vis.DataSet(DG.data.edges);
+      DG.edgesDataSet.on('*', function (event, properties, senderId) {
+         DG.data.edges = DG.edgesDataSet.get();
+      });
+	  data = {nodes: DG.nodesDataSet, edges: DG.edgesDataSet};
+      DG.network = new vis.Network(DG.container, data, DG.drawOptions);
+	  DG.fillKey();
+  },
   
   // Randomization Utilities -----------------------------------------------------------------
   rollDie: function(start,size){ 
@@ -132,6 +159,21 @@ var DG = {
     return array;
   },
   // ui handlers - move to ui file?
+  populateSavedSelect: function(){
+    // populate the saved dungeons select
+    console.log("populate");
+    var dungeonSelect = document.getElementById("saved");
+    dungeonSelect.innerHTML = ""
+    var keys = [];
+    var key = "";
+    for (i = 0; i < localStorage.length; i +=1){
+      key = localStorage.key(i);
+      keys.push(key);
+    };
+    if (keys.length > 0) {console.log("adding keys to options");
+      DG.addOptionsToSelect(dungeonSelect,keys);
+    };
+  },
   addOptionsToSelect: function(select,optionsList){
     console.log('adding opts');
     for(var i = 0; i < optionsList.length; i += 1) {
@@ -146,7 +188,7 @@ var DG = {
                           var dungeonString = JSON.stringify(DG.data);
 						  localStorage[key] = dungeonString;
 						  var dungeonSelect = document.getElementById("saved");
-						  DG.addOptionsToSelect(dungeonSelect,[key]);
+						  DG.populateSavedSelect();
 						  },
   loadDungeon: function(){ console.log("load function entered");
     var dungeonSelect = document.getElementById("saved");
@@ -157,24 +199,19 @@ var DG = {
         return null;
 	};
 	selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
-	console.log(selectedKey);
    	dungeonData = localStorage[selectedKey];
-    console.log(dungeonData);
 	if (dungeonData !== "unloaded"){
 	  DG.data = JSON.parse(dungeonData);
-	  DG.network = new vis.Network(DG.container, DG.data, DG.drawOptions);
-      DG.fillKey();
+	  DG.initNetwork();
 	  document.getElementById("dungeon_name").text = selectedKey;
 	  document.getElementById("dungeon_name").value = selectedKey;
 	}
-	
-	
-	
-  },
+  },  
+
   deleteDungeon: function(){alert("This will remove the selected dungeon from localStorage after a confirm dialog")},
   exportDungeon: function(){alert("This will export contents to a text file when done")},  // export a file with the data structure
   importDungeon: function(){alert("This will import an exported data file and draw the dungeon when done")}, //import a file previously exported
-  
+
   // Nodes and Linkage ------------------------------------------------------------------------
   linkStrats: {},  // complex enough for a separate breakout below
   allNodeIds: function(){ 
@@ -324,14 +361,15 @@ var DG = {
   // Dungeon Key table -------------------------------------------------
   fillKey: function() { 
   var dungeonKey = "<thead>\n<tr><th>Location</th><th>Description</th></tr>\n</thead><tbody>"
-  var tl = "<tr><td class='dungen'>";
+  var tl = "<tr id ='" 
+  var tlm = "'><td class='dungen'>";
   var tm = "</td><td class='dungen'>";
   var tr = "</td></tr>";
   var node = {};
   var nodesLength = DG.data.nodes.length;
   for (i = 0; i < nodesLength; i +=1){
       node = DG.data.nodes[i];
-      dungeonKey = dungeonKey + ( tl + node["label"] + tm + node["title"] + tr );
+      dungeonKey = dungeonKey + ( tl + node["id"] + tlm + node["label"] + tm + node["title"] + tr );
    }
    dungeonKey += "\n</tbody>";
    //This function will render out the labels and descriptions from 
@@ -341,6 +379,7 @@ var DG = {
   },
   // Dig a dungeon
   digDungeon: function(){
+    var data = { nodes: null, edges: null };
     var levelSelect = document.getElementById("level");
 	var sizeSelect = document.getElementById("size");
 	var patternSelect = document.getElementById("pattern");
@@ -382,9 +421,8 @@ var DG = {
 	default:
 
 	}
-
-    DG.network = new vis.Network(DG.container, DG.data, DG.drawOptions);
-    DG.fillKey();
+	
+    DG.initNetwork();
   }
   
 };

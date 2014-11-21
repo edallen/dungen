@@ -64,17 +64,5 @@ function bindButtons() {
 };
 
 function populateUI(){
-   // populate the saved dungeons select
-   console.log("populate");
-   var dungeonSelect = document.getElementById("saved");
-   var keys = [];
-   var key = "";
-   for (i = 0; i < localStorage.length; i +=1){
-     key = localStorage.key(i);
-	 console.log(key);
-	 keys.push(key);
-    };
-   if (keys.length > 0) {console.log("adding keys to options");
-     DG.addOptionsToSelect(dungeonSelect,keys);
-    };
+  DG.populateSavedSelect();
 }
