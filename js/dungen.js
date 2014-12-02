@@ -34,7 +34,8 @@ var DG = {
         */
 		var i = DG.data.nodes[DG.data.nodes.length - 1].id + 1;
 		
-        var newData = DG.makeNode(i, DG.nameNode(i+1) ); // alter the data as you want.
+        var newData = DG.makeNode(i, DG.nameNode(i+1) ); 
+		                    // alter the data as you want.
                             // all fields normally accepted by a node can be used.
 		console.log(newData);
 		DG.nodesDataSet.add(newData);
@@ -60,13 +61,40 @@ var DG = {
 		
         var newData = data; // alter the data as you want.
                             // all fields normally accepted by a node can be used.
-	    newData.label = DG.nodesDataSet.get(newData.id).label;
-		newData.label = window.prompt("Edit Location name",newData.label);
-        newData.title = DG.nodesDataSet.get(newData.id).title;
-		newData.title = window.prompt("Edit Description",newData.title);
+		bootbox.dialog({
+		  title:"Edit Location",
+		  message: '<div class="row">  ' +
+				'<div class="col-md-12"> ' +
+				'<form class="form"> ' +
+				'<div class="form-group"> ' +
+				'<label class="col-md-4 control-label" for="name">Name</label> ' +
+				'<input id="location_name" name="location_name" type="text" placeholder="Location name" value="' + DG.nodesDataSet.get(newData.id).label + 
+				  '" class="form-control input-md"/> ' +
+				'</div>'+
 
-	    DG.nodesDataSet.update(newData);
-        callback(newData);  // call the callback with the new data to edit the node.
+				'<div class="form-group"> ' +
+				  '<label class="col-md-4 control-label" for="description">Description</label> ' +
+					'<textarea id="location_description" name="location_description" type="text"  placeholder="Location description" value="' + DG.nodesDataSet.get(newData.id).title + '" '+ 
+					'class="form-control" rows="8" columns = "30">' + DG.nodesDataSet.get(newData.id).title + '</textarea>'+
+				'</div> ' +
+				'</form> </div>  </div>', 
+		  buttons: {
+			save: {
+			  label: "Save",
+			  className: "btn-success",
+			  callback: function() {
+				newData.label =  $('#location_name').val();
+				newData.title =  $('#location_description').val();
+				DG.nodesDataSet.update(newData);
+				callback(newData); 
+			  
+			  }
+			},
+
+		  }
+        
+		
+        });		 	 
     },
     onEditEdge: function(data,callback) {
         /** data = {id: edgeID,
@@ -143,7 +171,11 @@ var DG = {
     return roll;
   },
   drawOne: function(list){ return list[DG.rollDie(0, list.length )];},
-  
+  shufflePopOne: function(list){ var item = "";
+                          list = DG.shuffle(list);
+                          item = list.pop();
+                          return [item,list];
+						},
   shuffle: function(array) {
     // Mike Bostock's Fisher Yates shuffle implementation
     var m = array.length, t, i;
@@ -235,8 +267,6 @@ var DG = {
                                             label: label, 
                                             title: DG.makeTitle(DG.dungeonLevel), 
                                             group: ""};
-
-
   },
   makeEdge: function(startNode,endNode) { 
     return {from: startNode, to: endNode, label: this.randomEdgeLabel()};
@@ -249,7 +279,13 @@ var DG = {
     DG.roomCount = DG.rollDie(DG.minRooms, (DG.maxRooms - DG.minRooms) );
 	return DG.roomCount;
   },
-  makeRooms: function(){ 
+  setBaseMonsters: function() {
+    DG.data.baseMonsters = [DG.drawOne(DG.stock.monsters[DG.dungeonLevel])];
+	if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
+	if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
+  },
+  makeRooms: function(){
+    DG.setBaseMonsters();
     for(var i = 0; i < DG.roomCount; i+=1){
       DG.data.nodes[i] = DG.makeNode(i, DG.nameNode(i+1) );
     }
@@ -268,7 +304,7 @@ var DG = {
     var treasureRoll = 1;
     DG.monsterTreasureMultiplier = 1;
 
-    if (DG.rollOne()){ title += DG.randomOddities(dungeonLevel);}
+    if (DG.rollOne()){ title += DG.randomOddity(dungeonLevel);}
     if (DG.rollOne()){ title += DG.randomTrap(dungeonLevel);
                       treasureRoll += 1;
                        }
@@ -285,7 +321,9 @@ var DG = {
     if (title == "") {title = "Empty"}
     return title; 
   },
-  randomOddities: function(dungeonLevel){ return ""; },
+  randomOddity: function(dungeonLevel){ 
+    // ignoring dungeonLevel for now
+    return DG.drawOne(DG.stock.oddities) + "<br/>"; },
   randomHook: function(){ 
     var hook = "Hook: " + DG.drawOne(DG.stock.hook_items)  + "<br/>";
     return hook},
@@ -313,7 +351,13 @@ var DG = {
         monsterCount *= 2; 
       }
     }
-    monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
+	if (DG.rollThree()){
+      monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
+	} else {
+	// will let monster count stand, which will generate some group size outliers
+	  monsterLevel = dungeonLevel;
+	  monsterType = DG.drawOne(DG.data.baseMonsters);
+	}
     // adjusting plurals - extract to a function soon
     if (monsterCount > 1){ 
       if ( monsterType.match(/man$/) ){
@@ -332,30 +376,74 @@ var DG = {
   
   return monsters;
   },
+  valueFraction: function(treasureValue){ 
+    return DG.rollDie(1,9) * 0.1 * treasureValue 
+  },
+  oneTreasure: function(treasureValue){
+    var treasureCount = 1;
+    var treasureType = DG.drawOne(DG.stock.treasure);
+    if (treasureType["value"] < treasureValue){
+      treasureCount = Math.floor(treasureValue/treasureType["value"]);
+    }
+    return treasureCount + " " + treasureType["label"];
+  },
   randomTreasure: function(dungeonLevel){
     var hoard = "Ts: ";
     var treasureType = {};
     var treasureCount = 1;
     var treasureValue = ((1+dungeonLevel)^2.5) * 10;
-    if (DG.rollTwo()){ treasureValue *= 5 }
-    if (DG.rollThree()){ treasureValue *= 5 }
+    if (DG.rollTwo()){ treasureValue *= DG.rollDie(2,6) }
+    if (DG.rollThree()){ treasureValue *= DG.rollDie(2,6) }
     treasureValue *= DG.monsterTreasureMultiplier;
     // going simple with one type initially
-    treasureType = DG.drawOne(DG.stock.treasure);
-    if (treasureType["value"] < treasureValue){
-      treasureCount = Math.floor(treasureValue/treasureType["value"]);
+    // treasureType = DG.drawOne(DG.stock.treasure);
+    // if (treasureType["value"] < treasureValue){
+      // treasureCount = Math.floor(treasureValue/treasureType["value"]);
+    // }
+    hoard += DG.oneTreasure(treasureValue);
+	// second treasure
+	if (DG.rollThree()){
+	  hoard += ", ";
+	  hoard += DG.oneTreasure(DG.valueFraction(treasureValue));
+      if (DG.rollThree()){
+	    hoard += ", ";
+	    hoard += DG.oneTreasure(DG.valueFraction(treasureValue)); 
+	  }	  
+	}
+    hoard += "<br/>";
+	if (DG.rollOne()){ 
+      hoard += "Mg: " + DG.randomMinorMagicItem(dungeonLevel) + "<br/>";
     }
-    hoard += treasureCount + " " + treasureType["label"] + "<br/>";
     if (DG.rollDie(1,1000) < treasureValue){ 
-      hoard += "Magic: " + DG.randomMagicItem(dungeonLevel) + "<br/>";
+      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br/>";
     }
+	if (DG.rollDie(0,9) <= dungeonLevel){ 
+      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br/>";
+    }
+	if (DG.rollDie(1,8000) < treasureValue){ 
+      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br/>";
+    }
+	if (DG.rollDie(1,20000) < treasureValue){ 
+      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br/>";
+    }
+	
     return hoard; 
   },
   randomMagicItem: function(dungeonLevel){ // will need much more detail later and more items in big hoards
-    return DG.drawOne(DG.stock.magicItems)},
+    var item = DG.drawOne(DG.stock.magicItems);
+	if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
+	return item;},
+  randomMinorMagicItem: function(dungeonLevel){ // will need much more detail later and more items in big hoards
+    var item = DG.drawOne(DG.stock.minorMagicItems);
+	if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
+	return item;},
   randomTrap: function(dungeonLevel){
   // will tie to dungeonLevel later
-    return "Tp: " + DG.drawOne(DG.stock.traps) + "<br/>";
+    var trap = DG.drawOne(DG.stock.traps);
+	if (DG.rollTwo()){trap += " disarmed by " + DG.drawOne(DG.stock.disarms)}
+	if (DG.rollThree()){trap += ", triggered by " + DG.drawOne(DG.stock.triggers)}
+
+    return "Tp: " + trap + "<br/>";
   },
   
   // Dungeon Key table -------------------------------------------------
@@ -377,7 +465,7 @@ var DG = {
    document.getElementById("dungeon_key").innerHTML = dungeonKey;
    document.getElementById("dungeon_key_for_printing").innerHTML = dungeonKey;
   },
-  // Dig a dungeon
+  // Dig a dungeon ---------------------------------------------------------
   digDungeon: function(){
     var data = { nodes: null, edges: null };
     var levelSelect = document.getElementById("level");
@@ -419,7 +507,6 @@ var DG = {
 	
 	break;
 	default:
-
 	}
 	
     DG.initNetwork();
@@ -427,7 +514,7 @@ var DG = {
   
 };
 
-// link strategies
+// link strategies  --------------------------------------------------------------------
 DG.linkStrats = {
   branchLink: function(roomIds) { console.log("branch");
     var nodes = roomIds.length;
@@ -489,10 +576,8 @@ DG.linkStrats = {
      DG.linkNodes(triangles[i][0],triangles[i-1][1]);
      //DG.linkNodes(triangles[i][0],triangles[i-1][2]);
      //DG.linkNodes(triangles[i][1],triangles[i-1][2]);
-   }
-   
+   } 
    unlinkedNodes.map(function(node){DG.linkNodes(node,node - 1)});
-   
   },
   gridLink: function(){ console.log("grid");
     var rowLength = Math.floor(Math.sqrt(DG.roomCount)) + DG.rollDie(0,3);
@@ -511,8 +596,6 @@ DG.linkStrats = {
 	  } else {
 		 gridCol += 1;
 	  }
-  
-
 	}  /* Should have a grid of references to node IDs at end of loop, accounting for all nodes. The last row may be short. */
 
 	for(var r = 0; r < gridArray.length -1; r +=1){
@@ -525,7 +608,6 @@ DG.linkStrats = {
          DG.linkNodes(gridArray[r][c],gridArray[r][c+1]);
       }	  
 	}
-	
   }
 };
 

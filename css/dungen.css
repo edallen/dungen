@@ -1,5 +1,5 @@
 td.dungen{
-  background-color: D6E5FF;
+  font-size: 75%;
 }
 table#dungeon_key{ float: right;
                   width: 25%; }
@@ -12,3 +12,10 @@ table#dungeon_key_for_printing{ clear: both;
   font: 700 36px/0.5 'Alegreya', Arial, serif;
 }
 p {font: 400 16px/0.5 'Alegreya', Arial, serif;} */
+
+/* Making look nice */
+body { padding: 1em; font-family: Arial; font-size: 14px; }
+input[type="text"] { padding: 0.4em; font-family: Arial; }
+
+/* Inline Edit */
+p.hover { background: #fffbe1; }

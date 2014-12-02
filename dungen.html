@@ -1,18 +1,20 @@
 <html>
 <head>
   <title>DunGen Dungeon Generator</title>
-
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
   <link href="vis/vis.css" rel="stylesheet" type="text/css" />
   <link href="css/dungen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <h1>DunGen</h1>
 <h3>  Dungeon Generator from <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> </h3>
+<div class="container">
   <p> by Ed Allen </p>
   <p> Plans for expansion blogged about this project at 
     <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></p>
-  <p> Adding and removing works, though removing nodes does not yet remove them from the list. Save and load are working now, but are incomplete: edited edges and deleted nodes and edges do not save yet.
-Finishing those up, making the delete button work and adding full node content editing and saving are next on my list. Then probably fixing the canvas to resize with the window. Then expanding treasure generation.
+  <p> What's new? Awesome new node editing dialog box. Added odd features to nodes. Expanded trap and potion descriptions, multiple treasure types in some hoards, 
+  and some multiple magic items (more in deeper levels), dungeon levels get one to three common monster types. 
 <br/>
   To manually save, copy the text of the room contents table and paste into another file, and right click the map to save the image as a PNG. Print looks best after moving the table using the button. </p>
 
@@ -39,13 +41,13 @@ Finishing those up, making the delete button work and adding full node content e
 	<option value="random" >Random</option>
 	<option value="triangles" >Triangles</option>
   </select>
-  <button id="regenerate">Generate</button>
-   <button id="redraw">Redraw</button>
-  <button id="repopulate" style = "display:none">Repopulate</button>
-  <button id="relabel" style = "display:none">Relabel</button>
+  <button class= "btn-small" id="regenerate">Generate</button>
+   <button class= "btn-small" id="redraw">Redraw</button>
+  <button class= "btn-small" id="repopulate" style = "display:none">Repopulate</button>
+  <button class= "btn-small" id="relabel" style = "display:none">Relabel</button>
   <br/>
   <label for="dungeon_name">Name for save </label><input id="dungeon_name" placeholder="Name the dungeon" ></input>
-  <button id="save" >Save</button>  
+  <button class= "btn-small" id="save" >Save</button>  
   <select id="saved" >
      <option>Saved Dungeons</option>
   </select>
@@ -56,12 +58,14 @@ Finishing those up, making the delete button work and adding full node content e
 
   <button id="move_table">Move Table for Printing</button>
   <div id="dungeon"></div>
-  <table id="dungeon_key"></table>
-  <table id="dungeon_key_for_printing" style = "display: none"></table>
+  <table class = "dungen table table-bordered" id="dungeon_key"></table>
+  <table class = "dungen table table-bordered" id="dungeon_key_for_printing" style = "display: none"></table>
+  </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
-  <!-- <script type="text/javascript" src="vendor/rivets.bundled.min.js"></script> -->
+  <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="bootstrap/js/bootbox.min.js"></script>
   <script type="text/javascript" src="vis/vis.js"></script>
-  <!-- <script type="text/javascript" src="vendor/stapes.min.js"></script> -->
+
   <script type="text/javascript" src="js/dungen.js"></script>
   <script type="text/javascript" src="js/dungen_stock.js"></script>
   <script type="text/javascript" src="js/dungen_run.js"></script>
