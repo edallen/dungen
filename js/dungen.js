@@ -432,11 +432,66 @@ var DG = {
   randomMagicItem: function(dungeonLevel){ // will need much more detail later and more items in big hoards
     var item = DG.drawOne(DG.stock.magicItems);
 	if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
+	if (item === "sword") { item = DG.genSword()};
+	if (item === "weapon") { item = DG.genWeapon(dungeonLevel)};
+
+	if (item === "armor") { item = DG.genArmor(dungeonLevel)};
+
+	if (item === "wand") { item = DG.genWand(dungeonLevel)};
+	if (item === "ring") { item = DG.genRing(dungeonLevel)};
+	if (item === "staff") { item = DG.genStaff(dungeonLevel)};
+	if (item === "book") { item = DG.genBook(dungeonLevel)};
+	if (item === "scroll") { item = DG.genScroll(dungeonLevel)};
+    if (item === "trinket") { item = DG.genTrinket(dungeonLevel)};
+	if (item === "miscellaneous") { item = DG.genMisc(dungeonLevel)};
+
 	return item;},
   randomMinorMagicItem: function(dungeonLevel){ // will need much more detail later and more items in big hoards
     var item = DG.drawOne(DG.stock.minorMagicItems);
 	if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
+	if (item === "scroll") { item = DG.genScroll(dungeonLevel)};
+    if (item === "trinket") { item = DG.genTrinket(dungeonLevel)};
 	return item;},
+  genSword: function(dungeonLevel){
+    var sword = DG.drawOne(DG.stock.swords);
+	return sword;
+  },
+  genWeapon: function(dungeonLevel){
+    var weapon = DG.drawOne(DG.stock.weapons);
+	return weapon;
+  },
+  genArmor: function(dungeonLevel){
+    var armor = DG.drawOne(DG.stock.armor);
+	return armor;
+  },
+  genWand: function(dungeonLevel){
+    var wand = "Wand of " + DG.drawOne(DG.stock.wands);
+	return wand;
+  },
+  genRing: function(dungeonLevel){
+    var ring = "Ring of " + DG.drawOne(DG.stock.rings);
+	return ring;
+  },
+  genMisc: function(dungeonLevel){
+    var misc = DG.drawOne(DG.stock.miscellaneous);
+	return misc;
+  },
+  genStaff: function(dungeonLevel){
+    var staff = "Staff of " + DG.drawOne(DG.stock.staves);
+	return staff;
+  },
+  genBook: function(dungeonLevel){
+    var book = DG.drawOne(DG.stock.books);
+	return book;
+  },
+  genScroll: function(dungeonLevel){
+    var scroll = DG.drawOne(DG.stock.scrolls);
+	return scroll;
+  },
+  genTrinket: function(dungeonLevel){
+    var trinket = DG.drawOne(DG.stock.trinkets);
+	return trinket;
+  },
   randomTrap: function(dungeonLevel){
   // will tie to dungeonLevel later
     var trap = DG.drawOne(DG.stock.traps);
