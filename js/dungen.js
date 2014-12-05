@@ -176,6 +176,15 @@ var DG = {
                           item = list.pop();
                           return [item,list];
 						},
+  arrayToSet: function(a) {
+    var hash = {};
+    for (var i = 0; i < a.length; i++)
+        hash[a[i]] = true;
+    var r = [];
+    for (var k in hash)
+        r.push(k);
+    return r;
+  },
   shuffle: function(array) {
     // Mike Bostock's Fisher Yates shuffle implementation
     var m = array.length, t, i;
@@ -330,8 +339,10 @@ var DG = {
   randomMonsters: function(dungeonLevel){ 
     var monsterLevel = dungeonLevel;
     var monsterCount = 1;
-    var monsterType = "";
+    var monsterType = {name:"", int:0, tags:[]};
+	var monsterName = "";
     var newMonsterTreasureMultiplier;
+	var attitude ="";
     var monsters = "";
     for (var i = 0; i < 3; i +=1){
       if (DG.rollOne()){ monsterLevel += 1;}
@@ -353,28 +364,37 @@ var DG = {
     }
 	if (DG.rollThree()){
       monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
+	  monsterName = monsterType.name;
+	  console.log('mn:' + monsterName);
 	} else {
 	// will let monster count stand, which will generate some group size outliers
 	  monsterLevel = dungeonLevel;
 	  monsterType = DG.drawOne(DG.data.baseMonsters);
+	  monsterName = monsterType.name;
+	  console.log('mn:' + monsterName);
 	}
     // adjusting plurals - extract to a function soon
-    if (monsterCount > 1){ 
-      if ( monsterType.match(/man$/) ){
-        monsterType = monsterType.replace(/man$/, "men");}
-      else if ( monsterType.match(/y$/) ){
-         monsterType = monsterType.replace(/y$/, "ies");}      
+    if (monsterCount > 1){
+      if (monsterType.hasOwnProperty("plural")){
+	    monsterName = monsterType.plural;
+      }	      
       else {
-        monsterType += "s";
+        monsterName += "s";
       }
     }
     
     // extract this
     newMonsterTreasureMultiplier = (monsterLevel * (monsterCount^0.75));
     DG.monsterTreasureMultiplier = Math.max(DG.monsterTreasureMultiplier,newMonsterTreasureMultiplier);
-    monsters = "M: " +  monsterCount + " " + monsterType + "<br/>";
+    monsters = "M: " + monsterCount 
+    if (DG.rollThree()){ 
+		if (monsterType.int < 7){ attitude = DG.drawOne(DG.stock.basicAttitudes) }                
+		else {attitude = DG.drawOne(DG.stock.allAttitudes)} 	
+	    monsters += " " + attitude;
+	};
+    monsters += " " + monsterName + "<br/>";
   
-  return monsters;
+    return monsters;
   },
   valueFraction: function(treasureValue){ 
     return DG.rollDie(1,9) * 0.1 * treasureValue 
@@ -382,7 +402,11 @@ var DG = {
   oneTreasure: function(treasureValue){
     var treasureCount = 1;
     var treasureType = DG.drawOne(DG.stock.treasure);
-    if (treasureType["value"] < treasureValue){
+	if (treasureType["value"] === "X") {
+	  var jewelValue = Math.floor(treasureValue * DG.rollDie(1,8));
+	  return treasureType["label"] + " worth " + jewelValue  + " GP";
+    }
+    else if (treasureType["value"] < treasureValue){
       treasureCount = Math.floor(treasureValue/treasureType["value"]);
     }
     return treasureCount + " " + treasureType["label"];
@@ -432,7 +456,7 @@ var DG = {
   randomMagicItem: function(dungeonLevel){ // will need much more detail later and more items in big hoards
     var item = DG.drawOne(DG.stock.magicItems);
 	if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
-	if (item === "sword") { item = DG.genSword()};
+	if (item === "sword") { item = DG.genSword(dungeonLevel)};
 	if (item === "weapon") { item = DG.genWeapon(dungeonLevel)};
 
 	if (item === "armor") { item = DG.genArmor(dungeonLevel)};
@@ -454,14 +478,69 @@ var DG = {
 	return item;},
   genSword: function(dungeonLevel){
     var sword = DG.drawOne(DG.stock.swords);
+	var bonus = 1;
+	var powerList = [];
+	for (i = 0; i < dungeonLevel +2; i +=1){
+	  if (DG.rollTwo()){bonus +=1};
+	  if (DG.rollTwo()) {powerList.push(DG.drawOne(DG.stock.swordPowers))};
+	}
+	if (powerList.indexOf("Cursed") === -1 ){
+	  sword += " +" + bonus;
+	} else {
+	  sword += " -" + bonus + " Cursed";
+	  powerList.remove(["Cursed"]);
+	}
+	powerList = DG.arrayToSet(powerList);
+	if (powerList !== []){
+	  sword += ", " + powerList.join(', ');
+    }	  
+
 	return sword;
   },
   genWeapon: function(dungeonLevel){
     var weapon = DG.drawOne(DG.stock.weapons);
+	var bonus = 1;
+	var powerList = [];
+	for (i = 0; i < dungeonLevel +1; i +=1){
+	  if (DG.rollTwo()){bonus +=1};
+	  if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.weaponPowers))};
+	}
+	if (powerList.indexOf("Cursed") === -1 ){
+	  weapon += " +" + bonus;
+	} else {
+	  weapon += " -" + bonus + " Cursed";
+	  powerList.remove(["Cursed"]);
+
+	}
+	powerList = DG.arrayToSet(powerList);
+	if (powerList !== []){
+	  weapon += ", " + powerList.join(', ');
+    }	  
+
+	
 	return weapon;
   },
   genArmor: function(dungeonLevel){
     var armor = DG.drawOne(DG.stock.armor);
+
+	var bonus = 1;
+	var powerList = [];
+	for (i = 0; i < dungeonLevel +1; i +=1){
+	  if (DG.rollTwo()){bonus +=1};
+	  if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.armorPowers))};
+	}
+	if (powerList.indexOf("Cursed") === -1 ){
+	  armor += " +" + bonus;
+	} else {
+	  armor += " -" + bonus + " Cursed";
+	  powerList.remove(["Cursed"]);
+
+	}
+	powerList = DG.arrayToSet(powerList);
+	if (powerList !== []){
+	  armor += ", " + powerList.join(', ');
+    }	  
+
 	return armor;
   },
   genWand: function(dungeonLevel){

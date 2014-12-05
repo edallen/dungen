@@ -9,14 +9,19 @@
 <body>
 <h1>DunGen</h1>
 <h3>  Dungeon Generator from <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> </h3>
-<div class="container">
+<div class="container-fluid">
   <p> by Ed Allen </p>
-  <p> Plans for expansion blogged about this project at 
+  <p> Plans for expansion of this project blogged at 
     <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></p>
-  <p> What's new? Awesome new node editing dialog box. Added odd features to nodes. Expanded trap and potion descriptions, multiple treasure types in some hoards, 
-  and some multiple magic items (more in deeper levels), dungeon levels get one to three common monster types. 
+  <p> What's new? Loot, both mundane and magic, is way more varied. Monsters can (50%) have attitude. Later the frequency will be adjustable. Monsters expanded from name strings to objects, a step towards theming. So far, it just means
+  smarter ones have more extensive attitude options.
+  <br/>
+  Tested on mobile. Generation works, the VisJS graph editor does not. 
+  This is a desktop/laptop app for now. Will work on alternate editing path for tablets. 
+  Not optimistic about supporting phones: navigation issues, besides slowness and lack of screenspace.
 <br/>
-  To manually save, copy the text of the room contents table and paste into another file, and right click the map to save the image as a PNG. Print looks best after moving the table using the button. </p>
+  To manually save, copy the text of the room contents table and paste into another file, and right click the map to save the image as a PNG.
+  Print looks best after moving the table using the button. </p>
 
   <select id="level">
     <option value = "0">Level 1</option>
