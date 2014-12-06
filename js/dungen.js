@@ -19,8 +19,11 @@ Array.prototype.remove= function(){
 // http://community.sitepoint.com/t/remove-the-element-from-array-a-if-it-exists-in-array-b/5958
 
 var DG = {
-  // Arguments to the Vis.Network creation call ----------------------------------------------
   container:  document.getElementById('dungeon'),
+  // Text utility functions
+  brToLf: function(text) { return text.replace(new RegExp('<br\/>','g'),'\n').replace(new RegExp('<br>','g'),'\n').replace(new RegExp('<br \/>','g'),'\n');},
+  lfToBr: function(text) { return text.replace(new RegExp('\r?\n','g'), '<br>');},
+  // Arguments to the Vis.Network creation call ----------------------------------------------
   drawOptions: { 
     dataManipulation: true,
 	onAdd: function(data,callback) {
@@ -74,8 +77,8 @@ var DG = {
 
 				'<div class="form-group"> ' +
 				  '<label class="col-md-4 control-label" for="description">Description</label> ' +
-					'<textarea id="location_description" name="location_description" type="text"  placeholder="Location description" value="' + DG.nodesDataSet.get(newData.id).title + '" '+ 
-					'class="form-control" rows="8" columns = "30">' + DG.nodesDataSet.get(newData.id).title + '</textarea>'+
+					'<textarea id="location_description" name="location_description" type="text"  placeholder="Location description" value="' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '" '+ 
+					'class="form-control" rows="8" columns = "30">' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '</textarea>'+
 				'</div> ' +
 				'</form> </div>  </div>', 
 		  buttons: {
@@ -84,7 +87,7 @@ var DG = {
 			  className: "btn-success",
 			  callback: function() {
 				newData.label =  $('#location_name').val();
-				newData.title =  $('#location_description').val();
+				newData.title =  DG.lfToBr($('#location_description').val());
 				DG.nodesDataSet.update(newData);
 				callback(newData); 
 			  
@@ -104,10 +107,34 @@ var DG = {
         */
         var newData = data; // alter the data as you want, except for the ID.
                             // all fields normally accepted by an edge can be used.a
-        newData.label = DG.edgesDataSet.get(newData.id).label;	
-		newData.label = window.prompt("Change label",newData.label);
-        DG.edgesDataSet.update(newData);
-		callback(newData);  // call the callback with the new data to edit the edge.
+		bootbox.dialog({
+		  title:"Edit Path between Locations",
+		  message: '<div class="row">  ' +
+				'<div class="col-md-12"> ' +
+				'<form class="form"> ' +
+				'<div class="form-group"> ' +
+				'<label class="col-md-4 control-label" for="name">Name</label> ' +
+				'<input id="edge_name" name="edge_name" type="text" placeholder="Path name" value="' + DG.edgesDataSet.get(newData.id).label + 
+				  '" class="form-control input-md"/> ' +
+				'</div>'+
+				'</form> </div>  </div>', 
+		  buttons: {
+			save: {
+			  label: "Save",
+			  className: "btn-success",
+			  callback: function() {
+				newData.label =  $('#edge_name').val();
+
+				DG.edgesDataSet.update(newData);
+				callback(newData); 
+			  
+			  }
+			},
+
+		  }
+        
+		
+        })
     },
     onConnect: function(data,callback) {
         // data = {from: nodeId1, to: nodeId2};
@@ -150,6 +177,7 @@ var DG = {
 	  DG.edgesDataSet = new vis.DataSet(DG.data.edges);
       DG.edgesDataSet.on('*', function (event, properties, senderId) {
          DG.data.edges = DG.edgesDataSet.get();
+		 DG.fillKey();
       });
 	  data = {nodes: DG.nodesDataSet, edges: DG.edgesDataSet};
       DG.network = new vis.Network(DG.container, data, DG.drawOptions);
@@ -249,7 +277,15 @@ var DG = {
 	}
   },  
 
-  deleteDungeon: function(){alert("This will remove the selected dungeon from localStorage after a confirm dialog")},
+  deleteDungeon: function(){
+    var dungeonSelect = document.getElementById("saved");
+    var selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
+	var message = "Permanently delete dungeon " + selectedKey + " from storage?";
+    if (confirm(message)){
+	  localStorage.removeItem(selectedKey);
+	  DG.populateSavedSelect();
+	}
+  },
   exportDungeon: function(){alert("This will export contents to a text file when done")},  // export a file with the data structure
   importDungeon: function(){alert("This will import an exported data file and draw the dungeon when done")}, //import a file previously exported
 
@@ -332,9 +368,9 @@ var DG = {
   },
   randomOddity: function(dungeonLevel){ 
     // ignoring dungeonLevel for now
-    return DG.drawOne(DG.stock.oddities) + "<br/>"; },
+    return DG.drawOne(DG.stock.oddities) + "<br>"; },
   randomHook: function(){ 
-    var hook = "Hook: " + DG.drawOne(DG.stock.hook_items)  + "<br/>";
+    var hook = "Hook: " + DG.drawOne(DG.stock.hook_items)  + "<br>";
     return hook},
   randomMonsters: function(dungeonLevel){ 
     var monsterLevel = dungeonLevel;
@@ -392,7 +428,7 @@ var DG = {
 		else {attitude = DG.drawOne(DG.stock.allAttitudes)} 	
 	    monsters += " " + attitude;
 	};
-    monsters += " " + monsterName + "<br/>";
+    monsters += " " + monsterName + "<br>";
   
     return monsters;
   },
@@ -434,21 +470,21 @@ var DG = {
 	    hoard += DG.oneTreasure(DG.valueFraction(treasureValue)); 
 	  }	  
 	}
-    hoard += "<br/>";
+    hoard += "<br>";
 	if (DG.rollOne()){ 
-      hoard += "Mg: " + DG.randomMinorMagicItem(dungeonLevel) + "<br/>";
+      hoard += "Mg: " + DG.randomMinorMagicItem(dungeonLevel) + "<br>";
     }
     if (DG.rollDie(1,1000) < treasureValue){ 
-      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br/>";
+      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
     }
 	if (DG.rollDie(0,9) <= dungeonLevel){ 
-      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br/>";
+      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
     }
 	if (DG.rollDie(1,8000) < treasureValue){ 
-      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br/>";
+      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
     }
 	if (DG.rollDie(1,20000) < treasureValue){ 
-      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br/>";
+      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
     }
 	
     return hoard; 
@@ -577,11 +613,13 @@ var DG = {
 	if (DG.rollTwo()){trap += " disarmed by " + DG.drawOne(DG.stock.disarms)}
 	if (DG.rollThree()){trap += ", triggered by " + DG.drawOne(DG.stock.triggers)}
 
-    return "Tp: " + trap + "<br/>";
+    return "Tp: " + trap + "<br>";
   },
   
   // Dungeon Key table -------------------------------------------------
   fillKey: function() { 
+   //This function will render out the labels and descriptions from 
+   //DG.data.nodes into table#dungeon_key
   var dungeonKey = "<thead>\n<tr><th>Location</th><th>Description</th></tr>\n</thead><tbody>"
   var tl = "<tr id ='" 
   var tlm = "'><td class='dungen'>";
@@ -589,13 +627,20 @@ var DG = {
   var tr = "</td></tr>";
   var node = {};
   var nodesLength = DG.data.nodes.length;
+  var edge = {};
+  var edgesLength = DG.data.edges.length;
   for (i = 0; i < nodesLength; i +=1){
       node = DG.data.nodes[i];
       dungeonKey = dungeonKey + ( tl + node["id"] + tlm + node["label"] + tm + node["title"] + tr );
    }
    dungeonKey += "\n</tbody>";
-   //This function will render out the labels and descriptions from 
-   //DG.data.nodes into table#dungeon_key
+   dungeonKey += "\n<tbody>";
+   for (i = 0; i < edgesLength; i +=1){
+      edge = DG.data.edges[i];
+	  
+      dungeonKey = dungeonKey + ( tl + edge["id"] + tlm + edge["label"] + tm + DG.data.nodes[edge["from"]]["label"] + " to " + DG.data.nodes[edge["to"]]["label"] + tr );
+   }
+   dungeonKey += "\n</tbody>";
    document.getElementById("dungeon_key").innerHTML = dungeonKey;
    document.getElementById("dungeon_key_for_printing").innerHTML = dungeonKey;
   },

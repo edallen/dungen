@@ -538,7 +538,7 @@ DG.stock = {
 	  "Power",
 	  "Wizardry"],
   scrolls: ["Scroll"],
-  books: ["Book", "Libram", "Tome", "Manual", "Grimoire",],
+  books: ["Book", "Libram", "Tome", "Manual", "Grimoire"],
   rings: ["Regeneration", 
 	  "Weakness", 
 	  "Invisibility", 
