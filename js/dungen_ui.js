@@ -38,7 +38,12 @@ function bindButtons() {
   
   var importButton = document.getElementById("import");
   importButton.addEventListener("click", function() { DG.importDungeon(); } );
-  
+
+  var keyButton = document.getElementById("scroll-to-key");
+  keyButton.addEventListener("click", function() { DG.scrollToKey(); } );
+
+  var topButton = document.getElementById("scroll-to-top");
+  topButton.addEventListener("click", function() { DG.scrollToTop(); } );
 };
 
 function populateUI(){

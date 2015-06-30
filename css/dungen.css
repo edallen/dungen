@@ -4,9 +4,9 @@ td.dungen{
 table#dungeon_key{ float: right;
                   width: 25%; }
 div#dungeon{float: left;
-           width: 74%;}
+           width: 90%;}
 table#dungeon_key_for_printing{ clear: both;
-                  width:74%; }
+                  width:90%; }
 				  
 /* h1 {
   font: 700 36px/0.5 'Alegreya', Arial, serif;
@@ -19,3 +19,10 @@ input[type="text"] { padding: 0.4em; font-family: Arial; }
 
 /* Inline Edit */
 p.hover { background: #fffbe1; }
+
+.top-right-fixed {
+    position: fixed;
+    top: 1em;
+    right: 1em;
+}
+.clear-both {  clear: both;  }

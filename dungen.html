@@ -7,21 +7,10 @@
   <link href="css/dungen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<h1>DunGen</h1>
-<h3>  Dungeon Generator from <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> </h3>
+
+<h3>  <b>DunGen</b> <small>Pointcrawl Dungeon Generator by Ed Allen: <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> & <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></small></h3>
+<button id="scroll-to-key" class="top-right-fixed">Key</button>
 <div class="container-fluid">
-  <p> by Ed Allen </p>
-  <p> Plans for expansion of this project blogged at 
-    <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></p>
-  <p> What's new? Loot, both mundane and magic, is way more varied. Monsters can (50%) have attitude. Later the frequency will be adjustable. Monsters expanded from name strings to objects, a step towards theming. So far, it just means
-  smarter ones have more extensive attitude options.
-  <br/>
-  Tested on mobile. Generation works, the VisJS graph editor does not. 
-  This is a desktop/laptop app for now. Will work on alternate editing path for tablets. 
-  Not optimistic about supporting phones: navigation issues, besides slowness and lack of screenspace.
-<br/>
-  To manually save, copy the text of the room contents table and paste into another file, and right click the map to save the image as a PNG.
-  Print looks best after moving the table using the button. </p>
 
   <select id="level">
     <option value = "0">Level 1</option>
@@ -50,7 +39,6 @@
    <button class= "btn-small" id="redraw">Redraw</button>
   <button class= "btn-small" id="repopulate" style = "display:none">Repopulate</button>
   <button class= "btn-small" id="relabel" style = "display:none">Relabel</button>
-  <br/>
   <label for="dungeon_name">Name for save </label><input id="dungeon_name" placeholder="Name the dungeon" ></input>
   <button class= "btn-small" id="save" >Save</button>  
   <select id="saved" >
@@ -60,12 +48,22 @@
   <button id="delete">Delete from storage</button>
   <button id="export" style="display:none">Export file</button>
   <button id="import" style="display:none">Import file</button>
+  <button id= "chrome-dl" type="button" onclick="DG.chromeSaveImage()" style="display:none" >Download Image</button>
 
-  <button id="move_table">Move Table for Printing</button>
+
+  <button id="move_table"style="display:none">Move Table for Printing</button>
   <div id="dungeon"></div>
-  <table class = "dungen table table-bordered" id="dungeon_key"></table>
-  <table class = "dungen table table-bordered" id="dungeon_key_for_printing" style = "display: none"></table>
+  <span class="clear-both"></span>
+
+  <table class = "dungen table table-bordered" id="dungeon_key"style = "display: none"></table>
+  <div id="table-holder">
+    <table class = "dungen table table-bordered" id="dungeon_key_for_printing" ></table>
+    <button id= "scroll-to-top">Top</button>
   </div>
+  <div id="footer_notes" style="clear: both"><label for="notes">Notes</label><br>
+    <textarea id="notes" cols='120' rows='10' ></textarea></div>
+  </div>
+<p>To manually save and use the dungeon outside this page, copy the text of the room contents table and notes field and paste into another file, and right click the map to save the image as a PNG.</p>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
   <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="bootstrap/js/bootbox.min.js"></script>

@@ -19,52 +19,19 @@ Array.prototype.remove= function(){
 // http://community.sitepoint.com/t/remove-the-element-from-array-a-if-it-exists-in-array-b/5958
 
 var DG = {
+  scrollToKey: function(){
+    $("html, body").animate({ scrollTop:"880px" });
+  },
+  scrollToTop: function(){
+    $("html, body").animate({ scrollTop:"20px" });
+  },
   container:  document.getElementById('dungeon'),
   // Text utility functions
   brToLf: function(text) { return text.replace(new RegExp('<br\/>','g'),'\n').replace(new RegExp('<br>','g'),'\n').replace(new RegExp('<br \/>','g'),'\n');},
   lfToBr: function(text) { return text.replace(new RegExp('\r?\n','g'), '<br>');},
   // Arguments to the Vis.Network creation call ----------------------------------------------
-  drawOptions: { 
-    dataManipulation: true,
-	onAdd: function(data,callback) {
-        /** data = {id: random unique id,
-        *           label: new,
-        *           x: x position of click (canvas space),
-        *           y: y position of click (canvas space),
-        *           allowedToMoveX: true,
-        *           allowedToMoveY: true
-        *          };
-        */
-		var i = DG.data.nodes[DG.data.nodes.length - 1].id + 1;
-		
-        var newData = DG.makeNode(i, DG.nameNode(i+1) ); 
-		                    // alter the data as you want.
-                            // all fields normally accepted by a node can be used.
-		console.log(newData);
-		DG.nodesDataSet.add(newData);
-	
-        callback(newData);  // call the callback to add a node.
-    },
-    onEdit: function(data,callback) {
-        /** data = {id:...,
-        *           label: ...,
-        *           group: ...,
-        *           shape: ...,
-        *           color: {
-        *             background:...,
-        *             border:...,
-        *             highlight: {
-        *               background:...,
-        *               border:...
-        *             }
-        *           }
-        *          };
-        */
-		console.log(data);
-		
-        var newData = data; // alter the data as you want.
-                            // all fields normally accepted by a node can be used.
-		bootbox.dialog({
+  nodeDialog: function(newData,callback){
+    bootbox.dialog({
 		  title:"Edit Location",
 		  message: '<div class="row">  ' +
 				'<div class="col-md-12"> ' +
@@ -97,7 +64,156 @@ var DG = {
 		  }
         
 		
-        });		 	 
+        });		 	
+  
+  },
+  formatOption: function(node,selectedId){
+    var option =  '<option value="' + node.id + '"';
+	if (selectedId === node.id){
+	  option += " selected ";
+	}
+	option += '>' + node.label + '</option>';
+	
+	return option;
+  },
+  formatFromOption: function(node){
+  	return DG.formatOption(node,DG.fromOption);
+  },
+  formatToOption: function(node){
+  	return DG.formatOption(node,DG.toOption);
+  },
+  
+  fromOptions: function(selectedId){
+    DG.fromOption = selectedId;
+    var optionsList = DG.nodesDataSet.map(DG.formatFromOption,{fields:["id","label"],
+	                                  returnType: "Object"});
+	DG.fromOption = null;								  
+	return optionsList.join('\n');
+									  
+  },
+  toOptions: function(selectedId){
+    DG.toOption = selectedId;
+    var optionsList = DG.nodesDataSet.map(DG.formatToOption,{fields:["id","label"],
+	                                  returnType: "Object"});
+	DG.toOption = null;								  
+	return optionsList.join('\n');
+									  
+  },
+  edgeDialog: function(thisEdge, callback){
+     var fromNodeId = thisEdge.from;
+	 var toNodeId = thisEdge.to;
+     bootbox.dialog({
+		  		  title:"Edit Path between Locations",
+		  message: '<div class="row">  ' +
+				'<div class="col-md-12"> ' +
+				'<form class="form"> ' +
+				'<div class="form-group"> ' +
+				'<label class="col-md-4 control-label" for="name">Name</label> ' +
+				'<input id="edge_name" name="edge_name" type="text" placeholder="Path name" value="' + thisEdge.label + 
+				  '" class="form-control input-md"/> ' +
+				'</div>'+
+				'<div class="form-group"> ' +
+				  '<label class="col-md-4 control-label" for="fromNode">From</label> ' +
+				  '<select id="fromNode">' + DG.fromOptions(fromNodeId) + '</select>' +
+				'</div>'+
+				'<div class="form-group"> ' +
+				  '<label class="col-md-4 control-label" for="toNode">To</label> ' +
+				  '<select id="toNode">' + DG.toOptions(toNodeId) + '</select>' +
+				'</div>'+
+				'</form> </div>  </div>', 
+		  buttons: {
+			save: {
+			  label: "Save",
+			  className: "btn-success",
+			  callback: function() {
+				thisEdge.label =  $('#edge_name').val();
+                thisEdge.from =  $('#fromNode').val();
+				thisEdge.to =  $('#toNode').val();
+				DG.edgesDataSet.update(thisEdge);
+				callback(thisEdge); 
+			  
+			  }
+			},
+
+		  }
+        
+		
+        })		 
+  },
+  drawOptions: { 
+    //physics: {barnesHut: {enabled: false}},
+    dataManipulation: true,
+	onAdd: function(data,callback) {
+        /** data = {id: random unique id,
+        *           label: new,
+        *           x: x position of click (canvas space),
+        *           y: y position of click (canvas space),
+        *           allowedToMoveX: true,
+        *           allowedToMoveY: true
+        *          };
+        */
+		var i = DG.data.nodes[DG.data.nodes.length - 1].id + 1;
+		
+        var newData = DG.makeNode(i, DG.nameNode(i+1) ); 
+		                    // alter the data as you want.
+                            // all fields normally accepted by a node can be used.
+		DG.nodesDataSet.add(newData);
+	
+        callback(newData);  // call the callback to add a node.
+    },
+    onEdit: function(data,callback) {
+        /** data = {id:...,
+        *           label: ...,
+        *           group: ...,
+        *           shape: ...,
+        *           color: {
+        *             background:...,
+        *             border:...,
+        *             highlight: {
+        *               background:...,
+        *               border:...
+        *             }
+        *           }
+        *          };
+        */
+		
+        var newData = data; // alter the data as you want.
+                            // all fields normally accepted by a node can be used.
+		DG.nodeDialog(newData,callback);
+/* 		bootbox.dialog({
+		  title:"Edit Location",
+		  message: '<div class="row">  ' +
+				'<div class="col-md-12"> ' +
+				'<form class="form"> ' +
+				'<div class="form-group"> ' +
+				'<label class="col-md-4 control-label" for="name">Name</label> ' +
+				'<input id="location_name" name="location_name" type="text" placeholder="Location name" value="' + DG.nodesDataSet.get(newData.id).label + 
+				  '" class="form-control input-md"/> ' +
+				'</div>'+
+
+				'<div class="form-group"> ' +
+				  '<label class="col-md-4 control-label" for="description">Description</label> ' +
+					'<textarea id="location_description" name="location_description" type="text"  placeholder="Location description" value="' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '" '+ 
+					'class="form-control" rows="8" columns = "30">' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '</textarea>'+
+				'</div> ' +
+				'</form> </div>  </div>', 
+		  buttons: {
+			save: {
+			  label: "Save",
+			  className: "btn-success",
+			  callback: function() {
+				newData.label =  $('#location_name').val();
+				newData.title =  DG.lfToBr($('#location_description').val());
+				DG.nodesDataSet.update(newData);
+				callback(newData); 
+			  
+			  }
+			},
+
+		  }
+        
+		
+        }); */		 	 
     },
     onEditEdge: function(data,callback) {
         /** data = {id: edgeID,
@@ -158,7 +274,8 @@ var DG = {
     height: '90%'
   },
   data: { nodes:[],
-          edges:[],},
+          edges:[],
+		  notes: ''},
   nodesDataSet:"uninitialized",
   edgesDataSet:"uninitialized",
   // Shared variables
@@ -172,15 +289,18 @@ var DG = {
 	  DG.nodesDataSet = new vis.DataSet(DG.data.nodes);
 	  DG.nodesDataSet.on('*', function (event, properties, senderId) {
         DG.data.nodes = DG.nodesDataSet.get();
-	    DG.fillKey();
+        DG.fillKey();		
       });
 	  DG.edgesDataSet = new vis.DataSet(DG.data.edges);
       DG.edgesDataSet.on('*', function (event, properties, senderId) {
          DG.data.edges = DG.edgesDataSet.get();
 		 DG.fillKey();
       });
+	  console.log("in initNetwork, data follows")
 	  data = {nodes: DG.nodesDataSet, edges: DG.edgesDataSet};
+	  console.log(data);
       DG.network = new vis.Network(DG.container, data, DG.drawOptions);
+	;
 	  DG.fillKey();
   },
   
@@ -216,9 +336,9 @@ var DG = {
   shuffle: function(array) {
     // Mike Bostock's Fisher Yates shuffle implementation
     var m = array.length, t, i;
-    // While there remain elements to shuffle…
+    // While there remain elements to shuffleï¿½
     while (m) {
-      // Pick a remaining element…
+      // Pick a remaining elementï¿½
       i = Math.floor(Math.random() * m--);
       // And swap it with the current element.
       t = array[m];
@@ -230,7 +350,6 @@ var DG = {
   // ui handlers - move to ui file?
   populateSavedSelect: function(){
     // populate the saved dungeons select
-    console.log("populate");
     var dungeonSelect = document.getElementById("saved");
     dungeonSelect.innerHTML = ""
     var keys = [];
@@ -239,17 +358,14 @@ var DG = {
       key = localStorage.key(i);
       keys.push(key);
     };
-    if (keys.length > 0) {console.log("adding keys to options");
-      DG.addOptionsToSelect(dungeonSelect,keys);
-    };
+    if (keys.length > 0) {  DG.addOptionsToSelect(dungeonSelect,keys); };
   },
   addOptionsToSelect: function(select,optionsList){
-    console.log('adding opts');
+  
     for(var i = 0; i < optionsList.length; i += 1) {
       var opt = document.createElement('option');
       opt.value = optionsList[i];
       opt.innerHTML = optionsList[i];
-	  console.log(opt);
       select.appendChild(opt);
 	}
   },
@@ -259,7 +375,7 @@ var DG = {
 						  var dungeonSelect = document.getElementById("saved");
 						  DG.populateSavedSelect();
 						  },
-  loadDungeon: function(){ console.log("load function entered");
+  loadDungeon: function(){ 
     var dungeonSelect = document.getElementById("saved");
 	var selectedKey = "";
 	var dungeonData = "unloaded";
@@ -314,12 +430,21 @@ var DG = {
                                             group: ""};
   },
   makeEdge: function(startNode,endNode) { 
+    if (startNode === undefined) {return "error"};
+	if (endNode === undefined) {return "error"};
     return {from: startNode, to: endNode, label: this.randomEdgeLabel()};
   },
   linksOnNode: function(nodeId) { return edges = DG.data.edges.filter(function( edge ) {
-   return (edge.from == nodeId || edge.to == nodeId); });
+   return (edge.from === nodeId || edge.to === nodeId); });
   },
-  linkNodes: function(a,b){DG.data.edges.push(DG.makeEdge(a,b));},
+  linkNodes: function(startEdge,endEdge){  console.log([startEdge,endEdge]);
+    var edge = DG.makeEdge(startEdge,endEdge);
+	console.log(edge);
+    if (edge === "error"){ console.log( "attempting to link undefined node"); return}
+    DG.data.edges.push(DG.makeEdge(startEdge,endEdge));
+	console.log("made edge");
+	console.log(DG.data.edges)
+  },
   setRandomRoomCount: function(){
     DG.roomCount = DG.rollDie(DG.minRooms, (DG.maxRooms - DG.minRooms) );
 	return DG.roomCount;
@@ -401,13 +526,11 @@ var DG = {
 	if (DG.rollThree()){
       monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
 	  monsterName = monsterType.name;
-	  console.log('mn:' + monsterName);
 	} else {
 	// will let monster count stand, which will generate some group size outliers
 	  monsterLevel = dungeonLevel;
 	  monsterType = DG.drawOne(DG.data.baseMonsters);
 	  monsterName = monsterType.name;
-	  console.log('mn:' + monsterName);
 	}
     // adjusting plurals - extract to a function soon
     if (monsterCount > 1){
@@ -616,12 +739,30 @@ var DG = {
     return "Tp: " + trap + "<br>";
   },
   
+  // save button works in Chrome
+  chromeSaveImage: function () {
+	var ua = window.navigator.userAgent;
+  
+	// save image without file type
+	var canvas = $("canvas")[0];
+	document.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+
+	// save image as png
+	var link = document.createElement('a');
+	var fileName = prompt("Name for image file?","dungeon.png");
+	link.download = fileName;
+	link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
+	link.click();
+		
+  },
+	
   // Dungeon Key table -------------------------------------------------
   fillKey: function() { 
    //This function will render out the labels and descriptions from 
    //DG.data.nodes into table#dungeon_key
   var dungeonKey = "<thead>\n<tr><th>Location</th><th>Description</th></tr>\n</thead><tbody>"
-  var tl = "<tr id ='" 
+  var tln = "<tr class='node_row' id ='" 
+  var tle = "<tr  class='edge_row'id ='" 
   var tlm = "'><td class='dungen'>";
   var tm = "</td><td class='dungen'>";
   var tr = "</td></tr>";
@@ -629,16 +770,20 @@ var DG = {
   var nodesLength = DG.data.nodes.length;
   var edge = {};
   var edgesLength = DG.data.edges.length;
+  var fromNodeLabel, toNodeLabel;
   for (i = 0; i < nodesLength; i +=1){
       node = DG.data.nodes[i];
-      dungeonKey = dungeonKey + ( tl + node["id"] + tlm + node["label"] + tm + node["title"] + tr );
+      dungeonKey = dungeonKey + ( tln + node["id"] + tlm + node["label"] + tm + node["title"] + tr );
    }
    dungeonKey += "\n</tbody>";
    dungeonKey += "\n<tbody>";
+   console.log(DG.data.edges);
    for (i = 0; i < edgesLength; i +=1){
       edge = DG.data.edges[i];
-	  
-      dungeonKey = dungeonKey + ( tl + edge["id"] + tlm + edge["label"] + tm + DG.data.nodes[edge["from"]]["label"] + " to " + DG.data.nodes[edge["to"]]["label"] + tr );
+
+	  fromNodeLabel = DG.data.nodes[edge["from"]]["label"];
+	  toNodeLabel = DG.data.nodes[edge["to"]]["label"];
+      dungeonKey = dungeonKey + ( tle + edge["id"] + tlm + edge["label"] + tm + fromNodeLabel + " to " + toNodeLabel + tr );
    }
    dungeonKey += "\n</tbody>";
    document.getElementById("dungeon_key").innerHTML = dungeonKey;
@@ -695,7 +840,7 @@ var DG = {
 
 // link strategies  --------------------------------------------------------------------
 DG.linkStrats = {
-  branchLink: function(roomIds) { console.log("branch");
+  branchLink: function(roomIds) {  console.log("branchLink entered");
     var nodes = roomIds.length;
     var linkedNodes = [];
     var unlinkedNodes =roomIds.slice();
@@ -712,32 +857,34 @@ DG.linkStrats = {
        toLink = linkedNodes[DG.rollDie(0,linkedNodes.length-1)];        
     }
   },
-  linearLink: function(roomIds){ console.log("linear");
+  linearLink: function(roomIds){ 
     for (var i = 0; i < roomIds.length -1; i+=1){
       var startEdge = i;
       var endEdge = startEdge + 1;
       DG.linkNodes(startEdge,endEdge);
     }
   },
-  randomLink: function(linksToMake){ console.log("random");
+  randomLink: function(linksToMake){
+    console.log("randomLink entered");
     for(var i = 0; i < linksToMake; i+=1){
      var startEdge = DG.rollDie(0,DG.roomCount-1);
      var endEdge = DG.rollOther(0,DG.roomCount-1,startEdge);
+	 console.log([startEdge,endEdge]);
      DG.linkNodes(startEdge,endEdge);}
   },
-  randomAllLink: function(linksToMake){ console.log("randomAll");
+  randomAllLink: function(linksToMake){ 
     DG.linkStrats.randomLink(linksToMake);
     var nodes = DG.allNodeIds().slice();
 	  
 	var linkedNodes = [];
 	DG.data.edges.forEach(function(edge){linkedNodes.push(edge["from"])});
 	DG.data.edges.forEach(function(edge){linkedNodes.push(edge["to"])});
-    console.log(linkedNodes);
+   
 	var unlinkedNodes = nodes.remove.apply(nodes,linkedNodes);
  
 	unlinkedNodes.map(function(node){DG.linkNodes(node,(linkedNodes.pop() || 1));});
   },
-  trianglesLink: function(roomIds){ console.log("triangles");
+  trianglesLink: function(roomIds){   console.log("trianglesLink entered");
    var nodesCount = roomIds.length;
    var unlinkedNodes = roomIds.slice();
    var linkedNodes = [];
@@ -758,8 +905,10 @@ DG.linkStrats = {
    } 
    unlinkedNodes.map(function(node){DG.linkNodes(node,node - 1)});
   },
-  gridLink: function(){ console.log("grid");
+  gridLink: function(){ 
     var rowLength = Math.floor(Math.sqrt(DG.roomCount)) + DG.rollDie(0,3);
+	console.log("rowLength ")
+	console.log(rowLength); 
 	var gridArray = [[]];
 	var gridRow = 0;
 	var nodes = DG.data.nodes.length;
@@ -778,13 +927,17 @@ DG.linkStrats = {
 	}  /* Should have a grid of references to node IDs at end of loop, accounting for all nodes. The last row may be short. */
 
 	for(var r = 0; r < gridArray.length -1; r +=1){
+	  console.log("iterating columns, linking item in row to next one down")
 	  for (var c = 0; c < gridArray[r+1].length; c += 1){
-	     console.log(gridArray[r][c],gridArray[r+1][c]);
-         DG.linkNodes(gridArray[r][c],gridArray[r+1][c]);
+		 if (gridArray[r+1][c] !== undefined && gridArray[r][c] !== undefined){
+           DG.linkNodes(gridArray[r][c],gridArray[r+1][c]);
+		 }
       }
+	  console.log("iterating columns, linking item in row to next one to right")
 	  for (var c = 0; c < gridArray[r].length; c += 1){
-	    console.log(gridArray[r][c],gridArray[r][c+1]);
-         DG.linkNodes(gridArray[r][c],gridArray[r][c+1]);
+		 if (gridArray[r][c+1] !== undefined && gridArray[r][c] !== undefined){
+           DG.linkNodes(gridArray[r][c],gridArray[r][c+1]);
+		 }
       }	  
 	}
   }
