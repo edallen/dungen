@@ -3,14 +3,14 @@
 // utility added to Array, bad to change primitive prototypes but Array is
 // hard to subclass
 Array.prototype.remove= function(){
-	var what, L= arguments.length, ax;
-	while(L && this.length){
-		what= arguments[--L];
-		while((ax= this.indexOf(what))!= -1){
-			this.splice(ax, 1);
-		}
-	}
-	return this;
+  var what, L= arguments.length, ax;
+  while(L && this.length){
+    what= arguments[--L];
+    while((ax= this.indexOf(what))!= -1){
+      this.splice(ax, 1);
+    }
+  }
+  return this;
 }
 //to remove all of the elements of one array from another, apply the method:
 //var a1=[1,2,3,4,5,6], a2=[5,6,7,8,9];
@@ -19,6 +19,7 @@ Array.prototype.remove= function(){
 // http://community.sitepoint.com/t/remove-the-element-from-array-a-if-it-exists-in-array-b/5958
 
 var DG = {
+  clearNotes: function(){ $("#notes").trigger("clearText"); },
   scrollToKey: function(){
     $("html, body").animate({ scrollTop:"880px" });
   },
@@ -32,118 +33,118 @@ var DG = {
   // Arguments to the Vis.Network creation call ----------------------------------------------
   nodeDialog: function(newData,callback){
     bootbox.dialog({
-		  title:"Edit Location",
-		  message: '<div class="row">  ' +
-				'<div class="col-md-12"> ' +
-				'<form class="form"> ' +
-				'<div class="form-group"> ' +
-				'<label class="col-md-4 control-label" for="name">Name</label> ' +
-				'<input id="location_name" name="location_name" type="text" placeholder="Location name" value="' + DG.nodesDataSet.get(newData.id).label + 
-				  '" class="form-control input-md"/> ' +
-				'</div>'+
+      title:"Edit Location",
+      message: '<div class="row">  ' +
+        '<div class="col-md-12"> ' +
+        '<form class="form"> ' +
+        '<div class="form-group"> ' +
+        '<label class="col-md-4 control-label" for="name">Name</label> ' +
+        '<input id="location_name" name="location_name" type="text" placeholder="Location name" value="' + DG.nodesDataSet.get(newData.id).label +
+          '" class="form-control input-md"/> ' +
+        '</div>'+
 
-				'<div class="form-group"> ' +
-				  '<label class="col-md-4 control-label" for="description">Description</label> ' +
-					'<textarea id="location_description" name="location_description" type="text"  placeholder="Location description" value="' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '" '+ 
-					'class="form-control" rows="8" columns = "30">' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '</textarea>'+
-				'</div> ' +
-				'</form> </div>  </div>', 
-		  buttons: {
-			save: {
-			  label: "Save",
-			  className: "btn-success",
-			  callback: function() {
-				newData.label =  $('#location_name').val();
-				newData.title =  DG.lfToBr($('#location_description').val());
-				DG.nodesDataSet.update(newData);
-				callback(newData); 
-			  
-			  }
-			},
+        '<div class="form-group"> ' +
+          '<label class="col-md-4 control-label" for="description">Description</label> ' +
+          '<textarea id="location_description" name="location_description" type="text"  placeholder="Location description" value="' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '" '+
+          'class="form-control" rows="8" columns = "30">' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '</textarea>'+
+        '</div> ' +
+        '</form> </div>  </div>',
+      buttons: {
+      save: {
+        label: "Save",
+        className: "btn-success",
+        callback: function() {
+        newData.label =  $('#location_name').val();
+        newData.title =  DG.lfToBr($('#location_description').val());
+        DG.nodesDataSet.update(newData);
+        callback(newData);
 
-		  }
+        }
+      },
+
+      }
         
-		
+
         });		 	
   
   },
   formatOption: function(node,selectedId){
     var option =  '<option value="' + node.id + '"';
-	if (selectedId === node.id){
-	  option += " selected ";
-	}
-	option += '>' + node.label + '</option>';
-	
-	return option;
+  if (selectedId === node.id){
+    option += " selected ";
+  }
+  option += '>' + node.label + '</option>';
+
+  return option;
   },
   formatFromOption: function(node){
-  	return DG.formatOption(node,DG.fromOption);
+    return DG.formatOption(node,DG.fromOption);
   },
   formatToOption: function(node){
-  	return DG.formatOption(node,DG.toOption);
+    return DG.formatOption(node,DG.toOption);
   },
   
   fromOptions: function(selectedId){
     DG.fromOption = selectedId;
     var optionsList = DG.nodesDataSet.map(DG.formatFromOption,{fields:["id","label"],
-	                                  returnType: "Object"});
-	DG.fromOption = null;								  
-	return optionsList.join('\n');
-									  
+                                    returnType: "Object"});
+  DG.fromOption = null;
+  return optionsList.join('\n');
+
   },
   toOptions: function(selectedId){
     DG.toOption = selectedId;
     var optionsList = DG.nodesDataSet.map(DG.formatToOption,{fields:["id","label"],
-	                                  returnType: "Object"});
-	DG.toOption = null;								  
-	return optionsList.join('\n');
-									  
+                                    returnType: "Object"});
+  DG.toOption = null;
+  return optionsList.join('\n');
+
   },
   edgeDialog: function(thisEdge, callback){
      var fromNodeId = thisEdge.from;
-	 var toNodeId = thisEdge.to;
+   var toNodeId = thisEdge.to;
      bootbox.dialog({
-		  		  title:"Edit Path between Locations",
-		  message: '<div class="row">  ' +
-				'<div class="col-md-12"> ' +
-				'<form class="form"> ' +
-				'<div class="form-group"> ' +
-				'<label class="col-md-4 control-label" for="name">Name</label> ' +
-				'<input id="edge_name" name="edge_name" type="text" placeholder="Path name" value="' + thisEdge.label + 
-				  '" class="form-control input-md"/> ' +
-				'</div>'+
-				'<div class="form-group"> ' +
-				  '<label class="col-md-4 control-label" for="fromNode">From</label> ' +
-				  '<select id="fromNode">' + DG.fromOptions(fromNodeId) + '</select>' +
-				'</div>'+
-				'<div class="form-group"> ' +
-				  '<label class="col-md-4 control-label" for="toNode">To</label> ' +
-				  '<select id="toNode">' + DG.toOptions(toNodeId) + '</select>' +
-				'</div>'+
-				'</form> </div>  </div>', 
-		  buttons: {
-			save: {
-			  label: "Save",
-			  className: "btn-success",
-			  callback: function() {
-				thisEdge.label =  $('#edge_name').val();
+            title:"Edit Path between Locations",
+      message: '<div class="row">  ' +
+        '<div class="col-md-12"> ' +
+        '<form class="form"> ' +
+        '<div class="form-group"> ' +
+        '<label class="col-md-4 control-label" for="name">Name</label> ' +
+        '<input id="edge_name" name="edge_name" type="text" placeholder="Path name" value="' + thisEdge.label +
+          '" class="form-control input-md"/> ' +
+        '</div>'+
+        '<div class="form-group"> ' +
+          '<label class="col-md-4 control-label" for="fromNode">From</label> ' +
+          '<select id="fromNode">' + DG.fromOptions(fromNodeId) + '</select>' +
+        '</div>'+
+        '<div class="form-group"> ' +
+          '<label class="col-md-4 control-label" for="toNode">To</label> ' +
+          '<select id="toNode">' + DG.toOptions(toNodeId) + '</select>' +
+        '</div>'+
+        '</form> </div>  </div>',
+      buttons: {
+      save: {
+        label: "Save",
+        className: "btn-success",
+        callback: function() {
+        thisEdge.label =  $('#edge_name').val();
                 thisEdge.from =  $('#fromNode').val();
-				thisEdge.to =  $('#toNode').val();
-				DG.edgesDataSet.update(thisEdge);
-				callback(thisEdge); 
-			  
-			  }
-			},
+        thisEdge.to =  $('#toNode').val();
+        DG.edgesDataSet.update(thisEdge);
+        callback(thisEdge);
 
-		  }
+        }
+      },
+
+      }
         
-		
+
         })		 
   },
   drawOptions: { 
     //physics: {barnesHut: {enabled: false}},
     dataManipulation: true,
-	onAdd: function(data,callback) {
+  onAdd: function(data,callback) {
         /** data = {id: random unique id,
         *           label: new,
         *           x: x position of click (canvas space),
@@ -152,13 +153,13 @@ var DG = {
         *           allowedToMoveY: true
         *          };
         */
-		var i = DG.data.nodes[DG.data.nodes.length - 1].id + 1;
-		
+    var i = DG.data.nodes[DG.data.nodes.length - 1].id + 1;
+
         var newData = DG.makeNode(i, DG.nameNode(i+1) ); 
-		                    // alter the data as you want.
+                        // alter the data as you want.
                             // all fields normally accepted by a node can be used.
-		DG.nodesDataSet.add(newData);
-	
+    DG.nodesDataSet.add(newData);
+
         callback(newData);  // call the callback to add a node.
     },
     onEdit: function(data,callback) {
@@ -176,43 +177,43 @@ var DG = {
         *           }
         *          };
         */
-		
+
         var newData = data; // alter the data as you want.
                             // all fields normally accepted by a node can be used.
-		DG.nodeDialog(newData,callback);
+    DG.nodeDialog(newData,callback);
 /* 		bootbox.dialog({
-		  title:"Edit Location",
-		  message: '<div class="row">  ' +
-				'<div class="col-md-12"> ' +
-				'<form class="form"> ' +
-				'<div class="form-group"> ' +
-				'<label class="col-md-4 control-label" for="name">Name</label> ' +
-				'<input id="location_name" name="location_name" type="text" placeholder="Location name" value="' + DG.nodesDataSet.get(newData.id).label + 
-				  '" class="form-control input-md"/> ' +
-				'</div>'+
+      title:"Edit Location",
+      message: '<div class="row">  ' +
+        '<div class="col-md-12"> ' +
+        '<form class="form"> ' +
+        '<div class="form-group"> ' +
+        '<label class="col-md-4 control-label" for="name">Name</label> ' +
+        '<input id="location_name" name="location_name" type="text" placeholder="Location name" value="' + DG.nodesDataSet.get(newData.id).label +
+          '" class="form-control input-md"/> ' +
+        '</div>'+
 
-				'<div class="form-group"> ' +
-				  '<label class="col-md-4 control-label" for="description">Description</label> ' +
-					'<textarea id="location_description" name="location_description" type="text"  placeholder="Location description" value="' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '" '+ 
-					'class="form-control" rows="8" columns = "30">' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '</textarea>'+
-				'</div> ' +
-				'</form> </div>  </div>', 
-		  buttons: {
-			save: {
-			  label: "Save",
-			  className: "btn-success",
-			  callback: function() {
-				newData.label =  $('#location_name').val();
-				newData.title =  DG.lfToBr($('#location_description').val());
-				DG.nodesDataSet.update(newData);
-				callback(newData); 
-			  
-			  }
-			},
+        '<div class="form-group"> ' +
+          '<label class="col-md-4 control-label" for="description">Description</label> ' +
+          '<textarea id="location_description" name="location_description" type="text"  placeholder="Location description" value="' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '" '+
+          'class="form-control" rows="8" columns = "30">' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '</textarea>'+
+        '</div> ' +
+        '</form> </div>  </div>',
+      buttons: {
+      save: {
+        label: "Save",
+        className: "btn-success",
+        callback: function() {
+        newData.label =  $('#location_name').val();
+        newData.title =  DG.lfToBr($('#location_description').val());
+        DG.nodesDataSet.update(newData);
+        callback(newData);
 
-		  }
+        }
+      },
+
+      }
         
-		
+
         }); */		 	 
     },
     onEditEdge: function(data,callback) {
@@ -223,59 +224,59 @@ var DG = {
         */
         var newData = data; // alter the data as you want, except for the ID.
                             // all fields normally accepted by an edge can be used.a
-		bootbox.dialog({
-		  title:"Edit Path between Locations",
-		  message: '<div class="row">  ' +
-				'<div class="col-md-12"> ' +
-				'<form class="form"> ' +
-				'<div class="form-group"> ' +
-				'<label class="col-md-4 control-label" for="name">Name</label> ' +
-				'<input id="edge_name" name="edge_name" type="text" placeholder="Path name" value="' + DG.edgesDataSet.get(newData.id).label + 
-				  '" class="form-control input-md"/> ' +
-				'</div>'+
-				'</form> </div>  </div>', 
-		  buttons: {
-			save: {
-			  label: "Save",
-			  className: "btn-success",
-			  callback: function() {
-				newData.label =  $('#edge_name').val();
+    bootbox.dialog({
+      title:"Edit Path between Locations",
+      message: '<div class="row">  ' +
+        '<div class="col-md-12"> ' +
+        '<form class="form"> ' +
+        '<div class="form-group"> ' +
+        '<label class="col-md-4 control-label" for="name">Name</label> ' +
+        '<input id="edge_name" name="edge_name" type="text" placeholder="Path name" value="' + DG.edgesDataSet.get(newData.id).label +
+          '" class="form-control input-md"/> ' +
+        '</div>'+
+        '</form> </div>  </div>',
+      buttons: {
+      save: {
+        label: "Save",
+        className: "btn-success",
+        callback: function() {
+        newData.label =  $('#edge_name').val();
 
-				DG.edgesDataSet.update(newData);
-				callback(newData); 
-			  
-			  }
-			},
+        DG.edgesDataSet.update(newData);
+        callback(newData);
 
-		  }
+        }
+      },
+
+      }
         
-		
+
         })
     },
     onConnect: function(data,callback) {
         // data = {from: nodeId1, to: nodeId2};
-		 var newData = {};
+     var newData = {};
          for (var attrname in data) { newData[attrname] = data[attrname]; }
-		 newData.label = DG.randomEdgeLabel();
-		
-		 DG.edgesDataSet.add(newData);
-		 // check or alter data as you see fit.
+     newData.label = DG.randomEdgeLabel();
+
+     DG.edgesDataSet.add(newData);
+     // check or alter data as you see fit.
          callback(newData);       // call the callback to connect the nodes.
     },
     onDelete: function(data,callback) {
      //   data = {nodes: [selectedNodeIds], edges: [selectedEdgeIds]};
         var newData = data; // alter the data as you want.
                            //  the same data structure is required.
-							// WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
-		DG.edgesDataSet.remove(newData.edges);
-		DG.nodesDataSet.remove(newData.nodes);
+              // WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
+    DG.edgesDataSet.remove(newData.edges);
+    DG.nodesDataSet.remove(newData.nodes);
         callback(newData);  // call the callback to delete the objects.
     },
     height: '90%'
   },
   data: { nodes:[],
           edges:[],
-		  notes: ''},
+          notes: ''},
   nodesDataSet:"uninitialized",
   edgesDataSet:"uninitialized",
   // Shared variables
@@ -286,22 +287,23 @@ var DG = {
   dungeonLevel: 0,
   monsterTreasureMultiplier: 1,
   initNetwork: function(){
-	  DG.nodesDataSet = new vis.DataSet(DG.data.nodes);
-	  DG.nodesDataSet.on('*', function (event, properties, senderId) {
+    DG.nodesDataSet = new vis.DataSet(DG.data.nodes);
+    DG.nodesDataSet.on('*', function (event, properties, senderId) {
         DG.data.nodes = DG.nodesDataSet.get();
         DG.fillKey();		
       });
-	  DG.edgesDataSet = new vis.DataSet(DG.data.edges);
+    DG.edgesDataSet = new vis.DataSet(DG.data.edges);
       DG.edgesDataSet.on('*', function (event, properties, senderId) {
          DG.data.edges = DG.edgesDataSet.get();
-		 DG.fillKey();
+     DG.fillKey();
       });
-	  console.log("in initNetwork, data follows")
-	  data = {nodes: DG.nodesDataSet, edges: DG.edgesDataSet};
-	  console.log(data);
+    console.log("in initNetwork, data follows")
+    data = {nodes: DG.nodesDataSet, edges: DG.edgesDataSet, notes: DG.notes};
+    console.log(data);
       DG.network = new vis.Network(DG.container, data, DG.drawOptions);
-	;
-	  DG.fillKey();
+  ;
+    DG.fillKey();
+	DG.clearNotes();
   },
   
   // Randomization Utilities -----------------------------------------------------------------
@@ -323,7 +325,7 @@ var DG = {
                           list = DG.shuffle(list);
                           item = list.pop();
                           return [item,list];
-						},
+            },
   arrayToSet: function(a) {
     var hash = {};
     for (var i = 0; i < a.length; i++)
@@ -367,40 +369,41 @@ var DG = {
       opt.value = optionsList[i];
       opt.innerHTML = optionsList[i];
       select.appendChild(opt);
-	}
+  }
   },
   saveDungeon: function(){var key = document.getElementById("dungeon_name").value;
                           var dungeonString = JSON.stringify(DG.data);
-						  localStorage[key] = dungeonString;
-						  var dungeonSelect = document.getElementById("saved");
-						  DG.populateSavedSelect();
-						  },
+              localStorage[key] = dungeonString;
+              var dungeonSelect = document.getElementById("saved");
+              DG.populateSavedSelect();
+              },
   loadDungeon: function(){ 
     var dungeonSelect = document.getElementById("saved");
-	var selectedKey = "";
-	var dungeonData = "unloaded";
-	if (dungeonSelect.selectedIndex == -1) {
-	    alert("No dungeon selected to load");
+    var selectedKey = "";
+    var dungeonData = "unloaded";
+    if (dungeonSelect.selectedIndex == -1) {
+      alert("No dungeon selected to load");
         return null;
-	};
-	selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
-   	dungeonData = localStorage[selectedKey];
-	if (dungeonData !== "unloaded"){
-	  DG.data = JSON.parse(dungeonData);
-	  DG.initNetwork();
-	  document.getElementById("dungeon_name").text = selectedKey;
-	  document.getElementById("dungeon_name").value = selectedKey;
-	}
+    };
+    selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
+      dungeonData = localStorage[selectedKey];
+    if (dungeonData !== "unloaded"){
+    DG.data = JSON.parse(dungeonData);
+    DG.initNetwork();
+    document.getElementById("dungeon_name").text = selectedKey;
+    document.getElementById("dungeon_name").value = selectedKey;
+    $("#notes").val(DG.data.notes);
+  }
   },  
 
   deleteDungeon: function(){
     var dungeonSelect = document.getElementById("saved");
     var selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
-	var message = "Permanently delete dungeon " + selectedKey + " from storage?";
+  var message = "Permanently delete dungeon " + selectedKey + " from storage?";
     if (confirm(message)){
-	  localStorage.removeItem(selectedKey);
-	  DG.populateSavedSelect();
-	}
+    localStorage.removeItem(selectedKey);
+    DG.populateSavedSelect();
+  }
   },
   exportDungeon: function(){alert("This will export contents to a text file when done")},  // export a file with the data structure
   importDungeon: function(){alert("This will import an exported data file and draw the dungeon when done")}, //import a file previously exported
@@ -431,7 +434,7 @@ var DG = {
   },
   makeEdge: function(startNode,endNode) { 
     if (startNode === undefined) {return "error"};
-	if (endNode === undefined) {return "error"};
+  if (endNode === undefined) {return "error"};
     return {from: startNode, to: endNode, label: this.randomEdgeLabel()};
   },
   linksOnNode: function(nodeId) { return edges = DG.data.edges.filter(function( edge ) {
@@ -439,20 +442,20 @@ var DG = {
   },
   linkNodes: function(startEdge,endEdge){  console.log([startEdge,endEdge]);
     var edge = DG.makeEdge(startEdge,endEdge);
-	console.log(edge);
+  console.log(edge);
     if (edge === "error"){ console.log( "attempting to link undefined node"); return}
     DG.data.edges.push(DG.makeEdge(startEdge,endEdge));
-	console.log("made edge");
-	console.log(DG.data.edges)
+  console.log("made edge");
+  console.log(DG.data.edges)
   },
   setRandomRoomCount: function(){
     DG.roomCount = DG.rollDie(DG.minRooms, (DG.maxRooms - DG.minRooms) );
-	return DG.roomCount;
+  return DG.roomCount;
   },
   setBaseMonsters: function() {
     DG.data.baseMonsters = [DG.drawOne(DG.stock.monsters[DG.dungeonLevel])];
-	if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
-	if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
+  if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
+  if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
   },
   makeRooms: function(){
     DG.setBaseMonsters();
@@ -501,9 +504,9 @@ var DG = {
     var monsterLevel = dungeonLevel;
     var monsterCount = 1;
     var monsterType = {name:"", int:0, tags:[]};
-	var monsterName = "";
+  var monsterName = "";
     var newMonsterTreasureMultiplier;
-	var attitude ="";
+  var attitude ="";
     var monsters = "";
     for (var i = 0; i < 3; i +=1){
       if (DG.rollOne()){ monsterLevel += 1;}
@@ -523,19 +526,19 @@ var DG = {
         monsterCount *= 2; 
       }
     }
-	if (DG.rollThree()){
+  if (DG.rollThree()){
       monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
-	  monsterName = monsterType.name;
-	} else {
-	// will let monster count stand, which will generate some group size outliers
-	  monsterLevel = dungeonLevel;
-	  monsterType = DG.drawOne(DG.data.baseMonsters);
-	  monsterName = monsterType.name;
-	}
+    monsterName = monsterType.name;
+  } else {
+  // will let monster count stand, which will generate some group size outliers
+    monsterLevel = dungeonLevel;
+    monsterType = DG.drawOne(DG.data.baseMonsters);
+    monsterName = monsterType.name;
+  }
     // adjusting plurals - extract to a function soon
     if (monsterCount > 1){
       if (monsterType.hasOwnProperty("plural")){
-	    monsterName = monsterType.plural;
+      monsterName = monsterType.plural;
       }	      
       else {
         monsterName += "s";
@@ -547,10 +550,10 @@ var DG = {
     DG.monsterTreasureMultiplier = Math.max(DG.monsterTreasureMultiplier,newMonsterTreasureMultiplier);
     monsters = "M: " + monsterCount 
     if (DG.rollThree()){ 
-		if (monsterType.int < 7){ attitude = DG.drawOne(DG.stock.basicAttitudes) }                
-		else {attitude = DG.drawOne(DG.stock.allAttitudes)} 	
-	    monsters += " " + attitude;
-	};
+    if (monsterType.int < 7){ attitude = DG.drawOne(DG.stock.basicAttitudes) }
+    else {attitude = DG.drawOne(DG.stock.allAttitudes)}
+      monsters += " " + attitude;
+  };
     monsters += " " + monsterName + "<br>";
   
     return monsters;
@@ -561,9 +564,9 @@ var DG = {
   oneTreasure: function(treasureValue){
     var treasureCount = 1;
     var treasureType = DG.drawOne(DG.stock.treasure);
-	if (treasureType["value"] === "X") {
-	  var jewelValue = Math.floor(treasureValue * DG.rollDie(1,8));
-	  return treasureType["label"] + " worth " + jewelValue  + " GP";
+  if (treasureType["value"] === "X") {
+    var jewelValue = Math.floor(treasureValue * DG.rollDie(1,8));
+    return treasureType["label"] + " worth " + jewelValue  + " GP";
     }
     else if (treasureType["value"] < treasureValue){
       treasureCount = Math.floor(treasureValue/treasureType["value"]);
@@ -584,178 +587,178 @@ var DG = {
       // treasureCount = Math.floor(treasureValue/treasureType["value"]);
     // }
     hoard += DG.oneTreasure(treasureValue);
-	// second treasure
-	if (DG.rollThree()){
-	  hoard += ", ";
-	  hoard += DG.oneTreasure(DG.valueFraction(treasureValue));
+  // second treasure
+  if (DG.rollThree()){
+    hoard += ", ";
+    hoard += DG.oneTreasure(DG.valueFraction(treasureValue));
       if (DG.rollThree()){
-	    hoard += ", ";
-	    hoard += DG.oneTreasure(DG.valueFraction(treasureValue)); 
-	  }	  
-	}
+      hoard += ", ";
+      hoard += DG.oneTreasure(DG.valueFraction(treasureValue));
+    }
+  }
     hoard += "<br>";
-	if (DG.rollOne()){ 
+  if (DG.rollOne()){
       hoard += "Mg: " + DG.randomMinorMagicItem(dungeonLevel) + "<br>";
     }
     if (DG.rollDie(1,1000) < treasureValue){ 
       hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
     }
-	if (DG.rollDie(0,9) <= dungeonLevel){ 
+  if (DG.rollDie(0,9) <= dungeonLevel){
       hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
     }
-	if (DG.rollDie(1,8000) < treasureValue){ 
+  if (DG.rollDie(1,8000) < treasureValue){
       hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
     }
-	if (DG.rollDie(1,20000) < treasureValue){ 
+  if (DG.rollDie(1,20000) < treasureValue){
       hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
     }
-	
+
     return hoard; 
   },
   randomMagicItem: function(dungeonLevel){ // will need much more detail later and more items in big hoards
     var item = DG.drawOne(DG.stock.magicItems);
-	if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
-	if (item === "sword") { item = DG.genSword(dungeonLevel)};
-	if (item === "weapon") { item = DG.genWeapon(dungeonLevel)};
+  if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
+  if (item === "sword") { item = DG.genSword(dungeonLevel)};
+  if (item === "weapon") { item = DG.genWeapon(dungeonLevel)};
 
-	if (item === "armor") { item = DG.genArmor(dungeonLevel)};
+  if (item === "armor") { item = DG.genArmor(dungeonLevel)};
 
-	if (item === "wand") { item = DG.genWand(dungeonLevel)};
-	if (item === "ring") { item = DG.genRing(dungeonLevel)};
-	if (item === "staff") { item = DG.genStaff(dungeonLevel)};
-	if (item === "book") { item = DG.genBook(dungeonLevel)};
-	if (item === "scroll") { item = DG.genScroll(dungeonLevel)};
+  if (item === "wand") { item = DG.genWand(dungeonLevel)};
+  if (item === "ring") { item = DG.genRing(dungeonLevel)};
+  if (item === "staff") { item = DG.genStaff(dungeonLevel)};
+  if (item === "book") { item = DG.genBook(dungeonLevel)};
+  if (item === "scroll") { item = DG.genScroll(dungeonLevel)};
     if (item === "trinket") { item = DG.genTrinket(dungeonLevel)};
-	if (item === "miscellaneous") { item = DG.genMisc(dungeonLevel)};
+  if (item === "miscellaneous") { item = DG.genMisc(dungeonLevel)};
 
-	return item;},
+  return item;},
   randomMinorMagicItem: function(dungeonLevel){ // will need much more detail later and more items in big hoards
     var item = DG.drawOne(DG.stock.minorMagicItems);
-	if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
-	if (item === "scroll") { item = DG.genScroll(dungeonLevel)};
+  if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
+  if (item === "scroll") { item = DG.genScroll(dungeonLevel)};
     if (item === "trinket") { item = DG.genTrinket(dungeonLevel)};
-	return item;},
+  return item;},
   genSword: function(dungeonLevel){
     var sword = DG.drawOne(DG.stock.swords);
-	var bonus = 1;
-	var powerList = [];
-	for (i = 0; i < dungeonLevel +2; i +=1){
-	  if (DG.rollTwo()){bonus +=1};
-	  if (DG.rollTwo()) {powerList.push(DG.drawOne(DG.stock.swordPowers))};
-	}
-	if (powerList.indexOf("Cursed") === -1 ){
-	  sword += " +" + bonus;
-	} else {
-	  sword += " -" + bonus + " Cursed";
-	  powerList.remove(["Cursed"]);
-	}
-	powerList = DG.arrayToSet(powerList);
-	if (powerList !== []){
-	  sword += ", " + powerList.join(', ');
+  var bonus = 1;
+  var powerList = [];
+  for (i = 0; i < dungeonLevel +2; i +=1){
+    if (DG.rollTwo()){bonus +=1};
+    if (DG.rollTwo()) {powerList.push(DG.drawOne(DG.stock.swordPowers))};
+  }
+  if (powerList.indexOf("Cursed") === -1 ){
+    sword += " +" + bonus;
+  } else {
+    sword += " -" + bonus + " Cursed";
+    powerList.remove(["Cursed"]);
+  }
+  powerList = DG.arrayToSet(powerList);
+  if (powerList !== []){
+    sword += ", " + powerList.join(', ');
     }	  
 
-	return sword;
+  return sword;
   },
   genWeapon: function(dungeonLevel){
     var weapon = DG.drawOne(DG.stock.weapons);
-	var bonus = 1;
-	var powerList = [];
-	for (i = 0; i < dungeonLevel +1; i +=1){
-	  if (DG.rollTwo()){bonus +=1};
-	  if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.weaponPowers))};
-	}
-	if (powerList.indexOf("Cursed") === -1 ){
-	  weapon += " +" + bonus;
-	} else {
-	  weapon += " -" + bonus + " Cursed";
-	  powerList.remove(["Cursed"]);
+  var bonus = 1;
+  var powerList = [];
+  for (i = 0; i < dungeonLevel +1; i +=1){
+    if (DG.rollTwo()){bonus +=1};
+    if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.weaponPowers))};
+  }
+  if (powerList.indexOf("Cursed") === -1 ){
+    weapon += " +" + bonus;
+  } else {
+    weapon += " -" + bonus + " Cursed";
+    powerList.remove(["Cursed"]);
 
-	}
-	powerList = DG.arrayToSet(powerList);
-	if (powerList !== []){
-	  weapon += ", " + powerList.join(', ');
+  }
+  powerList = DG.arrayToSet(powerList);
+  if (powerList !== []){
+    weapon += ", " + powerList.join(', ');
     }	  
 
-	
-	return weapon;
+
+  return weapon;
   },
   genArmor: function(dungeonLevel){
     var armor = DG.drawOne(DG.stock.armor);
 
-	var bonus = 1;
-	var powerList = [];
-	for (i = 0; i < dungeonLevel +1; i +=1){
-	  if (DG.rollTwo()){bonus +=1};
-	  if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.armorPowers))};
-	}
-	if (powerList.indexOf("Cursed") === -1 ){
-	  armor += " +" + bonus;
-	} else {
-	  armor += " -" + bonus + " Cursed";
-	  powerList.remove(["Cursed"]);
+  var bonus = 1;
+  var powerList = [];
+  for (i = 0; i < dungeonLevel +1; i +=1){
+    if (DG.rollTwo()){bonus +=1};
+    if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.armorPowers))};
+  }
+  if (powerList.indexOf("Cursed") === -1 ){
+    armor += " +" + bonus;
+  } else {
+    armor += " -" + bonus + " Cursed";
+    powerList.remove(["Cursed"]);
 
-	}
-	powerList = DG.arrayToSet(powerList);
-	if (powerList !== []){
-	  armor += ", " + powerList.join(', ');
+  }
+  powerList = DG.arrayToSet(powerList);
+  if (powerList !== []){
+    armor += ", " + powerList.join(', ');
     }	  
 
-	return armor;
+  return armor;
   },
   genWand: function(dungeonLevel){
     var wand = "Wand of " + DG.drawOne(DG.stock.wands);
-	return wand;
+  return wand;
   },
   genRing: function(dungeonLevel){
     var ring = "Ring of " + DG.drawOne(DG.stock.rings);
-	return ring;
+  return ring;
   },
   genMisc: function(dungeonLevel){
     var misc = DG.drawOne(DG.stock.miscellaneous);
-	return misc;
+  return misc;
   },
   genStaff: function(dungeonLevel){
     var staff = "Staff of " + DG.drawOne(DG.stock.staves);
-	return staff;
+  return staff;
   },
   genBook: function(dungeonLevel){
     var book = DG.drawOne(DG.stock.books);
-	return book;
+  return book;
   },
   genScroll: function(dungeonLevel){
     var scroll = DG.drawOne(DG.stock.scrolls);
-	return scroll;
+  return scroll;
   },
   genTrinket: function(dungeonLevel){
     var trinket = DG.drawOne(DG.stock.trinkets);
-	return trinket;
+  return trinket;
   },
   randomTrap: function(dungeonLevel){
   // will tie to dungeonLevel later
     var trap = DG.drawOne(DG.stock.traps);
-	if (DG.rollTwo()){trap += " disarmed by " + DG.drawOne(DG.stock.disarms)}
-	if (DG.rollThree()){trap += ", triggered by " + DG.drawOne(DG.stock.triggers)}
+  if (DG.rollTwo()){trap += " disarmed by " + DG.drawOne(DG.stock.disarms)}
+  if (DG.rollThree()){trap += ", triggered by " + DG.drawOne(DG.stock.triggers)}
 
     return "Tp: " + trap + "<br>";
   },
   
   // save button works in Chrome
   chromeSaveImage: function () {
-	var ua = window.navigator.userAgent;
+  var ua = window.navigator.userAgent;
   
-	// save image without file type
-	var canvas = $("canvas")[0];
-	document.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+  // save image without file type
+  var canvas = $("canvas")[0];
+  document.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
-	// save image as png
-	var link = document.createElement('a');
-	var fileName = prompt("Name for image file?","dungeon.png");
-	link.download = fileName;
-	link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
-	link.click();
-		
+  // save image as png
+  var link = document.createElement('a');
+  var fileName = prompt("Name for image file?","dungeon.png");
+  link.download = fileName;
+  link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
+  link.click();
+
   },
-	
+
   // Dungeon Key table -------------------------------------------------
   fillKey: function() { 
    //This function will render out the labels and descriptions from 
@@ -781,8 +784,8 @@ var DG = {
    for (i = 0; i < edgesLength; i +=1){
       edge = DG.data.edges[i];
 
-	  fromNodeLabel = DG.data.nodes[edge["from"]]["label"];
-	  toNodeLabel = DG.data.nodes[edge["to"]]["label"];
+    fromNodeLabel = DG.data.nodes[edge["from"]]["label"];
+    toNodeLabel = DG.data.nodes[edge["to"]]["label"];
       dungeonKey = dungeonKey + ( tle + edge["id"] + tlm + edge["label"] + tm + fromNodeLabel + " to " + toNodeLabel + tr );
    }
    dungeonKey += "\n</tbody>";
@@ -793,13 +796,14 @@ var DG = {
   digDungeon: function(){
     var data = { nodes: null, edges: null };
     var levelSelect = document.getElementById("level");
-	var sizeSelect = document.getElementById("size");
-	var patternSelect = document.getElementById("pattern");
-	var selectedSize = "5,5";
-	var selectedPattern = patternSelect.options[patternSelect.selectedIndex].value;
-	DG.data.nodes = [];
-	DG.data.edges = [];
-	DG.roomCount = 0;
+    var sizeSelect = document.getElementById("size");
+    var patternSelect = document.getElementById("pattern");
+    var selectedSize = "5,5";
+    var selectedPattern = patternSelect.options[patternSelect.selectedIndex].value;
+    DG.data.nodes = [];
+    DG.data.edges = [];
+    DG.data.notes = "";
+    DG.roomCount = 0;
     DG.edgeCount = 0;
     DG.dungeonLevel = parseInt(levelSelect.options[levelSelect.selectedIndex].value);
     selectedSize = sizeSelect.options[sizeSelect.selectedIndex].value;
@@ -809,30 +813,30 @@ var DG = {
  
     DG.makeRooms();
 
-	switch (selectedPattern) {
+  switch (selectedPattern) {
     case "branch":
-	  DG.linkStrats.branchLink(DG.allNodeIds());
-	break;
-	case "branch_loops":
-	  DG.linkStrats.branchLink(DG.allNodeIds());
-	  DG.linkStrats.randomLink(Math.floor(DG.roomCount/5) + 1);
-	break;
-	case "triangles":
-	  DG.linkStrats.trianglesLink(DG.allNodeIds());
-	  DG.linkStrats.randomLink(Math.floor(DG.roomCount/6) + 1);
-	break;
-	case "grid":
-	  DG.linkStrats.gridLink();
-	break;
-	case "random":
-	  DG.linkStrats.randomAllLink(Math.floor(DG.roomCount) + 2);
-	break;
-	case "mixed":
-	
-	break;
-	default:
-	}
-	
+    DG.linkStrats.branchLink(DG.allNodeIds());
+  break;
+  case "branch_loops":
+    DG.linkStrats.branchLink(DG.allNodeIds());
+    DG.linkStrats.randomLink(Math.floor(DG.roomCount/5) + 1);
+  break;
+  case "triangles":
+    DG.linkStrats.trianglesLink(DG.allNodeIds());
+    DG.linkStrats.randomLink(Math.floor(DG.roomCount/6) + 1);
+  break;
+  case "grid":
+    DG.linkStrats.gridLink();
+  break;
+  case "random":
+    DG.linkStrats.randomAllLink(Math.floor(DG.roomCount) + 2);
+  break;
+  case "mixed":
+
+  break;
+  default:
+  }
+    
     DG.initNetwork();
   }
   
@@ -869,20 +873,20 @@ DG.linkStrats = {
     for(var i = 0; i < linksToMake; i+=1){
      var startEdge = DG.rollDie(0,DG.roomCount-1);
      var endEdge = DG.rollOther(0,DG.roomCount-1,startEdge);
-	 console.log([startEdge,endEdge]);
+   console.log([startEdge,endEdge]);
      DG.linkNodes(startEdge,endEdge);}
   },
   randomAllLink: function(linksToMake){ 
     DG.linkStrats.randomLink(linksToMake);
     var nodes = DG.allNodeIds().slice();
-	  
-	var linkedNodes = [];
-	DG.data.edges.forEach(function(edge){linkedNodes.push(edge["from"])});
-	DG.data.edges.forEach(function(edge){linkedNodes.push(edge["to"])});
+
+  var linkedNodes = [];
+  DG.data.edges.forEach(function(edge){linkedNodes.push(edge["from"])});
+  DG.data.edges.forEach(function(edge){linkedNodes.push(edge["to"])});
    
-	var unlinkedNodes = nodes.remove.apply(nodes,linkedNodes);
+  var unlinkedNodes = nodes.remove.apply(nodes,linkedNodes);
  
-	unlinkedNodes.map(function(node){DG.linkNodes(node,(linkedNodes.pop() || 1));});
+  unlinkedNodes.map(function(node){DG.linkNodes(node,(linkedNodes.pop() || 1));});
   },
   trianglesLink: function(roomIds){   console.log("trianglesLink entered");
    var nodesCount = roomIds.length;
@@ -907,39 +911,39 @@ DG.linkStrats = {
   },
   gridLink: function(){ 
     var rowLength = Math.floor(Math.sqrt(DG.roomCount)) + DG.rollDie(0,3);
-	console.log("rowLength ")
-	console.log(rowLength); 
-	var gridArray = [[]];
-	var gridRow = 0;
-	var nodes = DG.data.nodes.length;
-	var gridCol = 0;
-	// lay out room objects into a 2D grid array
-	for (var i = 0; i < nodes; i+=1){
+  console.log("rowLength ")
+  console.log(rowLength);
+  var gridArray = [[]];
+  var gridRow = 0;
+  var nodes = DG.data.nodes.length;
+  var gridCol = 0;
+  // lay out room objects into a 2D grid array
+  for (var i = 0; i < nodes; i+=1){
     
       gridArray[gridRow][gridCol] = DG.data.nodes[i].id;
-	  if (gridCol == (rowLength -1)){
-		 gridCol = 0;
-		 gridRow += 1;
-		 gridArray[gridRow] = [];
-	  } else {
-		 gridCol += 1;
-	  }
-	}  /* Should have a grid of references to node IDs at end of loop, accounting for all nodes. The last row may be short. */
+    if (gridCol == (rowLength -1)){
+     gridCol = 0;
+     gridRow += 1;
+     gridArray[gridRow] = [];
+    } else {
+     gridCol += 1;
+    }
+  }  /* Should have a grid of references to node IDs at end of loop, accounting for all nodes. The last row may be short. */
 
-	for(var r = 0; r < gridArray.length -1; r +=1){
-	  console.log("iterating columns, linking item in row to next one down")
-	  for (var c = 0; c < gridArray[r+1].length; c += 1){
-		 if (gridArray[r+1][c] !== undefined && gridArray[r][c] !== undefined){
+  for(var r = 0; r < gridArray.length -1; r +=1){
+    console.log("iterating columns, linking item in row to next one down")
+    for (var c = 0; c < gridArray[r+1].length; c += 1){
+     if (gridArray[r+1][c] !== undefined && gridArray[r][c] !== undefined){
            DG.linkNodes(gridArray[r][c],gridArray[r+1][c]);
-		 }
+     }
       }
-	  console.log("iterating columns, linking item in row to next one to right")
-	  for (var c = 0; c < gridArray[r].length; c += 1){
-		 if (gridArray[r][c+1] !== undefined && gridArray[r][c] !== undefined){
+    console.log("iterating columns, linking item in row to next one to right")
+    for (var c = 0; c < gridArray[r].length; c += 1){
+     if (gridArray[r][c+1] !== undefined && gridArray[r][c] !== undefined){
            DG.linkNodes(gridArray[r][c],gridArray[r][c+1]);
-		 }
+     }
       }	  
-	}
+  }
   }
 };
 

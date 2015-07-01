@@ -44,6 +44,9 @@ function bindButtons() {
 
   var topButton = document.getElementById("scroll-to-top");
   topButton.addEventListener("click", function() { DG.scrollToTop(); } );
+
+  $('#notes').change(function(){DG.notes = $(this).val(); DG.data.notes = $(this).val()});
+  $("#notes").on("clearText", function(){$(this).val('');});
 };
 
 function populateUI(){
