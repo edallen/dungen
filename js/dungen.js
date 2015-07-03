@@ -21,7 +21,9 @@ Array.prototype.remove= function(){
 var DG = {
   clearNotes: function(){ $("#notes").trigger("clearText"); },
   scrollToKey: function(){
-    $("html, body").animate({ scrollTop:"880px" });
+    var tablePosition = $("#dungeon_key").position();
+    var scrollTop = tablePosition.top - 50;
+    $("html, body").animate({ scrollTop: scrollTop });
   },
   scrollToTop: function(){
     $("html, body").animate({ scrollTop:"20px" });
@@ -386,8 +388,15 @@ var DG = {
     DG.populateSavedSelect();
   }
   },
-  exportDungeon: function(){alert("This will export contents to a text file when done")},  // export a file with the data structure
-  importDungeon: function(){alert("This will import an exported data file and draw the dungeon when done")}, //import a file previously exported
+  exportDungeon: function(){var dungeonString = JSON.stringify(DG.data);
+    $("#export-import").val(dungeonString);
+  },  // export a file with the data structure
+  importDungeon: function(){
+    var dungeonData = $("#export-import").val();
+    DG.data = JSON.parse(dungeonData);
+    DG.initNetwork();
+    $("#notes").val(DG.data.notes);
+  }, //import a file previously exported
 
   // Nodes and Linkage ------------------------------------------------------------------------
   linkStrats: {},  // complex enough for a separate breakout below
@@ -771,7 +780,6 @@ var DG = {
    }
    dungeonKey += "\n</tbody>";
    document.getElementById("dungeon_key").innerHTML = dungeonKey;
-   document.getElementById("dungeon_key_for_printing").innerHTML = dungeonKey;
   },
   // Dig a dungeon ---------------------------------------------------------
   digDungeon: function(){
