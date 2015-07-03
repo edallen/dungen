@@ -143,140 +143,121 @@ var DG = {
   },
   drawOptions: { 
     //physics: {barnesHut: {enabled: false}},
-    dataManipulation: true,
-  onAdd: function(data,callback) {
-        /** data = {id: random unique id,
-        *           label: new,
-        *           x: x position of click (canvas space),
-        *           y: y position of click (canvas space),
-        *           allowedToMoveX: true,
-        *           allowedToMoveY: true
-        *          };
-        */
-    var i = DG.data.nodes[DG.data.nodes.length - 1].id + 1;
+	configure: {enabled: false},
+    manipulation: {
+	  enabled: true,
+      initiallyActive: false,		
+	  addNode: function(data,callback) {
+			/** data = {id: random unique id,
+			*           label: new,
+			*           x: x position of click (canvas space),
+			*           y: y position of click (canvas space),
+			*           allowedToMoveX: true,
+			*           allowedToMoveY: true
+			*          };
+			*/
+		var i = DG.data.nodes[DG.data.nodes.length - 1].id + 1;
 
-        var newData = DG.makeNode(i, DG.nameNode(i+1) ); 
-                        // alter the data as you want.
-                            // all fields normally accepted by a node can be used.
-    DG.nodesDataSet.add(newData);
+			var newData = DG.makeNode(i, DG.nameNode(i+1) ); 
+							// alter the data as you want.
+								// all fields normally accepted by a node can be used.
+		DG.nodesDataSet.add(newData);
 
-        callback(newData);  // call the callback to add a node.
-    },
-    onEdit: function(data,callback) {
-        /** data = {id:...,
-        *           label: ...,
-        *           group: ...,
-        *           shape: ...,
-        *           color: {
-        *             background:...,
-        *             border:...,
-        *             highlight: {
-        *               background:...,
-        *               border:...
-        *             }
-        *           }
-        *          };
-        */
+			callback(newData);  // call the callback to add a node.
+		},
+	  editNode: function(data,callback) {
+			/** data = {id:...,
+			*           label: ...,
+			*           group: ...,
+			*           shape: ...,
+			*           color: {
+			*             background:...,
+			*             border:...,
+			*             highlight: {
+			*               background:...,
+			*               border:...
+			*             }
+			*           }
+			*          };
+			*/
 
-        var newData = data; // alter the data as you want.
-                            // all fields normally accepted by a node can be used.
-    DG.nodeDialog(newData,callback);
-/* 		bootbox.dialog({
-      title:"Edit Location",
-      message: '<div class="row">  ' +
-        '<div class="col-md-12"> ' +
-        '<form class="form"> ' +
-        '<div class="form-group"> ' +
-        '<label class="col-md-4 control-label" for="name">Name</label> ' +
-        '<input id="location_name" name="location_name" type="text" placeholder="Location name" value="' + DG.nodesDataSet.get(newData.id).label +
-          '" class="form-control input-md"/> ' +
-        '</div>'+
+			var newData = data; // alter the data as you want.
+								// all fields normally accepted by a node can be used.
+		  DG.nodeDialog(newData,callback);
+		},
+		editEdge: function(data,callback) {
+			/** data = {id: edgeID,
+			*           from: nodeId1,
+			*           to: nodeId2,
+			*          };
+			*/
+			var newData = data; // alter the data as you want, except for the ID.
+								// all fields normally accepted by an edge can be used.a
+            bootbox.dialog({
+              title:"Edit Path between Locations",
+              message: '<div class="row">  ' +
+                '<div class="col-md-12"> ' +
+                '<form class="form"> ' +
+                '<div class="form-group"> ' +
+                '<label class="col-md-4 control-label" for="name">Name</label> ' +
+                '<input id="edge_name" name="edge_name" type="text" placeholder="Path name" value="' + DG.edgesDataSet.get(newData.id).label +
+                  '" class="form-control input-md"/> ' +
+                '</div>'+
+                '</form> </div>  </div>',
+              buttons: {
+                  save: {
+                    label: "Save",
+                    className: "btn-success",
+                    callback: function() {
+                    newData.label =  $('#edge_name').val();
 
-        '<div class="form-group"> ' +
-          '<label class="col-md-4 control-label" for="description">Description</label> ' +
-          '<textarea id="location_description" name="location_description" type="text"  placeholder="Location description" value="' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '" '+
-          'class="form-control" rows="8" columns = "30">' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '</textarea>'+
-        '</div> ' +
-        '</form> </div>  </div>',
-      buttons: {
-      save: {
-        label: "Save",
-        className: "btn-success",
-        callback: function() {
-        newData.label =  $('#location_name').val();
-        newData.title =  DG.lfToBr($('#location_description').val());
-        DG.nodesDataSet.update(newData);
-        callback(newData);
+                    DG.edgesDataSet.update(newData);
+                    callback(newData);
 
-        }
-      },
+                    }
+                  }
 
-      }
-        
+              }
+                
 
-        }); */		 	 
-    },
-    onEditEdge: function(data,callback) {
-        /** data = {id: edgeID,
-        *           from: nodeId1,
-        *           to: nodeId2,
-        *          };
-        */
-        var newData = data; // alter the data as you want, except for the ID.
-                            // all fields normally accepted by an edge can be used.a
-    bootbox.dialog({
-      title:"Edit Path between Locations",
-      message: '<div class="row">  ' +
-        '<div class="col-md-12"> ' +
-        '<form class="form"> ' +
-        '<div class="form-group"> ' +
-        '<label class="col-md-4 control-label" for="name">Name</label> ' +
-        '<input id="edge_name" name="edge_name" type="text" placeholder="Path name" value="' + DG.edgesDataSet.get(newData.id).label +
-          '" class="form-control input-md"/> ' +
-        '</div>'+
-        '</form> </div>  </div>',
-      buttons: {
-      save: {
-        label: "Save",
-        className: "btn-success",
-        callback: function() {
-        newData.label =  $('#edge_name').val();
+            })
+		  
+		},
+		addEdge: function(data,callback) {
+			// data = {from: nodeId1, to: nodeId2};
+		 var newData = {};
+			 for (var attrname in data) { newData[attrname] = data[attrname]; }
+		 newData.label = DG.randomEdgeLabel();
 
-        DG.edgesDataSet.update(newData);
-        callback(newData);
-
-        }
-      },
-
-      }
-        
-
-        })
-    },
-    onConnect: function(data,callback) {
-        // data = {from: nodeId1, to: nodeId2};
-     var newData = {};
-         for (var attrname in data) { newData[attrname] = data[attrname]; }
-     newData.label = DG.randomEdgeLabel();
-
-     DG.edgesDataSet.add(newData);
-     // check or alter data as you see fit.
-         callback(newData);       // call the callback to connect the nodes.
-    },
-    onDelete: function(data,callback) {
-     //   data = {nodes: [selectedNodeIds], edges: [selectedEdgeIds]};
-        var newData = data; // alter the data as you want.
-                           //  the same data structure is required.
-              // WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
-    DG.edgesDataSet.remove(newData.edges);
-    DG.nodesDataSet.remove(newData.nodes);
-        callback(newData);  // call the callback to delete the objects.
-    },
-    height: '90%'
+		 DG.edgesDataSet.add(newData);
+		 // check or alter data as you see fit.
+			 callback(newData);       // call the callback to connect the nodes.
+		},
+		deleteNode: function(data,callback) {
+		 //   data = {nodes: [selectedNodeIds], edges: [selectedEdgeIds]};
+		  var newData = data; // alter the data as you want.
+							   //  the same data structure is required.
+				  // WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
+		  DG.edgesDataSet.remove(newData.edges);
+		  DG.nodesDataSet.remove(newData.nodes);
+		  callback(newData);  // call the callback to delete the objects.
+		},
+        deleteEdge: function(data,callback) {
+        // duping deleteNode in translation from 3.6 to 4.4 for now, probably needs revision
+		 //   data = {nodes: [selectedNodeIds], edges: [selectedEdgeIds]};
+		  var newData = data; // alter the data as you want.
+							   //  the same data structure is required.
+				  // WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
+		  DG.edgesDataSet.remove(newData.edges);
+		  DG.nodesDataSet.remove(newData.nodes);
+		  callback(newData);  // call the callback to delete the objects.
+		}
+    }
   },
   data: { nodes:[],
-          edges:[],
-          notes: ''},
+			  edges:[],
+			  notes: ''},
+              
   nodesDataSet:"uninitialized",
   edgesDataSet:"uninitialized",
   // Shared variables
@@ -303,7 +284,7 @@ var DG = {
       DG.network = new vis.Network(DG.container, data, DG.drawOptions);
   ;
     DG.fillKey();
-	DG.clearNotes();
+    DG.clearNotes();
   },
   
   // Randomization Utilities -----------------------------------------------------------------
