@@ -40,10 +40,10 @@ function bindButtons() {
   importButton.addEventListener("click", function() { DG.importDungeon(); } );
 
   var keyButton = document.getElementById("scroll-to-key");
-  keyButton.addEventListener("click", function() { DG.scrollToKey(); } );
+  keyButton.addEventListener("click", function() { DG.scrollToKey(); $(this).hide(); $("#scroll-to-top").show(); } );
 
   var topButton = document.getElementById("scroll-to-top");
-  topButton.addEventListener("click", function() { DG.scrollToTop(); } );
+  topButton.addEventListener("click", function() { DG.scrollToTop(); $(this).hide(); $("#scroll-to-key").show();} );
 
   $('#notes').change(function(){DG.notes = $(this).val(); DG.data.notes = $(this).val()});
   $("#notes").on("clearText", function(){$(this).val('');});

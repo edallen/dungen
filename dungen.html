@@ -10,6 +10,7 @@
 
 <h3>  <b>DunGen</b> <small>Pointcrawl Dungeon Generator by Ed Allen: <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> & <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></small></h3>
 <button id="scroll-to-key" class="top-right-fixed">Key</button>
+<button id= "scroll-to-top" class="top-right-fixed" style="display: none">Top</button>
 <div class="container-fluid">
 
   <select id="level">
@@ -58,13 +59,13 @@
   <table class = "dungen table table-bordered" id="dungeon_key"style = "display: none"></table>
   <div id="table-holder">
     <table class = "dungen table table-bordered" id="dungeon_key_for_printing" ></table>
-    <button id= "scroll-to-top">Top</button>
+   
   </div>
   <div id="footer_notes" style="clear: both"><label for="notes">Notes</label><br>
     <textarea id="notes" cols='120' rows='10' ></textarea></div>
   </div>
   <br>
-<p>To manually save and use the dungeon outside this page, copy the text of the room contents table and notes field and paste into another file, and right click the map to save the image as a PNG.</p>
+<p>To manually save and use the dungeon outside this page, copy the text of the room contents table and notes field and paste into another file, and right click the map to save the image as a PNG. If you need to clear all cached data in your browser for some reason, please do this manual save of any dungeons you care about first. Dungen saves to your browser's "LocalStorage" not to a server. Clearing all LocalStorage will wipe out any saved and edited dungeons. Export/import or having a server are on the To Do list.</p>
 <p>Added free-form notes field that saves and loads along with dungeon table and network. Cleaned up the UI with less cluttered top and scroll buttons for mobile access to key table. The next step will be to make editing work on mobile using a recent update of vis.js.</p>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
