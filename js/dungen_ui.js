@@ -5,7 +5,10 @@ function bindButtons() {
   redrawButton.addEventListener("click", function() { DG.network.redraw(); } );
   
   var regenerateButton = document.getElementById("regenerate");
-  regenerateButton.addEventListener("click", function() { DG.digDungeon(); } );
+  regenerateButton.addEventListener("click", function() { DG.digDungeon("dungeon"); } );
+  
+  var wildsButton = document.getElementById("wilds");
+  wildsButton.addEventListener("click", function() { DG.digDungeon("wilds"); } );
   
   var moveTableButton = document.getElementById("move_table");
   moveTableButton.addEventListener("click", function() { 

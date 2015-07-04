@@ -38,9 +38,8 @@
   </select>
   <button class= "btn-small" id="theme">Theme</button>
   <button class= "btn-small" id="regenerate">Generate</button>
+   <button class= "btn-small" id="wilds">Wilds</button>
   <button class= "btn-small" id="redraw">Redraw</button>
-  <button class= "btn-small" id="repopulate" style = "display:none">Repopulate</button>
-  <button class= "btn-small" id="relabel" style = "display:none">Relabel</button>
   <label for="dungeon_name">Name for save </label><input id="dungeon_name" placeholder="Name the dungeon" ></input>
   <button class= "btn-small" id="save" >Save</button>  
   <select id="saved" >
@@ -72,7 +71,12 @@
 and use the Download Image button on Chrome or the right click menu to save the image as a PNG. 
 If you need to clear all cached data in your browser for some reason, please export if you'll want to use a dungeon in DunGen again or manually save of any dungeons you care about first. 
 DunGen saves to your browser's "LocalStorage" not to a server. Clearing all LocalStorage will wipe out any saved and edited dungeons.</p>
-<p>This version updates to use vis.js 4.4 to see if it makes the editing bar work in mobile browsers. </p>
+
+<p>First step towards wilderness generation: adding a Wilderness nodes and edges lists. Initially the monsters, treasures, oddities, traps, and hooks still generate as for a dungeon, and feature scale is an issue, 
+so the results will need much tweaking. Comments welcome at the Ruminations blog linked above or on G+. If you like hacking, take a look at the dungen_stock.js file first. 
+It's pretty easy to customize content there.
+</p>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="bootstrap/js/bootbox.min.js"></script>

@@ -41,7 +41,7 @@ var DG = {
     for(var i = 0; i < tagsLength ; i++){
       if (DG.data.monsterTags.indexOf(tags[i]) !== -1 ){ checkedAttribute = "checked "; }
       else { checkedAttribute = ""; }
-      checkboxes += '<input id = "' + tags[i] + '" ' +
+      checkboxes += '<input class="monsterTag" id = "' + tags[i] + '" ' +
       'name = "' + tags[i] + '" ' +
       'type = "checkbox" value ="' + tags[i] + '" ' +
       checkedAttribute +
@@ -62,10 +62,10 @@ var DG = {
                  label: "Use selected",
                  className: "btn-success",
                  callback: function() {
-                   var checkedValues = $('input:checkbox:checked').map(function() {
+                   var monsterTags = $('input.monsterTag:checkbox:checked').map(function() {
                    return this.value;
                    }).get();
-                   DG.data.monsterTags = checkedValues;}
+                   DG.data.monsterTags = monsterTags;}
                 },
           all:{ 
              label: "Any",
@@ -450,20 +450,23 @@ var DG = {
      });
      return nodeIds;
   },
-  makeNode: function(id,label) { return { id: id, 
-                                            shape: "box",
-                                            fontSize: 14,
-                                            color: {
-                                              background: 'lightgray',
-                                              border: 'gray',
-                                              highlight: {
-                                                background: 'lightgray',
-                                                border: 'black'
-                                              }
-                                            },                                          
-                                            label: label, 
-                                            title: DG.makeTitle(DG.dungeonLevel), 
-                                            group: ""};
+  makeNode: function(id,label) { 
+  var border, bgColor;
+  if (DG.data.locationType = "wilds") {  bgColor = "lightgreen";  border = 'green' } else {  bgColor = "lightgray";  border = 'gray' }
+  return {  id: id, 
+            shape: "box",
+            fontSize: 14,
+            color: {
+              background: bgColor,
+              border: border,
+              highlight: {
+                background: bgColor,
+                border: 'black'
+              }
+            },                                          
+            label: label, 
+            title: DG.makeTitle(DG.dungeonLevel), 
+            group: ""};
   },
   makeEdge: function(startNode,endNode) { 
     if (startNode === undefined) {return "error"};
@@ -512,9 +515,13 @@ var DG = {
   nameNode: function(nodeNum){ 
     return "" + (nodeNum) + ": " + DG.randomNodeLabel()},  
   randomNodeLabel: function(){
-    return this.drawOne(this.stock.nodeLabels)},
+    if (DG.data.locationType == "wilds"){return this.drawOne(this.wild.nodeLabels)}
+    else  { return this.drawOne(this.stock.nodeLabels)}
+   },
   randomEdgeLabel: function(){
-    return this.drawOne(this.stock.edgeLabels)},
+    if (DG.data.locationType == "wilds"){return this.drawOne(this.wild.edgeLabels)}
+    else  { return this.drawOne(this.stock.edgeLabels) } 
+  },
     
   // Node Content Randomization section ---------------------------------------------
   makeTitle: function(dungeonLevel){ 
@@ -535,7 +542,9 @@ var DG = {
                      }
     if (DG.rollDie(1,6) <= treasureRoll){title += DG.randomTreasure(dungeonLevel)};
     if (DG.rollOne()){ title += DG.randomHook();}
-
+    // let's have fewer truly empty rooms
+    if (title == "" && DG.rollThree()){ title += DG.randomOddity(dungeonLevel);}
+    if (title == "" && DG.rollTwo()){ title += DG.randomHook(dungeonLevel);}
     if (title == "") {title = "Empty"}
     return title; 
   },
@@ -867,7 +876,7 @@ var DG = {
    document.getElementById("dungeon_key").innerHTML = dungeonKey;
   },
   // Dig a dungeon ---------------------------------------------------------
-  digDungeon: function(){
+  digDungeon: function(locationType){
     var data = { nodes: null, edges: null };
     var levelSelect = document.getElementById("level");
     var sizeSelect = document.getElementById("size");
@@ -877,6 +886,7 @@ var DG = {
     DG.data.nodes = [];
     DG.data.edges = [];
     DG.data.notes = "";
+    DG.data.locationType = locationType;
     DG.roomCount = 0;
     DG.edgeCount = 0;
     DG.dungeonLevel = parseInt(levelSelect.options[levelSelect.selectedIndex].value);
