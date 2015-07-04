@@ -8,7 +8,7 @@ function bindButtons() {
   regenerateButton.addEventListener("click", function() { DG.digDungeon(); } );
   
   var moveTableButton = document.getElementById("move_table");
-   moveTableButton.addEventListener("click", function() { 
+  moveTableButton.addEventListener("click", function() { 
      var keyStyle = document.getElementById("dungeon_key").style.display
 	 if (keyStyle == "none"){ 
 	   document.getElementById("dungeon_key").style.display = "block";
@@ -38,7 +38,12 @@ function bindButtons() {
   
   var importButton = document.getElementById("import");
   importButton.addEventListener("click", function() { DG.importDungeon(); } );
-
+  
+  var themeButton = document.getElementById("theme");
+    themeButton.addEventListener("click", function() { 
+      DG.themeBox(); 
+  });
+  
   var keyButton = document.getElementById("scroll-to-key");
   keyButton.addEventListener("click", function() { DG.scrollToKey(); $(this).hide(); $("#scroll-to-top").show(); } );
 

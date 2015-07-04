@@ -32,6 +32,50 @@ var DG = {
   // Text utility functions
   brToLf: function(text) { return text.replace(new RegExp('<br\/>','g'),'\n').replace(new RegExp('<br>','g'),'\n').replace(new RegExp('<br \/>','g'),'\n');},
   lfToBr: function(text) { return text.replace(new RegExp('\r?\n','g'), '<br>');},
+  // Theming dialog
+  themeBox: function(){
+    var checkboxes = "";
+    var tags = DG.stock.monsterTags;
+    var tagsLength = tags.length;
+    var checkedAttribute = "";
+    for(var i = 0; i < tagsLength ; i++){
+      if (DG.data.monsterTags.indexOf(tags[i]) !== -1 ){ checkedAttribute = "checked "; }
+      else { checkedAttribute = ""; }
+      checkboxes += '<input id = "' + tags[i] + '" ' +
+      'name = "' + tags[i] + '" ' +
+      'type = "checkbox" value ="' + tags[i] + '" ' +
+      checkedAttribute +
+      '>' + tags[i] + '</input><br>';
+    }    
+    bootbox.dialog({
+        title:"Monster theme",
+        message:"Select thematic monster keywords:" + 
+        '<div class="row">  ' +
+        '<div class="col-md-12"> ' +
+        '<form class="form"> ' +
+        '<div class="form-group"> ' + checkboxes + 
+        
+        '</div>'+
+         '</form> </div>  </div>',
+        buttons:{
+          save:{ 
+                 label: "Use selected",
+                 className: "btn-success",
+                 callback: function() {
+                   var checkedValues = $('input:checkbox:checked').map(function() {
+                   return this.value;
+                   }).get();
+                   DG.data.monsterTags = checkedValues;}
+                },
+          all:{ 
+             label: "Any",
+             className: "btn-success",
+             callback: function() {
+               DG.data.monsterTags = [];}
+             }
+      }
+    });
+  },
   // Arguments to the Vis.Network creation call ----------------------------------------------
   nodeDialog: function(newData,callback){
     bootbox.dialog({
@@ -52,22 +96,19 @@ var DG = {
         '</div> ' +
         '</form> </div>  </div>',
       buttons: {
-      save: {
-        label: "Save",
-        className: "btn-success",
-        callback: function() {
-        newData.label =  $('#location_name').val();
-        newData.title =  DG.lfToBr($('#location_description').val());
-        DG.nodesDataSet.update(newData);
-        callback(newData);
+          save: {
+            label: "Save",
+            className: "btn-success",
+            callback: function() {
+            newData.label =  $('#location_name').val();
+            newData.title =  DG.lfToBr($('#location_description').val());
+            DG.nodesDataSet.update(newData);
+            callback(newData);
 
-        }
-      },
-
-      }
-        
-
-        });		 	
+            }
+         }                
+      }       
+    });		 	
   
   },
   formatOption: function(node,selectedId){
@@ -106,7 +147,7 @@ var DG = {
      var fromNodeId = thisEdge.from;
    var toNodeId = thisEdge.to;
      bootbox.dialog({
-            title:"Edit Path between Locations",
+      title:"Edit Path between Locations",
       message: '<div class="row">  ' +
         '<div class="col-md-12"> ' +
         '<form class="form"> ' +
@@ -125,23 +166,23 @@ var DG = {
         '</div>'+
         '</form> </div>  </div>',
       buttons: {
-      save: {
-        label: "Save",
-        className: "btn-success",
-        callback: function() {
-        thisEdge.label =  $('#edge_name').val();
-                thisEdge.from =  $('#fromNode').val();
-        thisEdge.to =  $('#toNode').val();
-        DG.edgesDataSet.update(thisEdge);
-        callback(thisEdge);
+          save: {
+            label: "Save",
+            className: "btn-success",
+            callback: function() {
+            thisEdge.label =  $('#edge_name').val();
+                    thisEdge.from =  $('#fromNode').val();
+            thisEdge.to =  $('#toNode').val();
+            DG.edgesDataSet.update(thisEdge);
+            callback(thisEdge);
 
-        }
-      },
+            }
+          }
 
       }
         
 
-        })		 
+     })		 
   },
   drawOptions: { 
     //physics: {barnesHut: {enabled: false}},
@@ -257,8 +298,10 @@ var DG = {
     }
   },
   data: { nodes:[],
-			  edges:[],
-			  notes: ''},
+		  edges:[],
+		  notes: '',
+          monsterTags:[]
+        },
               
   nodesDataSet:"uninitialized",
   edgesDataSet:"uninitialized",
@@ -308,7 +351,7 @@ var DG = {
                           list = DG.shuffle(list);
                           item = list.pop();
                           return [item,list];
-            },
+  },
   arrayToSet: function(a) {
     var hash = {};
     for (var i = 0; i < a.length; i++)
@@ -321,7 +364,7 @@ var DG = {
   shuffle: function(array) {
     // Mike Bostock's Fisher Yates shuffle implementation
     var m = array.length, t, i;
-    // While there remain elements to shuffle�
+    // While there remain elements to shuffle
     while (m) {
       // Pick a remaining element�
       i = Math.floor(Math.random() * m--);
@@ -332,7 +375,7 @@ var DG = {
     }
     return array;
   },
-  // ui handlers - move to ui file?
+  //   UI handlers - move to ui file?  ------------------------------------------------------- 
   populateSavedSelect: function(){
     // populate the saved dungeons select
     var dungeonSelect = document.getElementById("saved");
@@ -352,41 +395,41 @@ var DG = {
       opt.value = optionsList[i];
       opt.innerHTML = optionsList[i];
       select.appendChild(opt);
-  }
+    }
   },
   saveDungeon: function(){var key = document.getElementById("dungeon_name").value;
                           var dungeonString = JSON.stringify(DG.data);
               localStorage[key] = dungeonString;
               var dungeonSelect = document.getElementById("saved");
               DG.populateSavedSelect();
-              },
+  },
   loadDungeon: function(){ 
     var dungeonSelect = document.getElementById("saved");
     var selectedKey = "";
     var dungeonData = "unloaded";
     if (dungeonSelect.selectedIndex == -1) {
       alert("No dungeon selected to load");
-        return null;
+      return null;
     };
     selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
-      dungeonData = localStorage[selectedKey];
+    dungeonData = localStorage[selectedKey];
     if (dungeonData !== "unloaded"){
-    DG.data = JSON.parse(dungeonData);
-    DG.initNetwork();
-    document.getElementById("dungeon_name").text = selectedKey;
-    document.getElementById("dungeon_name").value = selectedKey;
-    $("#notes").val(DG.data.notes);
-  }
+        DG.data = JSON.parse(dungeonData);
+        DG.initNetwork();
+        document.getElementById("dungeon_name").text = selectedKey;
+        document.getElementById("dungeon_name").value = selectedKey;
+        $("#notes").val(DG.data.notes);
+  }  
   },  
 
   deleteDungeon: function(){
     var dungeonSelect = document.getElementById("saved");
     var selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
-  var message = "Permanently delete dungeon " + selectedKey + " from storage?";
+    var message = "Permanently delete dungeon " + selectedKey + " from storage?";
     if (confirm(message)){
     localStorage.removeItem(selectedKey);
     DG.populateSavedSelect();
-  }
+    }
   },
   exportDungeon: function(){var dungeonString = JSON.stringify(DG.data);
     $("#export-import").val(dungeonString);
@@ -424,28 +467,40 @@ var DG = {
   },
   makeEdge: function(startNode,endNode) { 
     if (startNode === undefined) {return "error"};
-  if (endNode === undefined) {return "error"};
+    if (endNode === undefined) {return "error"};
     return {from: startNode, to: endNode, label: this.randomEdgeLabel()};
   },
   linksOnNode: function(nodeId) { return edges = DG.data.edges.filter(function( edge ) {
-   return (edge.from === nodeId || edge.to === nodeId); });
+    return (edge.from === nodeId || edge.to === nodeId); });
   },
   linkNodes: function(startEdge,endEdge){  console.log([startEdge,endEdge]);
     var edge = DG.makeEdge(startEdge,endEdge);
-  console.log(edge);
+    console.log(edge);
     if (edge === "error"){ console.log( "attempting to link undefined node"); return}
     DG.data.edges.push(DG.makeEdge(startEdge,endEdge));
-  console.log("made edge");
-  console.log(DG.data.edges)
+    console.log("made edge");
+    console.log(DG.data.edges)
   },
   setRandomRoomCount: function(){
     DG.roomCount = DG.rollDie(DG.minRooms, (DG.maxRooms - DG.minRooms) );
   return DG.roomCount;
   },
   setBaseMonsters: function() {
-    DG.data.baseMonsters = [DG.drawOne(DG.stock.monsters[DG.dungeonLevel])];
-  if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
-  if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
+      DG.data.baseMonsters = [];
+      if ((DG.data.monsterTags  !== undefined) &&  (DG.data.monsterTags !== []) ){ 
+        var fullMonsterList = DG.stock.monsters[DG.dungeonLevel];       
+        for (var i = 0; i < fullMonsterList.length; i++){ 
+           if (DG.tagMatch(fullMonsterList[i].tags, DG.data.monsterTags)){
+              DG.data.baseMonsters.push(fullMonsterList[i]);
+           }
+        }   
+        if (DG.data.baseMonsters.length > 0) {return } // fall through to random if we found nothing matching the theme tags
+      } 
+    
+      DG.data.baseMonsters = [DG.drawOne(DG.stock.monsters[DG.dungeonLevel])];
+      if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
+      if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
+
   },
   makeRooms: function(){
     DG.setBaseMonsters();
@@ -486,18 +541,20 @@ var DG = {
   },
   randomOddity: function(dungeonLevel){ 
     // ignoring dungeonLevel for now
-    return DG.drawOne(DG.stock.oddities) + "<br>"; },
+    return DG.drawOne(DG.stock.oddities) + "<br>"; 
+  },
   randomHook: function(){ 
     var hook = "Hook: " + DG.drawOne(DG.stock.hook_items)  + "<br>";
-    return hook},
+    return hook;
+  },
   randomMonsters: function(dungeonLevel){ 
     var monsterLevel = dungeonLevel;
     var monsterCount = 1;
     var monsterType = {name:"", int:0, tags:[]};
-  var monsterName = "";
-    var newMonsterTreasureMultiplier;
-  var attitude ="";
+    var monsterName = ""; 
+    var attitude ="";
     var monsters = "";
+    // how many and what level?
     for (var i = 0; i < 3; i +=1){
       if (DG.rollOne()){ monsterLevel += 1;}
     }
@@ -516,38 +573,70 @@ var DG = {
         monsterCount *= 2; 
       }
     }
-  if (DG.rollThree()){
-      monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
-    monsterName = monsterType.name;
-  } else {
-  // will let monster count stand, which will generate some group size outliers
-    monsterLevel = dungeonLevel;
-    monsterType = DG.drawOne(DG.data.baseMonsters);
-    monsterName = monsterType.name;
-  }
-    // adjusting plurals - extract to a function soon
-    if (monsterCount > 1){
-      if (monsterType.hasOwnProperty("plural")){
-      monsterName = monsterType.plural;
-      }	      
-      else {
-        monsterName += "s";
-      }
-    }
+   
+    monsterType = DG.selectMonster(monsterLevel); 
     
-    // extract this
-    newMonsterTreasureMultiplier = (monsterLevel * (monsterCount^0.75));
-    DG.monsterTreasureMultiplier = Math.max(DG.monsterTreasureMultiplier,newMonsterTreasureMultiplier);
+    // side effect - adjust monster multiplier for treasure    
+    DG.updateMonsterTreasureMultiplier(monsterLevel,monsterCount); 
+    // Fill in the string -----------------
+   
+    // Plural?
+    if (monsterCount > 1){
+      if (monsterType.hasOwnProperty("plural")){  monsterName = monsterType.plural; }	      
+      else { monsterName = monsterType.name + "s"; }
+    } else { monsterName = monsterType.name; }
+   
     monsters = "M: " + monsterCount 
+    // Add descriptive attitudes but only sometimes, to avoid being cloying.
+    // Choose from complex or simple motivations table based on the INT of the monster type.
     if (DG.rollThree()){ 
-    if (monsterType.int < 7){ attitude = DG.drawOne(DG.stock.basicAttitudes) }
-    else {attitude = DG.drawOne(DG.stock.allAttitudes)}
+      if (monsterType.int < 7){ attitude = DG.drawOne(DG.stock.basicAttitudes) }
+      else {attitude = DG.drawOne(DG.stock.allAttitudes)}
       monsters += " " + attitude;
-  };
-    monsters += " " + monsterName + "<br>";
-  
+    };
+    monsters += " " + monsterName + "<br>"; 
     return monsters;
   },
+  tagMatch: function(itemTags,themeTags){
+    for (var i = 0; i < itemTags.length; i++){
+      if (themeTags.indexOf(itemTags[i]) !== -1) { return true }
+    }
+    return false;
+  },
+  selectMonster: function(monsterLevel){
+    if ((DG.data.monsterTags  !== undefined) &&  (DG.data.monsterTags !== []) ){
+       // Select Monster type from long or short list
+        if (DG.rollThree()){ // Try several times for theme, then go random to fill in.
+          for(var i = 1; i < 6; i++){
+            monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
+            if ( DG.tagMatch(monsterType.tags,DG.data.monsterTags)) { return monsterType; }
+          } 
+          monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
+        } else { // About half come out of the base monster type for the level, for some coherence.
+          // will let monster count & treasure multiplier stand, which will generate some group size/treasure outliers
+          monsterType = DG.drawOne(DG.data.baseMonsters);      
+        } 
+    }
+    else{
+        // Select Monster type from long or short list
+        if (DG.rollThree()){
+          monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
+        } else { // About half come out of the base monster type for the level, for some coherence.
+          // will let monster count & treasure multiplier stand, which will generate some group size/treasure outliers
+          monsterType = DG.drawOne(DG.data.baseMonsters);      
+        }
+    }
+    return monsterType;
+  },
+  updateMonsterTreasureMultiplier: function(monsterLevel,monsterCount){
+    var newMonsterTreasureMultiplier;
+     // More monsters of the same type gives more treasure but don't scale linearly.
+    newMonsterTreasureMultiplier = (monsterLevel * (monsterCount^0.75));
+    // Use the biggest multiplier of any single group of monsters in the room.
+    DG.monsterTreasureMultiplier = Math.max(DG.monsterTreasureMultiplier,newMonsterTreasureMultiplier);
+  },
+  
+  
   valueFraction: function(treasureValue){ 
     return DG.rollDie(1,9) * 0.1 * treasureValue 
   },
@@ -571,11 +660,7 @@ var DG = {
     if (DG.rollTwo()){ treasureValue *= DG.rollDie(2,6) }
     if (DG.rollThree()){ treasureValue *= DG.rollDie(2,6) }
     treasureValue *= DG.monsterTreasureMultiplier;
-    // going simple with one type initially
-    // treasureType = DG.drawOne(DG.stock.treasure);
-    // if (treasureType["value"] < treasureValue){
-      // treasureCount = Math.floor(treasureValue/treasureType["value"]);
-    // }
+
     hoard += DG.oneTreasure(treasureValue);
   // second treasure
   if (DG.rollThree()){
@@ -753,7 +838,7 @@ var DG = {
   fillKey: function() { 
    //This function will render out the labels and descriptions from 
    //DG.data.nodes into table#dungeon_key
-  var dungeonKey = "<thead>\n<tr><th>Location</th><th>Description</th></tr>\n</thead><tbody>"
+  var dungeonKey = "<thead>\n<tr><th>Location</th><th>Description (click in a cell to edit)</th></tr>\n</thead><tbody>"
   var tln = "<tr class='node_row' id ='" 
   var tle = "<tr  class='edge_row'id ='" 
   var tlm = "'><td class='dungen'>";
@@ -842,7 +927,7 @@ DG.linkStrats = {
     var currentNodeID = unlinkedNodes.pop();
     linkedNodes.push(currentNodeID);
     var toLink = currentNodeID;
-    var newEdge = {}
+    var newEdge = {};
     while (unlinkedNodes.length > 0 ){
        currentNodeID = unlinkedNodes.pop();
        DG.linkNodes(currentNodeID, toLink);

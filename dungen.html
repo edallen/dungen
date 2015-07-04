@@ -36,8 +36,9 @@
 	<option value="random" >Random</option>
 	<option value="triangles" >Triangles</option>
   </select>
+  <button class= "btn-small" id="theme">Theme</button>
   <button class= "btn-small" id="regenerate">Generate</button>
-   <button class= "btn-small" id="redraw">Redraw</button>
+  <button class= "btn-small" id="redraw">Redraw</button>
   <button class= "btn-small" id="repopulate" style = "display:none">Repopulate</button>
   <button class= "btn-small" id="relabel" style = "display:none">Relabel</button>
   <label for="dungeon_name">Name for save </label><input id="dungeon_name" placeholder="Name the dungeon" ></input>
@@ -61,11 +62,16 @@
   <div id="footer_notes" style="clear: both"><label for="notes">Notes</label><br>
     <textarea id="notes" cols='120' rows='10' ></textarea></div><br>
     <button id="export" style="margin-right: 20px">Export</button>
-    <button id="import">Import</button><p> Export dumps the data for the current dungeon into the field below. Copy and paste into an email or a file to move to another computer. Copy there and paste into the field and click Import to load it. Editing here is possible but might break it.</p>
+    <button id="import">Import</button>
+    <p> Export dumps the data for the current dungeon into the field below. Copy and paste into an email or a file to move to another computer. 
+    Paste into the field there and click Import to load it. Careful editing in this field is possible. Save with a name on the destination computer.</p>
     <textarea id="export-import" cols='120' rows='10' ></textarea></div>
   </div>
   <br>
-<p>To manually save and use the dungeon outside this page, copy the text of the room contents table and notes field and paste into another file, and use the Download Image button on Chrome or the right click menu to save the image as a PNG. If you need to clear all cached data in your browser for some reason, please do this manual save of any dungeons you care about first. Dungen saves to your browser's "LocalStorage" not to a server. Clearing all LocalStorage will wipe out any saved and edited dungeons. Export/import or having a server are on the To Do list.</p>
+<p>To manually save and use the dungeon outside this page, copy the text of the room contents table and notes field and paste into another file, 
+and use the Download Image button on Chrome or the right click menu to save the image as a PNG. 
+If you need to clear all cached data in your browser for some reason, please export if you'll want to use a dungeon in DunGen again or manually save of any dungeons you care about first. 
+DunGen saves to your browser's "LocalStorage" not to a server. Clearing all LocalStorage will wipe out any saved and edited dungeons.</p>
 <p>This version updates to use vis.js 4.4 to see if it makes the editing bar work in mobile browsers. </p>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
