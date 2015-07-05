@@ -466,7 +466,7 @@ var DG = {
               }
             },                                          
             label: label, 
-            title: DG.makeTitle(DG.dungeonLevel), 
+            title: DG.makeContents(DG.data.dungeonLevel), 
             group: ""};
   },
   makeEdge: function(startNode,endNode) { 
@@ -488,10 +488,19 @@ var DG = {
   },
   setBaseMonsters: function() {
       var monsterSourceList;
-      if (DG.data.locationType == "wilds"){monsterSourceList = DG.wild.monsters;} else { monsterSourceList = DG.stock.monsters; }
+      if (DG.data.dungeonLevel === "wilds"){
+        // Not going to deal with multiple levels of base monsters
+        DG.data.baseMonsters = [];
+        return;
+      }
+      if (DG.data.locationType === "wilds"){
+        monsterSourceList = DG.wild.monsters;
+
+        
+      } else { monsterSourceList = DG.stock.monsters; }
       DG.data.baseMonsters = [];
       if ((DG.data.monsterTags  !== undefined) &&  (DG.data.monsterTags !== []) ){ 
-        var fullMonsterList = monsterSourceList[DG.dungeonLevel];       
+        var fullMonsterList = monsterSourceList[DG.data.dungeonLevel];       
         for (var i = 0; i < fullMonsterList.length; i++){ 
            if (DG.tagMatch(fullMonsterList[i].tags, DG.data.monsterTags)){
               DG.data.baseMonsters.push(fullMonsterList[i]);
@@ -500,9 +509,9 @@ var DG = {
         if (DG.data.baseMonsters.length > 0) {return } // fall through to random if we found nothing matching the theme tags
       } 
     
-      DG.data.baseMonsters = [DG.drawOne(monsterSourceList[DG.dungeonLevel])];
-      if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(monsterSourceList[DG.dungeonLevel]))};
-      if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(monsterSourceList[DG.dungeonLevel]))};
+      DG.data.baseMonsters = [DG.drawOne(monsterSourceList[DG.data.dungeonLevel])];
+      if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(monsterSourceList[DG.data.dungeonLevel]))};
+      if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(monsterSourceList[DG.data.dungeonLevel]))};
 
   },
   makeRooms: function(){
@@ -524,69 +533,107 @@ var DG = {
   },
     
   // Node Content Randomization section ---------------------------------------------
-  makeTitle: function(dungeonLevel){ 
-    var title = "";
+  makeContents: function(dungeonLevel){ 
+    var contents= "";
     var treasureRoll = 1;
     DG.monsterTreasureMultiplier = 1;
+    DG.treasureLevel = 1;
 
-    if (DG.rollOne()){ title += DG.randomOddity(dungeonLevel);}
-    if (DG.rollOne()){ title += DG.randomTrap(dungeonLevel);
+    if (DG.rollOne()){ contents += DG.randomOddity(dungeonLevel);}
+    if (DG.rollOne()){ contents += DG.randomTrap(dungeonLevel);
                       treasureRoll += 1;
                        }
-    if (DG.rollTwo()){ title += DG.randomMonsters(dungeonLevel);
+    if (DG.rollTwo()){ contents += DG.randomMonsters(dungeonLevel);
                      treasureRoll += 2;
                      }
     // More monsters, chance of bigger mixed set, with high treasure odds
-    if (DG.rollTwo()){ title += DG.randomMonsters(dungeonLevel);
+    if (DG.rollTwo()){ contents += DG.randomMonsters(dungeonLevel);
                      treasureRoll += 2;
                      }
-    if (DG.rollDie(1,6) <= treasureRoll){title += DG.randomTreasure(dungeonLevel)};
-    if (DG.rollOne()){ title += DG.randomHook();}
+    if (DG.data.dungeonLevel === "wilds"){
+        if (DG.rollDie(1,6) <= treasureRoll){contents += DG.randomTreasure(DG.treasureLevel)}; 
+    } else {                
+       if (DG.rollDie(1,6) <= treasureRoll){contents += DG.randomTreasure(dungeonLevel)}; 
+    }
+    if (DG.rollOne()){ contents += DG.randomHook();}
     // let's have fewer truly empty rooms
-    if (title == "" && DG.rollThree()){ title += DG.randomOddity(dungeonLevel);}
-    if (title == "" && DG.rollTwo()){ title += DG.randomHook(dungeonLevel);}
-    if (title == "") {title = "Empty"}
-    return title; 
+    if (contents == "" && DG.rollThree()){ contents += DG.randomOddity(dungeonLevel);}
+    if (contents == "" && DG.rollTwo()){ contents += DG.randomHook(dungeonLevel);}
+    if (contents == "") {contents= "Empty"}
+    return contents; 
   },
   randomOddity: function(dungeonLevel){ 
     // ignoring dungeonLevel for now
     return DG.drawOne(DG.stock.oddities) + "<br>"; 
   },
   randomHook: function(){ 
-    var hook = "Hook: " + DG.drawOne(DG.stock.hook_items)  + "<br>";
+    var hook = "Hook: " + DG.drawOne(DG.stock.hookItems)  + "<br>";
     return hook;
   },
+  randomNpcClass: function() {
+    return DG.drawOne(DG.stock.characterClasses);
+  },
   randomMonsters: function(dungeonLevel){ 
-    var monsterLevel = dungeonLevel;
+    var monsterLevel;
     var monsterCount = 1;
     var monsterType = {name:"", int:0, tags:[]};
     var monsterName = ""; 
     var attitude ="";
     var monsters = "";
-    // how many and what level?
-    for (var i = 0; i < 3; i +=1){
-      if (DG.rollOne()){ monsterLevel += 1;}
+    if (dungeonLevel === "wilds") {
+        monsterLevel = Math.min(DG.rollDie(0,5), DG.rollDie(0,5));
+        DG.treasureLevel = Math.max( DG.treasureLevel, monsterLevel);
+        switch (monsterLevel) {
+          case 0:
+            if (DG.rollThree()){ monsterCount = Math.min( DG.rollDie(1,300),DG.rollDie(1,300) ); }
+            else{ monsterCount = DG.rollDie(1,20); } 
+            break;
+          case 1:
+            if (DG.rollTwo()){ monsterCount = Math.min( DG.rollDie(1,250),DG.rollDie(1,250) ); }
+            else { monsterCount = DG.rollDie(1,20); }
+            break;        
+          case 2:
+            monsterCount = Math.min(DG.rollDie(1,40),DG.rollDie(1,40),DG.rollDie(1,40));
+            break;
+          case 3:
+             monsterCount = Math.min(DG.rollDie(1,30),DG.rollDie(1,30),DG.rollDie(1,30));
+            break;
+          case 4:
+            monsterCount = Math.min(DG.rollDie(1,16),DG.rollDie(1,16),DG.rollDie(1,16));
+            break;
+          case 5:
+            monsterCount = Math.min(DG.rollDie(1,6),DG.rollDie(1,6));
+            break;
+          default:
+            monsterCount = DG.rollDie(1,6);
+          
+        }         
+    }  
+    else {
+        monsterLevel = dungeonLevel;
+        // how many and what level?
+        for (var i = 0; i < 3; i +=1){
+          if (DG.rollOne()){ monsterLevel += 1;}
+        }
+        if (monsterLevel > 5) {
+           monsterLevel = 5; }
+        if (monsterLevel == dungeonLevel) { monsterCount += DG.rollDie(0,8); }  
+        if (monsterLevel == dungeonLevel + 1){ monsterCount += DG.rollDie(0,3); }
+        if (monsterLevel == dungeonLevel + 2){ monsterCount += DG.rollDie(0,1); }
+        // have a chance of a large horde of lower monsters
+        if ( monsterLevel == dungeonLevel && DG.rollTwo() && monsterLevel > 0 ){ 
+          monsterLevel = monsterLevel - 1; 
+          monsterCount *= 2;
+          // can go two steps down
+          if (DG.rollThree() && (monsterLevel > 0 )){ 
+            monsterLevel = monsterLevel - 1; 
+            monsterCount *= 2; 
+          }
+        }
     }
-    if (monsterLevel > 5) {
-       monsterLevel = 5; }
-    if (monsterLevel == dungeonLevel) { monsterCount += DG.rollDie(0,8); }  
-    if (monsterLevel == dungeonLevel + 1){ monsterCount += DG.rollDie(0,3); }
-    if (monsterLevel == dungeonLevel + 2){ monsterCount += DG.rollDie(0,1); }
-    // have a chance of a large horde of lower monsters
-    if ( monsterLevel == dungeonLevel && DG.rollTwo() && monsterLevel > 0 ){ 
-      monsterLevel = monsterLevel - 1; 
-      monsterCount *= 2;
-      // can go two steps down
-      if (DG.rollThree() && (monsterLevel > 0 )){ 
-        monsterLevel = monsterLevel - 1; 
-        monsterCount *= 2; 
-      }
-    }
-   
     monsterType = DG.selectMonster(monsterLevel); 
     
-    // side effect - adjust monster multiplier for treasure    
-    DG.updateMonsterTreasureMultiplier(monsterLevel,monsterCount); 
+ 
     // Fill in the string -----------------
    
     // Plural?
@@ -598,17 +645,88 @@ var DG = {
     monsters = "M: " + monsterCount 
     // Add descriptive attitudes but only sometimes, to avoid being cloying.
     // Choose from complex or simple motivations table based on the INT of the monster type.
-    if (DG.rollThree()){ 
-      if (monsterType.int < 7){ attitude = DG.drawOne(DG.stock.basicAttitudes) }
-      else {attitude = DG.drawOne(DG.stock.allAttitudes)}
-      monsters += " " + attitude;
-    };
+    if (DG.shouldDetailNpcs(monsterType) ){
+       monsters += " " + monsterName + ":<br>"; 
+       monsters += DG.detailNpcs( monsterLevel, monsterCount, monsterType ); 
+    } else {
+     if (DG.rollThree()){ 
+       attitude = DG.randomAttitude(monsterType);
+       monsters += " " + attitude;
+     };
     monsters += " " + monsterName + "<br>"; 
+    }
+   
+    
+    // side effect - adjust monster multiplier for treasure    
+    DG.updateMonsterTreasureMultiplier(monsterLevel,monsterCount, monsterType); 
     return monsters;
+  },
+  randomAttitude: function(monsterType) { 
+    if (monsterType.int < 7){ return DG.drawOne(DG.stock.basicAttitudes); }
+    return DG.drawOne(DG.stock.allAttitudes);
+  },
+  
+  shouldDetailNpcs: function(monsterType){ return DG.tagMatch(monsterType.tags, ["adventurer", "overlord", "npc"]); },
+  
+  getNpcLevel: function(monsterLevel){
+    switch (monsterLevel) {
+          case 0:
+            if (DG.rollTwo()) { return "2" } 
+            return "1" ;
+            break;
+          case 1:
+            if (DG.rollOne()) { return "4" };
+            if (DG.rollOne()) { return "1" };
+            if (DG.rollThree()) { return "2" };
+            return "3";
+            break;        
+          case 2:
+            if (DG.rollOne()) { return "6" };
+            if (DG.rollOne()) { return "3" };
+            if (DG.rollThree()) { return "5" };
+            return "4";
+            break;
+          case 3:
+          //mostly 6-7
+            if (DG.rollOne()) { return "8" };
+            if (DG.rollOne()) { return "5" };
+            if (DG.rollThree()) { return "7" };
+            return "6";          
+            break;
+          case 4:
+          // mostly 8-9 
+            if (DG.rollOne()) { return "10" };
+            if (DG.rollOne()) { return "7" };
+            if (DG.rollThree()) { return "9" };
+            return "8";           
+            break;
+          case 5:
+          // mostly 10 - 12
+            if (DG.rollOne()) { return "13" };
+            if (DG.rollOne()) { return "14" };
+            if (DG.rollOne()) { return "9" };
+            if (DG.rollTwo()) { return "12" };
+            if (DG.rollThree()) { return "11" };
+            return "10";  
+            break;
+    }    
+  
+  },
+  
+  detailNpcs: function(monsterLevel,monsterCount, monsterType){
+    var npcBlock = "";
+    for (var i = 0; i < monsterCount; i++){
+      if (DG.rollTwo()) { npcBlock += DG.randomAttitude(monsterType) + " ";};
+      npcBlock += DG.randomNpcClass() + " ";
+      npcBlock += DG.getNpcLevel(monsterLevel) + " ";  
+      
+      npcBlock += "<br>";      
+    }
+    return npcBlock;
   },
   tagMatch: function(itemTags,themeTags){
     for (var i = 0; i < itemTags.length; i++){
-      if (themeTags.indexOf(itemTags[i]) !== -1) { return true }
+      if (themeTags.indexOf(itemTags[i]) !== -1) { return true; }
     }
     return false;
   },
@@ -617,7 +735,7 @@ var DG = {
     if (DG.data.locationType == "wilds"){monsterSourceList = DG.wild.monsters;} else { monsterSourceList = DG.stock.monsters; }
     if ((DG.data.monsterTags  !== undefined) &&  (DG.data.monsterTags !== []) ){
        // Select Monster type from long or short list
-        if (DG.rollThree()){ // Try several times for theme, then go random to fill in.
+        if (DG.rollThree() || DG.data.dungeonLevel === "wilds"){ // Try several times for theme, then go random to fill in.
           for(var i = 1; i < 6; i++){
             monsterType = DG.drawOne(monsterSourceList[monsterLevel]);
             if ( DG.tagMatch(monsterType.tags,DG.data.monsterTags)) { return monsterType; }
@@ -630,7 +748,7 @@ var DG = {
     }
     else{
         // Select Monster type from long or short list
-        if (DG.rollThree()){
+        if (DG.rollThree()  || DG.data.dungeonLevel === "wilds" ){
           monsterType = DG.drawOne(monsterSourceList[monsterLevel]);
         } else { // About half come out of the base monster type for the level, for some coherence.
           // will let monster count & treasure multiplier stand, which will generate some group size/treasure outliers
@@ -639,10 +757,15 @@ var DG = {
     }
     return monsterType;
   },
-  updateMonsterTreasureMultiplier: function(monsterLevel,monsterCount){
+  updateMonsterTreasureMultiplier: function(monsterLevel, monsterCount, monsterType){
     var newMonsterTreasureMultiplier;
+    if (monsterType.int < 6) {
+    // not smart enough to amass treasure
+      newMonsterTreasureMultiplier = monsterLevel;
+    } else {
      // More monsters of the same type gives more treasure but don't scale linearly.
     newMonsterTreasureMultiplier = (monsterLevel * (monsterCount^0.75));
+    }
     // Use the biggest multiplier of any single group of monsters in the room.
     DG.monsterTreasureMultiplier = Math.max(DG.monsterTreasureMultiplier,newMonsterTreasureMultiplier);
   },
@@ -663,11 +786,11 @@ var DG = {
     }
     return treasureCount + " " + treasureType["label"];
   },
-  randomTreasure: function(dungeonLevel){
+  randomTreasure: function(treasureLevel){
     var hoard = "Ts: ";
     var treasureType = {};
     var treasureCount = 1;
-    var treasureValue = ((1+dungeonLevel)^2.5) * 10;
+    var treasureValue = ((1+treasureLevel)^2.5) * 10;
     if (DG.rollTwo()){ treasureValue *= DG.rollDie(2,6) }
     if (DG.rollThree()){ treasureValue *= DG.rollDie(2,6) }
     treasureValue *= DG.monsterTreasureMultiplier;
@@ -684,51 +807,51 @@ var DG = {
   }
     hoard += "<br>";
   if (DG.rollOne()){
-      hoard += "Mg: " + DG.randomMinorMagicItem(dungeonLevel) + "<br>";
+      hoard += "Mg: " + DG.randomMinorMagicItem(treasureLevel) + "<br>";
     }
     if (DG.rollDie(1,1000) < treasureValue){ 
-      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
+      hoard += "Mg: " + DG.randomMagicItem(treasureLevel) + "<br>";
     }
-  if (DG.rollDie(0,9) <= dungeonLevel){
-      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
+  if (DG.rollDie(0,9) <= treasureLevel){
+      hoard += "Mg: " + DG.randomMagicItem(treasureLevel) + "<br>";
     }
   if (DG.rollDie(1,8000) < treasureValue){
-      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
+      hoard += "Mg: " + DG.randomMagicItem(treasureLevel) + "<br>";
     }
   if (DG.rollDie(1,20000) < treasureValue){
-      hoard += "Mg: " + DG.randomMagicItem(dungeonLevel) + "<br>";
+      hoard += "Mg: " + DG.randomMagicItem(treasureLevel) + "<br>";
     }
 
     return hoard; 
   },
-  randomMagicItem: function(dungeonLevel){ // will need much more detail later and more items in big hoards
+  randomMagicItem: function(treasureLevel){ // will need much more detail later and more items in big hoards
     var item = DG.drawOne(DG.stock.magicItems);
   if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
-  if (item === "sword") { item = DG.genSword(dungeonLevel)};
-  if (item === "weapon") { item = DG.genWeapon(dungeonLevel)};
+  if (item === "sword") { item = DG.genSword(treasureLevel)};
+  if (item === "weapon") { item = DG.genWeapon(treasureLevel)};
 
-  if (item === "armor") { item = DG.genArmor(dungeonLevel)};
+  if (item === "armor") { item = DG.genArmor(treasureLevel)};
 
-  if (item === "wand") { item = DG.genWand(dungeonLevel)};
-  if (item === "ring") { item = DG.genRing(dungeonLevel)};
-  if (item === "staff") { item = DG.genStaff(dungeonLevel)};
-  if (item === "book") { item = DG.genBook(dungeonLevel)};
-  if (item === "scroll") { item = DG.genScroll(dungeonLevel)};
-    if (item === "trinket") { item = DG.genTrinket(dungeonLevel)};
-  if (item === "miscellaneous") { item = DG.genMisc(dungeonLevel)};
+  if (item === "wand") { item = DG.genWand(treasureLevel)};
+  if (item === "ring") { item = DG.genRing(treasureLevel)};
+  if (item === "staff") { item = DG.genStaff(treasureLevel)};
+  if (item === "book") { item = DG.genBook(treasureLevel)};
+  if (item === "scroll") { item = DG.genScroll(treasureLevel)};
+    if (item === "trinket") { item = DG.genTrinket(treasureLevel)};
+  if (item === "miscellaneous") { item = DG.genMisc(treasureLevel)};
 
   return item;},
-  randomMinorMagicItem: function(dungeonLevel){ // will need much more detail later and more items in big hoards
+  randomMinorMagicItem: function(treasureLevel){ // will need much more detail later and more items in big hoards
     var item = DG.drawOne(DG.stock.minorMagicItems);
   if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
-  if (item === "scroll") { item = DG.genScroll(dungeonLevel)};
-    if (item === "trinket") { item = DG.genTrinket(dungeonLevel)};
+  if (item === "scroll") { item = DG.genScroll(treasureLevel)};
+    if (item === "trinket") { item = DG.genTrinket(treasureLevel)};
   return item;},
-  genSword: function(dungeonLevel){
+  genSword: function(treasureLevel){
     var sword = DG.drawOne(DG.stock.swords);
   var bonus = 1;
   var powerList = [];
-  for (i = 0; i < dungeonLevel +2; i +=1){
+  for (i = 0; i < treasureLevel +2; i +=1){
     if (DG.rollTwo()){bonus +=1};
     if (DG.rollTwo()) {powerList.push(DG.drawOne(DG.stock.swordPowers))};
   }
@@ -745,11 +868,11 @@ var DG = {
 
   return sword;
   },
-  genWeapon: function(dungeonLevel){
+  genWeapon: function(treasureLevel){
     var weapon = DG.drawOne(DG.stock.weapons);
   var bonus = 1;
   var powerList = [];
-  for (i = 0; i < dungeonLevel +1; i +=1){
+  for (i = 0; i < treasureLevel +1; i +=1){
     if (DG.rollTwo()){bonus +=1};
     if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.weaponPowers))};
   }
@@ -768,12 +891,12 @@ var DG = {
 
   return weapon;
   },
-  genArmor: function(dungeonLevel){
+  genArmor: function(treasureLevel){
     var armor = DG.drawOne(DG.stock.armor);
 
   var bonus = 1;
   var powerList = [];
-  for (i = 0; i < dungeonLevel +1; i +=1){
+  for (i = 0; i < treasureLevel +1; i +=1){
     if (DG.rollTwo()){bonus +=1};
     if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.armorPowers))};
   }
@@ -791,31 +914,31 @@ var DG = {
 
   return armor;
   },
-  genWand: function(dungeonLevel){
+  genWand: function(treasureLevel){
     var wand = "Wand of " + DG.drawOne(DG.stock.wands);
   return wand;
   },
-  genRing: function(dungeonLevel){
+  genRing: function(treasureLevel){
     var ring = "Ring of " + DG.drawOne(DG.stock.rings);
   return ring;
   },
-  genMisc: function(dungeonLevel){
+  genMisc: function(treasureLevel){
     var misc = DG.drawOne(DG.stock.miscellaneous);
   return misc;
   },
-  genStaff: function(dungeonLevel){
+  genStaff: function(treasureLevel){
     var staff = "Staff of " + DG.drawOne(DG.stock.staves);
   return staff;
   },
-  genBook: function(dungeonLevel){
+  genBook: function(treasureLevel){
     var book = DG.drawOne(DG.stock.books);
   return book;
   },
-  genScroll: function(dungeonLevel){
+  genScroll: function(treasureLevel){
     var scroll = DG.drawOne(DG.stock.scrolls);
   return scroll;
   },
-  genTrinket: function(dungeonLevel){
+  genTrinket: function(treasureLevel){
     var trinket = DG.drawOne(DG.stock.trinkets);
   return trinket;
   },
@@ -884,6 +1007,7 @@ var DG = {
     var sizeSelect = document.getElementById("size");
     var patternSelect = document.getElementById("pattern");
     var selectedSize = "5,5";
+    var dungeonLevelSelected = levelSelect.options[levelSelect.selectedIndex].value;
     var selectedPattern = patternSelect.options[patternSelect.selectedIndex].value;
     DG.data.nodes = [];
     DG.data.edges = [];
@@ -891,7 +1015,7 @@ var DG = {
     DG.data.locationType = locationType;
     DG.roomCount = 0;
     DG.edgeCount = 0;
-    DG.dungeonLevel = parseInt(levelSelect.options[levelSelect.selectedIndex].value);
+    if (dungeonLevelSelected === "wilds") {DG.data.dungeonLevel = dungeonLevelSelected } else { DG.data.dungeonLevel = parseInt(dungeonLevelSelected); }
     selectedSize = sizeSelect.options[sizeSelect.selectedIndex].value;
     DG.minRooms = parseInt(selectedSize.split(",")[0]);
     DG.maxRooms = parseInt(selectedSize.split(",")[1]);
@@ -900,29 +1024,28 @@ var DG = {
     DG.makeRooms();
 
   switch (selectedPattern) {
-    case "branch":
+  case "branch":
     DG.linkStrats.branchLink(DG.allNodeIds());
-  break;
+    break;
   case "branch_loops":
     DG.linkStrats.branchLink(DG.allNodeIds());
     DG.linkStrats.randomLink(Math.floor(DG.roomCount/5) + 1);
-  break;
+    break;
   case "triangles":
     DG.linkStrats.trianglesLink(DG.allNodeIds());
     DG.linkStrats.randomLink(Math.floor(DG.roomCount/6) + 1);
-  break;
+    break;
   case "grid":
     DG.linkStrats.gridLink();
-  break;
+    break;
   case "random":
     DG.linkStrats.randomAllLink(Math.floor(DG.roomCount) + 2);
-  break;
+    break;
   case "mixed":
 
   break;
   default:
   }
-    
     DG.initNetwork();
   }
   

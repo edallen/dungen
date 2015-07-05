@@ -20,6 +20,7 @@
     <option value = "3">Level 4</option>
     <option value = "4">Level 5</option>
     <option value = "5">Level 6</option>
+    <option value = "wilds">Wilds</option>
   </select>
   <select id="size">
     <option value = "5,10">small (5 - 10)</option>
@@ -72,8 +73,14 @@ and use the Download Image button on Chrome or the right click menu to save the 
 If you need to clear all cached data in your browser for some reason, please export if you'll want to use a dungeon in DunGen again or manually save of any dungeons you care about first. 
 DunGen saves to your browser's "LocalStorage" not to a server. Clearing all LocalStorage will wipe out any saved and edited dungeons.</p>
 
-<p>First steps towards wilderness generation: adding Wilderness nodes, edges, and monster lists. The treasures, oddities, traps, and hooks still generate as for a dungeon, and feature scale is an issue, 
-so the results will need much tweaking. Comments welcome at the Ruminations blog linked above or on G+. If you like hacking, take a look at the dungen_stock.js file first. 
+<h3>Notes on new stuff and plans</h3>
+<p>First steps towards wilderness generation: adding Wilderness nodes, edges, and monster lists, and you can set "Wilds" as the dungeon level to get a classic wilderness with all levels of monsters, biased towards lower level ones with some very large groups. It's making a bit of effort now to distinguish between intelligent and unintelligent monsters with the assumption that the unintelligent don't really hoard treasure.
+ The oddities, traps, and hooks in the wilderness still generate as for a dungeon, and feature scale is an issue, 
+so the results will need much tweaking. A few more monsters went into the dungeon monsters list, and I added & adjusted some tags, mainly so more things come up for some tags.
+</p>
+<p> Also beginning to detail NPCs with class, level, attitude This currently applies to adventurers, cultists, and overlord & henchmen.</p>
+<p>
+Comments welcome at the Ruminations blog linked above or on G+. If you like hacking, take a look at the dungen_stock.js file first. 
 It's pretty easy to customize content there.
 </p>
 
