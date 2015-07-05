@@ -551,8 +551,9 @@ var DG = {
                      treasureRoll += 2;
                      }
     if (DG.data.dungeonLevel === "wilds"){
+        console.log("DG.treasureLevel: " + DG.treasureLevel );
         if (DG.rollDie(1,6) <= treasureRoll){contents += DG.randomTreasure(DG.treasureLevel)}; 
-    } else {                
+    } else {   
        if (DG.rollDie(1,6) <= treasureRoll){contents += DG.randomTreasure(dungeonLevel)}; 
     }
     if (DG.rollOne()){ contents += DG.randomHook();}
@@ -761,10 +762,10 @@ var DG = {
     var newMonsterTreasureMultiplier;
     if (monsterType.int < 6) {
     // not smart enough to amass treasure
-      newMonsterTreasureMultiplier = monsterLevel;
+      newMonsterTreasureMultiplier = monsterLevel + 1;
     } else {
      // More monsters of the same type gives more treasure but don't scale linearly.
-    newMonsterTreasureMultiplier = (monsterLevel * (monsterCount^0.75));
+    newMonsterTreasureMultiplier = (monsterLevel + 1 ) * Math.pow(monsterCount, 0.65);
     }
     // Use the biggest multiplier of any single group of monsters in the room.
     DG.monsterTreasureMultiplier = Math.max(DG.monsterTreasureMultiplier,newMonsterTreasureMultiplier);
@@ -777,6 +778,7 @@ var DG = {
   oneTreasure: function(treasureValue){
     var treasureCount = 1;
     var treasureType = DG.drawOne(DG.stock.treasure);
+    console.log("treasureValue: " + treasureValue);
   if (treasureType["value"] === "X") {
     var jewelValue = Math.floor(treasureValue * DG.rollDie(1,8));
     return treasureType["label"] + " worth " + jewelValue  + " GP";
@@ -787,14 +789,17 @@ var DG = {
     return treasureCount + " " + treasureType["label"];
   },
   randomTreasure: function(treasureLevel){
+    console.log("treasureLevel in randomTreasure: " + treasureLevel )
     var hoard = "Ts: ";
     var treasureType = {};
     var treasureCount = 1;
-    var treasureValue = ((1+treasureLevel)^2.5) * 10;
+    var treasureValue = Math.pow(1+treasureLevel, 1.5) * 10;
+    console.log("treasureValue in randomTreasure: " + treasureValue )
     if (DG.rollTwo()){ treasureValue *= DG.rollDie(2,6) }
     if (DG.rollThree()){ treasureValue *= DG.rollDie(2,6) }
-    treasureValue *= DG.monsterTreasureMultiplier;
-
+    if (DG.monsterTreasureMultiplier > 0 ){
+      treasureValue *= DG.monsterTreasureMultiplier;
+    }
     hoard += DG.oneTreasure(treasureValue);
   // second treasure
   if (DG.rollThree()){
