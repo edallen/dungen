@@ -793,7 +793,7 @@ var DG = {
     var hoard = "Ts: ";
     var treasureType = {};
     var treasureCount = 1;
-    var treasureValue = Math.pow(1+treasureLevel, 1.5) * 10;
+    var treasureValue = Math.pow(1+treasureLevel, 1.5) * 10 * DG.data.treasureMultiplier;
     console.log("treasureValue in randomTreasure: " + treasureValue )
     if (DG.rollTwo()){ treasureValue *= DG.rollDie(2,6) }
     if (DG.rollThree()){ treasureValue *= DG.rollDie(2,6) }
@@ -1018,6 +1018,7 @@ var DG = {
     DG.data.edges = [];
     DG.data.notes = "";
     DG.data.locationType = locationType;
+    DG.data.treasureMultiplier = parseFloat($("#treasureMultiplier").val()) || 1;
     DG.roomCount = 0;
     DG.edgeCount = 0;
     if (dungeonLevelSelected === "wilds") {DG.data.dungeonLevel = dungeonLevelSelected } else { DG.data.dungeonLevel = parseInt(dungeonLevelSelected); }
