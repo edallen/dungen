@@ -452,7 +452,8 @@ var DG = {
   },
   makeNode: function(id,label) { 
   var border, bgColor;
-  if (DG.data.locationType = "wilds") {  bgColor = "lightgreen";  border = 'green' } else {  bgColor = "lightgray";  border = 'gray' }
+  if (DG.data.locationType ==
+  "wilds") {  bgColor = "lightgreen";  border = 'green' } else {  bgColor = "lightgray";  border = 'gray' }
   return {  id: id, 
             shape: "box",
             fontSize: 14,
@@ -478,20 +479,19 @@ var DG = {
   },
   linkNodes: function(startEdge,endEdge){  console.log([startEdge,endEdge]);
     var edge = DG.makeEdge(startEdge,endEdge);
-    console.log(edge);
     if (edge === "error"){ console.log( "attempting to link undefined node"); return}
     DG.data.edges.push(DG.makeEdge(startEdge,endEdge));
-    console.log("made edge");
-    console.log(DG.data.edges)
   },
   setRandomRoomCount: function(){
     DG.roomCount = DG.rollDie(DG.minRooms, (DG.maxRooms - DG.minRooms) );
   return DG.roomCount;
   },
   setBaseMonsters: function() {
+      var monsterSourceList;
+      if (DG.data.locationType == "wilds"){monsterSourceList = DG.wild.monsters;} else { monsterSourceList = DG.stock.monsters; }
       DG.data.baseMonsters = [];
       if ((DG.data.monsterTags  !== undefined) &&  (DG.data.monsterTags !== []) ){ 
-        var fullMonsterList = DG.stock.monsters[DG.dungeonLevel];       
+        var fullMonsterList = monsterSourceList[DG.dungeonLevel];       
         for (var i = 0; i < fullMonsterList.length; i++){ 
            if (DG.tagMatch(fullMonsterList[i].tags, DG.data.monsterTags)){
               DG.data.baseMonsters.push(fullMonsterList[i]);
@@ -500,9 +500,9 @@ var DG = {
         if (DG.data.baseMonsters.length > 0) {return } // fall through to random if we found nothing matching the theme tags
       } 
     
-      DG.data.baseMonsters = [DG.drawOne(DG.stock.monsters[DG.dungeonLevel])];
-      if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
-      if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(DG.stock.monsters[DG.dungeonLevel]))};
+      DG.data.baseMonsters = [DG.drawOne(monsterSourceList[DG.dungeonLevel])];
+      if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(monsterSourceList[DG.dungeonLevel]))};
+      if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(monsterSourceList[DG.dungeonLevel]))};
 
   },
   makeRooms: function(){
@@ -613,14 +613,16 @@ var DG = {
     return false;
   },
   selectMonster: function(monsterLevel){
+    var monsterSourceList;
+    if (DG.data.locationType == "wilds"){monsterSourceList = DG.wild.monsters;} else { monsterSourceList = DG.stock.monsters; }
     if ((DG.data.monsterTags  !== undefined) &&  (DG.data.monsterTags !== []) ){
        // Select Monster type from long or short list
         if (DG.rollThree()){ // Try several times for theme, then go random to fill in.
           for(var i = 1; i < 6; i++){
-            monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
+            monsterType = DG.drawOne(monsterSourceList[monsterLevel]);
             if ( DG.tagMatch(monsterType.tags,DG.data.monsterTags)) { return monsterType; }
           } 
-          monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
+          monsterType = DG.drawOne(monsterSourceList[monsterLevel]);
         } else { // About half come out of the base monster type for the level, for some coherence.
           // will let monster count & treasure multiplier stand, which will generate some group size/treasure outliers
           monsterType = DG.drawOne(DG.data.baseMonsters);      
@@ -629,7 +631,7 @@ var DG = {
     else{
         // Select Monster type from long or short list
         if (DG.rollThree()){
-          monsterType = DG.drawOne(DG.stock.monsters[monsterLevel]);
+          monsterType = DG.drawOne(monsterSourceList[monsterLevel]);
         } else { // About half come out of the base monster type for the level, for some coherence.
           // will let monster count & treasure multiplier stand, which will generate some group size/treasure outliers
           monsterType = DG.drawOne(DG.data.baseMonsters);      
