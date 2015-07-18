@@ -34,44 +34,87 @@ var DG = {
   lfToBr: function(text) { return text.replace(new RegExp('\r?\n','g'), '<br>');},
   // Theming dialog
   themeBox: function(){
-    var checkboxes = "";
-    var tags = DG.stock.monsterTags;
-    var tagsLength = tags.length;
+    var monsterCheckboxes = "";
+    var nodeCheckboxes = "";
+    var edgeCheckboxes = "";
+    var monsterTags = DG.stock.monsterTags;
+    var nodeTags = DG.stock.nodeTags;
+    var edgeTags = DG.stock.edgeTags;
+    var monsterTagsLength = monsterTags.length;
+    var nodeTagsLength = nodeTags.length;
+    var edgeTagsLength = edgeTags.length;
+
     var checkedAttribute = "";
-    for(var i = 0; i < tagsLength ; i++){
-      if (DG.data.monsterTags.indexOf(tags[i]) !== -1 ){ checkedAttribute = "checked "; }
+    for(var i = 0; i < monsterTagsLength ; i++){
+      if (DG.data.monsterTags.indexOf(monsterTags[i]) !== -1 ){ checkedAttribute = "checked "; }
       else { checkedAttribute = ""; }
-      checkboxes += '<input class="monsterTag" id = "' + tags[i] + '" ' +
-      'name = "' + tags[i] + '" ' +
-      'type = "checkbox" value ="' + tags[i] + '" ' +
+      monsterCheckboxes += '<input class="monsterTag" id = "' + monsterTags[i] + '" ' +
+      'name = "' + monsterTags[i] + '" ' +
+      'type = "checkbox" value ="' + monsterTags[i] + '" ' +
       checkedAttribute +
-      '>' + tags[i] + '</input><br>';
-    }    
+      '>' + monsterTags[i] + '</input><br>';
+    }   
+    for(var i = 0; i < nodeTagsLength ; i++){
+      if (DG.data.nodeTags.indexOf(nodeTags[i]) !== -1 ){ checkedAttribute = "checked "; }
+      else { checkedAttribute = ""; }
+      nodeCheckboxes += '<input class="nodeTag" id = "' + nodeTags[i] + '" ' +
+      'name = "' + nodeTags[i] + '" ' +
+      'type = "checkbox" value ="' + nodeTags[i] + '" ' +
+      checkedAttribute +
+      '>' + nodeTags[i] + '</input><br>';
+    } 
+    for(var i = 0; i < edgeTagsLength ; i++){
+      if (DG.data.edgeTags.indexOf(edgeTags[i]) !== -1 ){ checkedAttribute = "checked "; }
+      else { checkedAttribute = ""; }
+      edgeCheckboxes += '<input class="edgeTag" id = "' + edgeTags[i] + '" ' +
+      'name = "' + edgeTags[i] + '" ' +
+      'type = "checkbox" value ="' + edgeTags[i] + '" ' +
+      checkedAttribute +
+      '>' + edgeTags[i] + '</input><br>';
+    }     
     bootbox.dialog({
-        title:"Monster theme",
-        message:"Select thematic monster keywords:" + 
+        title:"Select Theme",
+        message:"Monster keywords:" +
+        '<form class="form"> ' +        
         '<div class="row">  ' +
-        '<div class="col-md-12"> ' +
-        '<form class="form"> ' +
-        '<div class="form-group"> ' + checkboxes + 
+        
+        '<div class="col-md-6 form-group"> ' + monsterCheckboxes + 
         
         '</div>'+
-         '</form> </div>  </div>',
+        '<div class="col-md-6 form-group"> Nodes (not for Wilds yet)<br>' + nodeCheckboxes + '<br><br>Edges (not for Wilds yet)<br>' + edgeCheckboxes +
+        
+        '</div>'+
+        ' </div> </form><br> ',
         buttons:{
           save:{ 
                  label: "Use selected",
                  className: "btn-success",
                  callback: function() {
                    var monsterTags = $('input.monsterTag:checkbox:checked').map(function() {
-                   return this.value;
+                     return this.value;
                    }).get();
-                   DG.data.monsterTags = monsterTags;}
+                   var nodeTags = $('input.nodeTag:checkbox:checked').map(function() {
+                     return this.value;
+                   }).get();
+                   var edgeTags = $('input.edgeTag:checkbox:checked').map(function() {
+                     return this.value;
+                   }).get();
+                   DG.data.monsterTags = monsterTags;
+                   DG.data.nodeTags = nodeTags;
+                   DG.data.nodeTable = DG.filterListByTags(DG.stock.nodeLabels,nodeTags);
+                   DG.data.edgeTags = edgeTags;
+                   DG.data.edgeTable = DG.filterListByTags(DG.stock.edgeLabels,edgeTags);
+                 }
                 },
           all:{ 
              label: "Any",
              className: "btn-success",
              callback: function() {
-               DG.data.monsterTags = [];}
+               DG.data.monsterTags = [];
+               DG.data.nodeTags = [];
+               DG.data.nodeTable = [];
+               DG.data.edgeTags = [];
+               DG.data.edgeTable = [];}
              }
       }
     });
@@ -300,7 +343,11 @@ var DG = {
   data: { nodes:[],
 		  edges:[],
 		  notes: '',
-          monsterTags:[]
+          monsterTags:[],
+          nodeTags:[],
+          edgeTags:[],
+          nodeTable: [],
+          edgeTable: []
         },
               
   nodesDataSet:"uninitialized",
@@ -514,6 +561,17 @@ var DG = {
       if (DG.rollFour()){DG.data.baseMonsters.push(DG.drawOne(monsterSourceList[DG.data.dungeonLevel]))};
 
   },
+  
+  filterListByTags(fullList,filterTags){
+    var filteredList = [];
+    for (var i = 0; i < fullList.length; i++){ 
+           if (DG.tagMatch(fullList[i].tags, filterTags)){
+              filteredList.push(fullList[i]);
+           }
+        }
+    return filteredList;        
+  },
+  
   makeRooms: function(){
     DG.setBaseMonsters();
     for(var i = 0; i < DG.roomCount; i+=1){
@@ -522,14 +580,26 @@ var DG = {
   },
 
   nameNode: function(nodeNum){ 
-    return "" + (nodeNum) + ": " + DG.randomNodeLabel()},  
+    return "" + (nodeNum) + ": " + DG.randomNodeLabel()}, 
+    
   randomNodeLabel: function(){
-    if (DG.data.locationType == "wilds"){return this.drawOne(this.wild.nodeLabels)}
-    else  { return this.drawOne(this.stock.nodeLabels)}
+    var nodeLabel;
+    if (DG.data.locationType == "wilds"){return this.drawOne(this.wild.nodeLabels);}
+    else  { 
+        if (DG.data.nodeTable  === undefined) { return DG.drawOne(DG.stock.nodeLabels).label;}
+        if (DG.data.nodeTable.length > 0) {  return DG.drawOne(DG.data.nodeTable).label; }
+        return DG.drawOne(DG.stock.nodeLabels).label;        
+    }
    },
+   
+          
   randomEdgeLabel: function(){
     if (DG.data.locationType == "wilds"){return this.drawOne(this.wild.edgeLabels)}
-    else  { return this.drawOne(this.stock.edgeLabels) } 
+    else  { 
+      if (DG.data.edgeTable  === undefined) { return DG.drawOne(DG.stock.edgeLabels).label;}
+      if (DG.data.edgeTable.length > 0) {  return DG.drawOne(DG.data.edgeTable).label; }
+      return DG.drawOne(DG.stock.edgeLabels).label;
+    } 
   },
     
   // Node Content Randomization section ---------------------------------------------
@@ -737,7 +807,7 @@ var DG = {
     if ((DG.data.monsterTags  !== undefined) &&  (DG.data.monsterTags !== []) ){
        // Select Monster type from long or short list
         if (DG.rollThree() || DG.data.dungeonLevel === "wilds"){ // Try several times for theme, then go random to fill in.
-          for(var i = 1; i < 6; i++){
+          for(var i = 0; i < 8; i++){
             monsterType = DG.drawOne(monsterSourceList[monsterLevel]);
             if ( DG.tagMatch(monsterType.tags,DG.data.monsterTags)) { return monsterType; }
           } 
