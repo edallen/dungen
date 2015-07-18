@@ -674,7 +674,7 @@ DG.stock = {
   "Scroll with three holy spells",
   "Scroll with a trap spell that casts upon reader",
   "Scroll of protection from (some great danger in this dungeon)"],
-  books: ["Book", "Libram", "Tome", "Manual", "Grimoire", "Incanabulum","Volume","Codex", "Folio", "Treatise", "Monograph","Octavo","Quarto","Atlas","Primer","Atlas","Handbook","Spellbook"],
+  books: ["Book", "Libram", "Tome", "Manual", "Grimoire", "Incunabulum","Volume","Codex", "Folio", "Treatise", "Monograph","Octavo","Quarto","Atlas","Primer","Atlas","Handbook","Spellbook"],
   rings: ["Regeneration", 
 	  "Weakness", 
 	  "Invisibility", 

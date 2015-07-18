@@ -360,6 +360,7 @@ var DG = {
   dungeonLevel: 0,
   monsterTreasureMultiplier: 1,
   initNetwork: function(){
+    var data;
     DG.nodesDataSet = new vis.DataSet(DG.data.nodes);
     DG.nodesDataSet.on('*', function (event, properties, senderId) {
         DG.data.nodes = DG.nodesDataSet.get();
@@ -370,13 +371,10 @@ var DG = {
          DG.data.edges = DG.edgesDataSet.get();
      DG.fillKey();
       });
-    console.log("in initNetwork, data follows")
-    data = {nodes: DG.nodesDataSet, edges: DG.edgesDataSet, notes: DG.notes};
-    console.log(data);
-      DG.network = new vis.Network(DG.container, data, DG.drawOptions);
+    data = {nodes: DG.nodesDataSet, edges: DG.edgesDataSet};
+    DG.network = new vis.Network(DG.container, data, DG.drawOptions);
   ;
     DG.fillKey();
-    DG.clearNotes();
   },
   
   // Randomization Utilities -----------------------------------------------------------------
@@ -524,7 +522,7 @@ var DG = {
   linksOnNode: function(nodeId) { return edges = DG.data.edges.filter(function( edge ) {
     return (edge.from === nodeId || edge.to === nodeId); });
   },
-  linkNodes: function(startEdge,endEdge){  console.log([startEdge,endEdge]);
+  linkNodes: function(startEdge,endEdge){
     var edge = DG.makeEdge(startEdge,endEdge);
     if (edge === "error"){ console.log( "attempting to link undefined node"); return}
     DG.data.edges.push(DG.makeEdge(startEdge,endEdge));
@@ -613,15 +611,14 @@ var DG = {
     if (DG.rollOne()){ contents += DG.randomTrap(dungeonLevel);
                       treasureRoll += 1;
                        }
-    if (DG.rollTwo()){ contents += DG.randomMonsters(dungeonLevel);
+    if (DG.rollTwo()){ contents += DG.randomMonsters(dungeonLevel,true);
                      treasureRoll += 2;
                      }
     // More monsters, chance of bigger mixed set, with high treasure odds
-    if (DG.rollTwo()){ contents += DG.randomMonsters(dungeonLevel);
+    if (DG.rollTwo()){ contents += DG.randomMonsters(dungeonLevel,true);
                      treasureRoll += 2;
                      }
     if (DG.data.dungeonLevel === "wilds"){
-        console.log("DG.treasureLevel: " + DG.treasureLevel );
         if (DG.rollDie(1,6) <= treasureRoll){contents += DG.randomTreasure(DG.treasureLevel)}; 
     } else {   
        if (DG.rollDie(1,6) <= treasureRoll){contents += DG.randomTreasure(dungeonLevel)}; 
@@ -644,7 +641,7 @@ var DG = {
   randomNpcClass: function() {
     return DG.drawOne(DG.stock.characterClasses);
   },
-  randomMonsters: function(dungeonLevel){ 
+  randomMonsters: function(dungeonLevel,wrap){ 
     var monsterLevel;
     var monsterCount = 1;
     var monsterType = {name:"", int:0, tags:[]};
@@ -712,19 +709,21 @@ var DG = {
       if (monsterType.hasOwnProperty("plural")){  monsterName = monsterType.plural; }	      
       else { monsterName = monsterType.name + "s"; }
     } else { monsterName = monsterType.name; }
-   
-    monsters = "M: " + monsterCount 
+    if (wrap){ monsters = "M: " } else {monsters = ""}
+    monsters += monsterCount 
     // Add descriptive attitudes but only sometimes, to avoid being cloying.
     // Choose from complex or simple motivations table based on the INT of the monster type.
     if (DG.shouldDetailNpcs(monsterType) ){
-       monsters += " " + monsterName + ":<br>"; 
-       monsters += DG.detailNpcs( monsterLevel, monsterCount, monsterType ); 
+       monsters += " " + monsterName;
+       if (wrap) {monsters += ":<br>"; } else { monsters += ":\n" }
+       monsters += DG.detailNpcs( monsterLevel, monsterCount, monsterType, wrap ); 
     } else {
      if (DG.rollThree()){ 
        attitude = DG.randomAttitude(monsterType);
        monsters += " " + attitude;
      };
-    monsters += " " + monsterName + "<br>"; 
+    monsters += " " + monsterName;
+    if (wrap) { monsters += "<br>"; }
     }
    
     
@@ -740,38 +739,33 @@ var DG = {
   shouldDetailNpcs: function(monsterType){ return DG.tagMatch(monsterType.tags, ["adventurer", "overlord", "npc"]); },
   
   getNpcLevel: function(monsterLevel){
-    switch (monsterLevel) {
-          case 0:
+    if (monsterLevel === 0) {
             if (DG.rollTwo()) { return "2" } 
-            return "1" ;
-            break;
-          case 1:
-            if (DG.rollOne()) { return "4" };
+            return "1" ; }
+    else if (monsterLevel === 1) {
             if (DG.rollOne()) { return "1" };
+            if (DG.rollOne()) { return "4" };
             if (DG.rollThree()) { return "2" };
-            return "3";
-            break;        
-          case 2:
+            return "3"; }
+     else if (monsterLevel === 2) {
             if (DG.rollOne()) { return "6" };
             if (DG.rollOne()) { return "3" };
             if (DG.rollThree()) { return "5" };
-            return "4";
-            break;
-          case 3:
+            return "4"; }
+
+     else if (monsterLevel === 3) {
           //mostly 6-7
             if (DG.rollOne()) { return "8" };
             if (DG.rollOne()) { return "5" };
             if (DG.rollThree()) { return "7" };
-            return "6";          
-            break;
-          case 4:
-          // mostly 8-9 
+            return "6";  }         
+
+     else if (monsterLevel === 4) {
             if (DG.rollOne()) { return "10" };
             if (DG.rollOne()) { return "7" };
             if (DG.rollThree()) { return "9" };
-            return "8";           
-            break;
-          case 5:
+            return "8"; }          
+    else {
           // mostly 10 - 12
             if (DG.rollOne()) { return "13" };
             if (DG.rollOne()) { return "14" };
@@ -779,19 +773,16 @@ var DG = {
             if (DG.rollTwo()) { return "12" };
             if (DG.rollThree()) { return "11" };
             return "10";  
-            break;
-    }    
-  
+      }    
   },
   
-  detailNpcs: function(monsterLevel,monsterCount, monsterType){
+  detailNpcs: function(monsterLevel, monsterCount, monsterType,wrap ){
     var npcBlock = "";
     for (var i = 0; i < monsterCount; i++){
       if (DG.rollTwo()) { npcBlock += DG.randomAttitude(monsterType) + " ";};
       npcBlock += DG.randomNpcClass() + " ";
       npcBlock += DG.getNpcLevel(monsterLevel) + " ";  
-      
-      npcBlock += "<br>";      
+      if (wrap){ npcBlock += "<br>"; } else {  npcBlock += "\n"; }     
     }
     return npcBlock;
   },
@@ -848,7 +839,7 @@ var DG = {
   oneTreasure: function(treasureValue){
     var treasureCount = 1;
     var treasureType = DG.drawOne(DG.stock.treasure);
-    console.log("treasureValue: " + treasureValue);
+    
   if (treasureType["value"] === "X") {
     var jewelValue = Math.floor(treasureValue * DG.rollDie(1,8));
     return treasureType["label"] + " worth " + jewelValue  + " GP";
@@ -859,12 +850,10 @@ var DG = {
     return treasureCount + " " + treasureType["label"];
   },
   randomTreasure: function(treasureLevel){
-    console.log("treasureLevel in randomTreasure: " + treasureLevel )
     var hoard = "Ts: ";
     var treasureType = {};
     var treasureCount = 1;
     var treasureValue = Math.pow(1+treasureLevel, 1.5) * 10 * DG.data.treasureMultiplier;
-    console.log("treasureValue in randomTreasure: " + treasureValue )
     if (DG.rollTwo()){ treasureValue *= DG.rollDie(2,6) }
     if (DG.rollThree()){ treasureValue *= DG.rollDie(2,6) }
     if (DG.monsterTreasureMultiplier > 0 ){
@@ -1042,7 +1031,18 @@ var DG = {
   link.click();
 
   },
-
+  populateNotes: function(){ return DG.wanderingMonstersNote();},
+  
+  wanderingMonstersNote: function() { 
+    var monsterList = "Wandering Monsters\n";
+    var monsterCount = Math.round(DG.data.nodes.length/6) + 1;
+    if (DG.rollThree()){monsterCount+=1}
+    if (DG.rollThree()){monsterCount+=1}
+    for (var i = 1; i <= monsterCount; i+=1){
+      monsterList += ("" + i + ": " + DG.randomMonsters(DG.data.dungeonLevel, false) + "\n");
+    }
+    return monsterList;
+  },
   // Dungeon Key table -------------------------------------------------
   fillKey: function() { 
    //This function will render out the labels and descriptions from 
@@ -1064,7 +1064,6 @@ var DG = {
    }
    dungeonKey += "\n</tbody>";
    dungeonKey += "\n<tbody>";
-   console.log(DG.data.edges);
    for (i = 0; i < edgesLength; i +=1){
       edge = DG.data.edges[i];
 
@@ -1086,7 +1085,6 @@ var DG = {
     var selectedPattern = patternSelect.options[patternSelect.selectedIndex].value;
     DG.data.nodes = [];
     DG.data.edges = [];
-    DG.data.notes = "";
     DG.data.locationType = locationType;
     DG.data.treasureMultiplier = parseFloat($("#treasureMultiplier").val()) || 1;
     DG.roomCount = 0;
@@ -1098,6 +1096,9 @@ var DG = {
     DG.setRandomRoomCount();
  
     DG.makeRooms();
+    DG.data.notes = DG.populateNotes();
+    console.log(DG.data.notes);
+    
 
   switch (selectedPattern) {
   case "branch":
@@ -1123,13 +1124,14 @@ var DG = {
   default:
   }
     DG.initNetwork();
+    $("#notes").val(DG.data.notes);
   }
   
 };
 
 // link strategies  --------------------------------------------------------------------
 DG.linkStrats = {
-  branchLink: function(roomIds) {  console.log("branchLink entered");
+  branchLink: function(roomIds) { 
     var nodes = roomIds.length;
     var linkedNodes = [];
     var unlinkedNodes =roomIds.slice();
@@ -1154,11 +1156,9 @@ DG.linkStrats = {
     }
   },
   randomLink: function(linksToMake){
-    console.log("randomLink entered");
     for(var i = 0; i < linksToMake; i+=1){
      var startEdge = DG.rollDie(0,DG.roomCount-1);
      var endEdge = DG.rollOther(0,DG.roomCount-1,startEdge);
-   console.log([startEdge,endEdge]);
      DG.linkNodes(startEdge,endEdge);}
   },
   randomAllLink: function(linksToMake){ 
@@ -1173,7 +1173,7 @@ DG.linkStrats = {
  
   unlinkedNodes.map(function(node){DG.linkNodes(node,(linkedNodes.pop() || 1));});
   },
-  trianglesLink: function(roomIds){   console.log("trianglesLink entered");
+  trianglesLink: function(roomIds){
    var nodesCount = roomIds.length;
    var unlinkedNodes = roomIds.slice();
    var linkedNodes = [];
@@ -1196,8 +1196,7 @@ DG.linkStrats = {
   },
   gridLink: function(){ 
     var rowLength = Math.floor(Math.sqrt(DG.roomCount)) + DG.rollDie(0,3);
-  console.log("rowLength ")
-  console.log(rowLength);
+
   var gridArray = [[]];
   var gridRow = 0;
   var nodes = DG.data.nodes.length;
@@ -1216,13 +1215,11 @@ DG.linkStrats = {
   }  /* Should have a grid of references to node IDs at end of loop, accounting for all nodes. The last row may be short. */
 
   for(var r = 0; r < gridArray.length -1; r +=1){
-    console.log("iterating columns, linking item in row to next one down")
     for (var c = 0; c < gridArray[r+1].length; c += 1){
      if (gridArray[r+1][c] !== undefined && gridArray[r][c] !== undefined){
            DG.linkNodes(gridArray[r][c],gridArray[r+1][c]);
      }
       }
-    console.log("iterating columns, linking item in row to next one to right")
     for (var c = 0; c < gridArray[r].length; c += 1){
      if (gridArray[r][c+1] !== undefined && gridArray[r][c] !== undefined){
            DG.linkNodes(gridArray[r][c],gridArray[r][c+1]);
