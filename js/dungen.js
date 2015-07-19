@@ -641,7 +641,8 @@ var DG = {
   randomNpcClass: function() {
     return DG.drawOne(DG.stock.characterClasses);
   },
-  randomMonsters: function(dungeonLevel,wrap){ 
+  randomMonsters: function(dungeonLevel,wrap){
+    var undeadPrefix;  
     var monsterLevel;
     var monsterCount = 1;
     var monsterType = {name:"", int:0, tags:[]};
@@ -703,12 +704,17 @@ var DG = {
     
  
     // Fill in the string -----------------
-   
+    
+    if ( DG.tagMatch(["undead"],DG.data.monsterTags) && !DG.tagMatch(monsterType.tags,["undead"]) ){ undeadPrefix = "undead " } else {undeadPrefix = ""}
+    if ( DG.tagMatch(["demon"],DG.data.monsterTags) && !DG.tagMatch(monsterType.tags,["demon,devil,dragon"]) ){ demonicPrefix = "demonic " } else {demonicPrefix = ""}
+    if ( DG.tagMatch(["devil"],DG.data.monsterTags) && !DG.tagMatch(monsterType.tags,["demon,devil,dragon"]) ){ demonicPrefix = "infernal " } else {demonicPrefix = ""}
     // Plural?
     if (monsterCount > 1){
       if (monsterType.hasOwnProperty("plural")){  monsterName = monsterType.plural; }	      
       else { monsterName = monsterType.name + "s"; }
     } else { monsterName = monsterType.name; }
+    if (DG.rollTwo()){ monsterName = undeadPrefix + monsterName; }
+    if (DG.rollOne()){ monsterName = demonicPrefix + monsterName; }
     if (wrap){ monsters = "M: " } else {monsters = ""}
     monsters += monsterCount 
     // Add descriptive attitudes but only sometimes, to avoid being cloying.
