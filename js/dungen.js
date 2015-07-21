@@ -644,6 +644,7 @@ var DG = {
   randomMonsters: function(dungeonLevel,wrap){
     var undeadPrefix;  
     var monsterLevel;
+    var singletonAttitude = "";
     var monsterCount = 1;
     var monsterType = {name:"", int:0, tags:[]};
     var monsterName = ""; 
@@ -724,11 +725,13 @@ var DG = {
        if (wrap) {monsters += ":<br>"; } else { monsters += ":\n" }
        monsters += DG.detailNpcs( monsterLevel, monsterCount, monsterType, wrap ); 
     } else {
-     if (DG.rollThree()){ 
+     if (DG.rollTwo()){ 
        attitude = DG.randomAttitude(monsterType);
        monsters += " " + attitude;
+     }else if (DG.rollThree() && monsterCount > 1 ){
+       singletonAttitude = ", one is " + DG.randomAttitude(monsterType);
      };
-    monsters += " " + monsterName;
+    monsters += " " + monsterName + singletonAttitude;
     if (wrap) { monsters += "<br>"; }
     }
    
