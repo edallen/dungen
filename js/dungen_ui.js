@@ -52,6 +52,12 @@ function bindButtons() {
 
   var topButton = document.getElementById("scroll-to-top");
   topButton.addEventListener("click", function() { DG.scrollToTop(); $(this).hide(); $("#scroll-to-key").show();} );
+  
+  var replaceButton = document.getElementById("replace");
+  replaceButton.addEventListener("click", function() { 
+    var textFrom = $('#text_from').val();
+    var textTo = $('#text_to').val();
+    DG.replaceText(textFrom, textTo);  return false; } );
 
   $('#notes').change(function(){ DG.data.notes = $(this).val()});
   $("#notes").on("clearText", function(){$(this).val('');});

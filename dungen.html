@@ -68,23 +68,30 @@
     Paste into the field there and click Import to load it. Careful editing in this field is possible. Save with a name on the destination computer.</p>
     <textarea id="export-import" cols='120' rows='10' ></textarea></div>
   </div>
+  
+  <h3>Re-skin</h3> 
+  <p>Re-skin creatures or replace other repeating text in room descriptions and notes - there is no Undo so be careful.</p>
+  Replace <input id="text_from"></input> with <input id="text_to"></input> in Notes and all Location Descriptions. <button id="replace">Re-skin</button>
   <br>
+  <br>
+  
+  <h3>Backups and export</h3>
 <p>To manually save and use the dungeon outside this page, copy the text of the room contents table and notes field and paste into another file, 
 and use the Download Image button on Chrome or the right click menu to save the image as a PNG. 
 If you need to clear all cached data in your browser for some reason, please export if you'll want to use a dungeon in DunGen again or manually save of any dungeons you care about first. 
 DunGen saves to your browser's "LocalStorage" not to a server. Clearing all LocalStorage will wipe out any saved and edited dungeons.</p>
 
 <h3>Notes on new stuff and plans</h3>
-<p> NPC level bug fixed. Notes field starts with a wandering monster list.</p>
+
 <p>Added theming and new labels to nodes and edges for dungeons, but not wilds.</p>
 
-<p>First steps towards wilderness generation: adding Wilderness nodes, edges, and monster lists, and you can set "Wilds" as the dungeon level to get a classic wilderness with all levels 
-of monsters, biased towards lower level ones with some very large groups.
-
+<p>You can set "Wilds" as the dungeon level and then click the Wilds button to get a classic wilderness with all levels 
+of monsters, biased towards lower level ones with some very large groups. This dungeon level will give a mixed distribution in dungeons as well.</p>
+<p>
  The oddities, traps, and hooks in the wilderness still generate as for a dungeon, and feature scale is an issue, 
 so the results will need much tweaking. 
 </p>
-<p> Also beginning to detail NPCs with class, level, and attitude. This currently applies to adventurers, cultists, and overlord & henchmen.</p>
+
 
 <p>
 Comments welcome at the Ruminations blog linked above or on G+. If you like hacking, take a look at the dungen_stock.js file first. 

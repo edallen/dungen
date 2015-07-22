@@ -298,7 +298,7 @@ DG.stock = {
   monsters: [ 
 	[
 		  { name: "kobold", int: 9, tags: ['dragon','humanoid','chaos','reptile','stealthy']},
-          { name: "servant", int: 9, tags: ['human','humanoid','law']},
+         { name: "servant", int: 9, tags: ['human','humanoid','law']},
 		  { name: "goblin", int: 9, tags: ['goblin','humanoid','chaos','stealthy' ]}, 
 		  { name: "spider", int: 1, tags: ['vermin','spider','stealthy']},
 		  { name: "snake",  int: 3, tags: ['vermin', 'animal', 'reptile','familiar']},
@@ -306,7 +306,7 @@ DG.stock = {
 		  { name: "rat", int: 4, tags: ['vermin', 'mammal', 'animal','familiar']},
 		  { name: "giant beetle", int: 1, tags: ['vermin','insect']},
 		  { name: "giant rat", int: 4, tags: ['vermin', 'mammal', 'animal']},
-          { name: "mushroom man", plural: "mushroom men",  int: 9, tags: ['weird', 'underdark']},
+         { name: "mushroom man", plural: "mushroom men",  int: 9, tags: ['weird', 'underdark']},
 		  { name: "bat", int: 4, tags: ['vermin', 'mammal', 'animal','familiar', 'flying']},
 		  { name: "centipede", int: 1, tags: ['vermin','insect']},
 		  { name: "stirge", int: 1, tags: ['vermin','insect','chaos','weird', 'flying']},
@@ -1469,6 +1469,7 @@ nodeLabels:[
     { label: "Midden", tags: ["dungeon","fort","residence"]},
     { label: "Armory", tags: ["fort","crafts"]},
     { label: "Granary", tags: ["fort","crafts"]},
+    { label: "Mill", tags: ["fort","crafts"]},
     { label: "Dye works", tags: ["crafts"]},
     { label: "Wine cellar", tags: ["palace","residence", "temple"]},
     { label: "Brewery", tags: ["crafts"]},

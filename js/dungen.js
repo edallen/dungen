@@ -376,7 +376,21 @@ var DG = {
   ;
     DG.fillKey();
   },
-  
+  replaceText: function(textFrom, textTo){ 
+    var len = DG.data.nodes.length;
+    function replaceAll(findVal, replaceVal, str) {
+        console.log( "Find: " + findVal);
+         console.log( "Replace with: " + replaceVal);
+         console.log ("in: " + str);
+        return str.replace(new RegExp(findVal, 'g'), replaceVal);
+    }
+    for (i = 0; i < len; i++){
+       DG.data.nodes[i].title = replaceAll(textFrom, textTo, DG.data.nodes[i].title)
+    }
+    DG.data.notes = replaceAll(textFrom, textTo, DG.data.notes)
+    $("#notes").val(DG.data.notes);
+    DG.fillKey();
+  },
   // Randomization Utilities -----------------------------------------------------------------
   rollDie: function(start,size){ 
     var roll = Math.floor(Math.random() * (size)) + start ;
