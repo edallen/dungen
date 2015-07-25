@@ -146,6 +146,7 @@ var DG = {
             newData.label =  $('#location_name').val();
             newData.title =  DG.lfToBr($('#location_description').val());
             DG.nodesDataSet.update(newData);
+            DG.fillKey();
             callback(newData);
 
             }
@@ -326,6 +327,7 @@ var DG = {
 				  // WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
 		  DG.edgesDataSet.remove(newData.edges);
 		  DG.nodesDataSet.remove(newData.nodes);
+          DG.fillKey();
 		  callback(newData);  // call the callback to delete the objects.
 		},
         deleteEdge: function(data,callback) {
@@ -335,7 +337,7 @@ var DG = {
 							   //  the same data structure is required.
 				  // WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
 		  DG.edgesDataSet.remove(newData.edges);
-		  DG.nodesDataSet.remove(newData.nodes);
+          DG.fillKey();
 		  callback(newData);  // call the callback to delete the objects.
 		}
     }
@@ -364,12 +366,13 @@ var DG = {
     DG.nodesDataSet = new vis.DataSet(DG.data.nodes);
     DG.nodesDataSet.on('*', function (event, properties, senderId) {
         DG.data.nodes = DG.nodesDataSet.get();
+        DG.data.edges = DG.edgesDataSet.get();
         DG.fillKey();		
       });
     DG.edgesDataSet = new vis.DataSet(DG.data.edges);
       DG.edgesDataSet.on('*', function (event, properties, senderId) {
          DG.data.edges = DG.edgesDataSet.get();
-     DG.fillKey();
+         DG.fillKey();
       });
     data = {nodes: DG.nodesDataSet, edges: DG.edgesDataSet};
     DG.network = new vis.Network(DG.container, data, DG.drawOptions);
@@ -1089,14 +1092,14 @@ var DG = {
    dungeonKey += "\n<tbody>";
    for (i = 0; i < edgesLength; i +=1){
       edge = DG.data.edges[i];
-
-    fromNodeLabel = DG.data.nodes[edge["from"]]["label"];
-    toNodeLabel = DG.data.nodes[edge["to"]]["label"];
+      fromNodeLabel = DG.findInArrayById(edge["from"], DG.data.nodes)["label"];
+      toNodeLabel = DG.findInArrayById(edge["to"], DG.data.nodes)["label"];
       dungeonKey = dungeonKey + ( tle + edge["id"] + tlm + edge["label"] + tm + fromNodeLabel + " to " + toNodeLabel + tr );
    }
    dungeonKey += "\n</tbody>";
    document.getElementById("dungeon_key").innerHTML = dungeonKey;
   },
+  findInArrayById: function(id,arrayToSearch){ return $.grep(arrayToSearch, function(e){ return e.id == id; })[0];  },
   // Dig a dungeon ---------------------------------------------------------
   digDungeon: function(locationType){
     var data = { nodes: null, edges: null };
