@@ -577,7 +577,7 @@ var DG = {
 
   },
   
-  filterListByTags(fullList,filterTags){
+  filterListByTags:(fullList,filterTags){
     var filteredList = [];
     for (var i = 0; i < fullList.length; i++){ 
            if (DG.tagMatch(fullList[i].tags, filterTags)){
