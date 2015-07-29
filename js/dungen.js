@@ -137,7 +137,7 @@ var DG = {
           '<textarea id="location_description" name="location_description" type="text"  placeholder="Location description" value="' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '" '+
           'class="form-control" rows="8" columns = "30">' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '</textarea>'+
         '</div> ' +
-        '</form> </div>  </div>',
+        '</form><button id="reroll_node_title">Reroll</button> </div>  </div>',
       buttons: {
           save: {
             label: "Save",
@@ -1077,7 +1077,7 @@ var DG = {
   var tln = "<tr class='node_row' id ='" 
   var tle = "<tr  class='edge_row'id ='" 
   var tlm = "'><td class='dungen'>";
-  var tm = "</td><td class='dungen'>";
+  var tm = "</td><td class='dungen dg_description'>";
   var tr = "</td></tr>";
   var node = {};
   var nodesLength = DG.data.nodes.length;

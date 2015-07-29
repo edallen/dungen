@@ -10,23 +10,6 @@ function bindButtons() {
   var wildsButton = document.getElementById("wilds");
   wildsButton.addEventListener("click", function() { DG.digDungeon("wilds"); } );
   
-  var moveTableButton = document.getElementById("move_table");
-  moveTableButton.addEventListener("click", function() { 
-     var keyStyle = document.getElementById("dungeon_key").style.display
-	 if (keyStyle == "none"){ 
-	   document.getElementById("dungeon_key").style.display = "block";
-       document.getElementById("dungeon_key_for_printing").style.display = "none";
-       document.getElementById("move_table").innerHTML ="Move Table for Printing"; 
-	 }
-	 else { 
-	   document.getElementById("dungeon_key").style.display = "none";
-       document.getElementById("dungeon_key_for_printing").style.display = "block"; 
-	   document.getElementById("move_table").innerHTML = "Move Table Back"; 
-	 };
-
-	 false;
-	});
-  
   var saveButton = document.getElementById("save");
   saveButton.addEventListener("click", function() { DG.saveDungeon(); } );
   
@@ -61,7 +44,10 @@ function bindButtons() {
 
   $('#notes').change(function(){ DG.data.notes = $(this).val()});
   $("#notes").on("clearText", function(){$(this).val('');});
- 
+  $("body").on("click", "#reroll_node_title", function(){
+    var contents = DG.brToLf(DG.makeContents(DG.data.dungeonLevel));
+    console.log(contents)
+    $('textarea#location_description').html(contents);});
 };
 
 function populateUI(){
