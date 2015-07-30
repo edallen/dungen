@@ -60,37 +60,30 @@
     <table class = "dungen table table-bordered" id="dungeon_key"></table>
    
   </div>
+
   <div id="footer_notes" style="clear: both"><label for="notes">Notes</label><br>
-    <textarea id="notes" cols='120' rows='10' ></textarea></div><br>
+    <textarea id="notes" cols='120' rows='10' ></textarea></div>
+  <h3>Re-skin</h3> 
+  <p>Re-skin creatures or replace other repeating text in room descriptions and notes - there is no Undo so be careful.</p>
+  Replace <input id="text_from"></input> with <input id="text_to"></input> in Notes and all Location Descriptions. <button id="replace">Re-skin</button>
+  <h3>Import and Export</h3>
     <button id="export" style="margin-right: 20px">Export</button>
     <button id="import">Import</button>
     <p> Export dumps the data for the current dungeon into the field below. Copy and paste into an email or a file to move to another computer. 
     Paste into the field there and click Import to load it. Careful editing in this field is possible. Save with a name on the destination computer.</p>
     <textarea id="export-import" cols='120' rows='10' ></textarea></div>
   </div>
-  
-  <h3>Re-skin</h3> 
-  <p>Re-skin creatures or replace other repeating text in room descriptions and notes - there is no Undo so be careful.</p>
-  Replace <input id="text_from"></input> with <input id="text_to"></input> in Notes and all Location Descriptions. <button id="replace">Re-skin</button>
   <br>
-  <br>
-  
-  <h3>Backups and export</h3>
+
 <p>To manually save and use the dungeon outside this page, copy the text of the room contents table and notes field and paste into another file, 
 and use the Download Image button on Chrome or the right click menu to save the image as a PNG. 
 If you need to clear all cached data in your browser for some reason, please export if you'll want to use a dungeon in DunGen again or manually save of any dungeons you care about first. 
-DunGen saves to your browser's "LocalStorage" not to a server. Clearing all LocalStorage will wipe out any saved and edited dungeons.</p>
+DunGen saves to your browser's "LocalStorage" not to a server. <b>Clearing all LocalStorage will wipe out any saved and edited dungeons.</b></p>
 
 <h3>Notes on new stuff and plans</h3>
+<p> The initial version of relationships among denizens is in place. It will get better.</p>
 
-<p>Added theming and new labels to nodes and edges for dungeons, but not wilds.</p>
-
-<p>You can set "Wilds" as the dungeon level and then click the Wilds button to get a classic wilderness with all levels 
-of monsters, biased towards lower level ones with some very large groups. This dungeon level will give a mixed distribution in dungeons as well.</p>
-<p>
- The oddities, traps, and hooks in the wilderness still generate as for a dungeon, and feature scale is an issue, 
-so the results will need much tweaking. 
-</p>
+<p>The wilds still need a lot of work.</p>
 
 
 <p>

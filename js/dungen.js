@@ -145,6 +145,7 @@ var DG = {
             callback: function() {
             newData.label =  $('#location_name').val();
             newData.title =  DG.lfToBr($('#location_description').val());
+            DG.addMonstersToList();
             DG.nodesDataSet.update(newData);
             DG.fillKey();
             callback(newData);
@@ -346,6 +347,7 @@ var DG = {
 		  edges:[],
 		  notes: '',
           monsterTags:[],
+          monsters: {},
           nodeTags:[],
           edgeTags:[],
           nodeTable: [],
@@ -512,8 +514,19 @@ var DG = {
      });
      return nodeIds;
   },
+  addMonstersToList: function(){
+    if ( DG.monsterHold !== undefined ){
+      if (DG.data.monsters[DG.monsterHold["name"]]  !== undefined){
+        DG.data.monsters[DG.monsterHold["name"]]["count"] = DG.monsterHold.count
+      } else { DG.data.monsters[DG.monsterHold["name"]] = DG.monsterHold; }
+      DG.monsterHold = undefined;
+    }
+    
+  },
   makeNode: function(id,label) { 
   var border, bgColor;
+  var contents = DG.makeContents(DG.data.dungeonLevel);
+  DG.addMonstersToList();
   if (DG.data.locationType ==
   "wilds") {  bgColor = "lightgreen";  border = 'green' } else {  bgColor = "lightgray";  border = 'gray' }
   return {  id: id, 
@@ -528,7 +541,7 @@ var DG = {
               }
             },                                          
             label: label, 
-            title: DG.makeContents(DG.data.dungeonLevel), 
+            title: contents, 
             group: ""};
   },
   makeEdge: function(startNode,endNode) { 
@@ -658,6 +671,18 @@ var DG = {
   randomNpcClass: function() {
     return DG.drawOne(DG.stock.characterClasses);
   },
+  randomRelationship: function(intel, targetInt, plurality){
+  // simple at first
+  // Then introduce int 
+    console.log("t: " + targetInt)
+    var possibleRelationships = DG.stock.relationships.filter(function( rel ) { return  rel.min_subject_int <= intel }  );
+    console.log(possibleRelationships);
+    possibleRelationships = possibleRelationships.filter(function( rel ) { return rel.min_target_int <= targetInt }  ); 
+    console.log(possibleRelationships);
+    var relationship = DG.drawOne(possibleRelationships);
+    console.log(relationship);
+    return relationship[plurality];
+  },
   randomMonsters: function(dungeonLevel,wrap){
     var undeadPrefix;  
     var monsterLevel;
@@ -665,6 +690,7 @@ var DG = {
     var monsterCount = 1;
     var monsterType = {name:"", int:0, tags:[]};
     var monsterName = ""; 
+    var pluralMonsterName = "";
     var attitude ="";
     var monsters = "";
     if (dungeonLevel === "wilds") {
@@ -694,7 +720,8 @@ var DG = {
           default:
             monsterCount = DG.rollDie(1,6);
           
-        }         
+        } 
+        
     }  
     else {
         monsterLevel = dungeonLevel;
@@ -719,7 +746,7 @@ var DG = {
         }
     }
     monsterType = DG.selectMonster(monsterLevel); 
-    
+     
  
     // Fill in the string -----------------
     
@@ -727,9 +754,10 @@ var DG = {
     if ( DG.tagMatch(["demon"],DG.data.monsterTags) && !DG.tagMatch(monsterType.tags,["demon,devil,dragon"]) ){ demonicPrefix = "demonic " } else {demonicPrefix = ""}
     if ( DG.tagMatch(["devil"],DG.data.monsterTags) && !DG.tagMatch(monsterType.tags,["demon,devil,dragon"]) ){ demonicPrefix = "infernal " } else {demonicPrefix = ""}
     // Plural?
+     if (monsterType.hasOwnProperty("plural")){ pluralMonsterName = monsterType.plural; }	      
+      else { pluralMonsterName = monsterType.name + "s"; }
     if (monsterCount > 1){
-      if (monsterType.hasOwnProperty("plural")){  monsterName = monsterType.plural; }	      
-      else { monsterName = monsterType.name + "s"; }
+      monsterName = pluralMonsterName;
     } else { monsterName = monsterType.name; }
     if (DG.rollTwo()){ monsterName = undeadPrefix + monsterName; }
     if (DG.rollOne()){ monsterName = demonicPrefix + monsterName; }
@@ -737,6 +765,7 @@ var DG = {
     monsters += monsterCount 
     // Add descriptive attitudes but only sometimes, to avoid being cloying.
     // Choose from complex or simple motivations table based on the INT of the monster type.
+    DG.monsterHold = { name: pluralMonsterName, single_name: monsterType.name, count: monsterCount, int: monsterType.int, tags: monsterType.tags };
     if (DG.shouldDetailNpcs(monsterType) ){
        monsters += " " + monsterName;
        if (wrap) {monsters += ":<br>"; } else { monsters += ":\n" }
@@ -1057,7 +1086,7 @@ var DG = {
   link.click();
 
   },
-  populateNotes: function(){ return DG.wanderingMonstersNote();},
+  populateNotes: function(){ return DG.wanderingMonstersNote() + "\n" + DG.relationsNote();},
   
   wanderingMonstersNote: function() { 
     var monsterList = "Wandering Monsters\n";
@@ -1066,9 +1095,63 @@ var DG = {
     if (DG.rollThree()){monsterCount+=1}
     for (var i = 1; i <= monsterCount; i+=1){
       monsterList += ("" + i + ": " + DG.randomMonsters(DG.data.dungeonLevel, false) + "\n");
+      DG.addMonstersToList();
     }
     return monsterList;
   },
+  relationsNote: function() {
+    var relationsList = "";
+    var relationship = ""
+    var monster = {};
+    var target = {};
+    var intel;
+    var targetInt;
+    var plurality;
+    var name;
+    // before this method need to have a hash of rolled monsters to their number
+    // store in a temp value when rolled
+    // commit to the hash when a node's title is set or a wandering monster is set
+    // will disregard decrementing on edits
+    // reskinning should also adjust the key
+    for (var prop in DG.data.monsters)
+      if (DG.data.monsters.hasOwnProperty(prop)){
+        if( DG.rollFour() ){
+          monster = DG.data.monsters[prop];
+          target = DG.data.monsters[DG.drawOne( Object.keys(DG.data.monsters) )];
+          if (target === monster) {
+            target = DG.data.monsters[DG.drawOne( Object.keys(DG.data.monsters) )];
+            if (target === monster) {
+              target = DG.data.monsters[DG.drawOne( Object.keys(DG.data.monsters) )];
+            }
+          }
+          if (target.count > 1) {targetName = target.name} else {targetName = target.single_name}; 
+          console.log(monster);
+          intel = monster["int"];
+          if ( monster.count > 1 ) { 
+            plurality = "plural_text";
+            name = monster.name;
+
+          } else { 
+
+            plurality = "single_text";
+            name = monster.single_name;
+
+          }
+          targetInt = target["int"];
+          
+          relationship = "The " + name + " " + DG.randomRelationship(intel, targetInt, plurality) + " the " + targetName + ".";
+          relationsList += relationship + "\n";
+        }
+      }
+    // For each monster type in the list
+    // with a two thirds chance of it being the subject
+    // get a relation compatible with it as the subject
+    // Get a target compatible with the relationship from this level or "another level"
+    // concatenate the phrase and add it to the list
+    
+    return relationsList;
+  },
+  
   // Dungeon Key table -------------------------------------------------
   fillKey: function() { 
    //This function will render out the labels and descriptions from 
