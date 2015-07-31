@@ -384,9 +384,6 @@ var DG = {
   replaceText: function(textFrom, textTo){ 
     var len = DG.data.nodes.length;
     function replaceAll(findVal, replaceVal, str) {
-        console.log( "Find: " + findVal);
-         console.log( "Replace with: " + replaceVal);
-         console.log ("in: " + str);
         return str.replace(new RegExp(findVal, 'g'), replaceVal);
     }
     for (i = 0; i < len; i++){
@@ -674,13 +671,10 @@ var DG = {
   randomRelationship: function(intel, targetInt, plurality){
   // simple at first
   // Then introduce int 
-    console.log("t: " + targetInt)
     var possibleRelationships = DG.stock.relationships.filter(function( rel ) { return  rel.min_subject_int <= intel }  );
     console.log(possibleRelationships);
     possibleRelationships = possibleRelationships.filter(function( rel ) { return rel.min_target_int <= targetInt }  ); 
-    console.log(possibleRelationships);
     var relationship = DG.drawOne(possibleRelationships);
-    console.log(relationship);
     return relationship[plurality];
   },
   randomMonsters: function(dungeonLevel,wrap){
@@ -1125,7 +1119,6 @@ var DG = {
             }
           }
           if (target.count > 1) {targetName = target.name} else {targetName = target.single_name}; 
-          console.log(monster);
           intel = monster["int"];
           if ( monster.count > 1 ) { 
             plurality = "plural_text";
@@ -1194,6 +1187,8 @@ var DG = {
     var selectedPattern = patternSelect.options[patternSelect.selectedIndex].value;
     DG.data.nodes = [];
     DG.data.edges = [];
+    DG.data.monsters = {};
+    DG.monsterHold = undefined;
     DG.data.locationType = locationType;
     DG.data.treasureMultiplier = parseFloat($("#treasureMultiplier").val()) || 1;
     DG.roomCount = 0;
@@ -1206,7 +1201,6 @@ var DG = {
  
     DG.makeRooms();
     DG.data.notes = DG.populateNotes();
-    console.log(DG.data.notes);
     
 
   switch (selectedPattern) {
