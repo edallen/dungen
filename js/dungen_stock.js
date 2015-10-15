@@ -1721,6 +1721,7 @@ nodeLabels:[
     { label: "Compartment", tags: ["generic","temple","residence"]},
     { label: "Grave", tags: ["tombs"]},
     { label: "Grotto", tags: ["water","caves"]},
+    { label: "Acidic drainage stream", tags: ["water","caves","mines"]},
     { label: "Mausoleum", tags: ["tombs"]},
     { label: "Tomb", tags: ["tombs"]},
     { label: "Undercroft", tags: ["temple","residence"]},

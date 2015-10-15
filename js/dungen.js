@@ -32,6 +32,24 @@ var DG = {
   // Text utility functions
   brToLf: function(text) { return text.replace(new RegExp('<br\/>','g'),'\n').replace(new RegExp('<br>','g'),'\n').replace(new RegExp('<br \/>','g'),'\n');},
   lfToBr: function(text) { return text.replace(new RegExp('\r?\n','g'), '<br>');},
+
+  view: {
+    buildOptions: function(options,selected){
+      var optionsList = ""
+      options.map(function(option){
+          optionsList += "<option";
+          console.log("option: " + option);
+          console.log("selected: " + selected);
+          if (selected == option){ optionsList += " selected='selected'"; }
+          optionsList += ">"; 
+          optionsList += option; 
+          optionsList += "</option>"; 
+          return optionsList;
+      })
+      console.log(optionsList);
+      return optionsList;
+    }
+  },
   // Theming dialog
   themeBox: function(){
     var monsterCheckboxes = "";
@@ -119,6 +137,59 @@ var DG = {
       }
     });
   },
+  
+    //style dialog
+  styleBox: function(){
+      var bgColorList = ["white", "wheat", "salmon", "lightblue", "lightgreen", "lightgray"];
+      var currentBgColor = DG.data.style.bgColor;
+      var bgColorOptions = DG.view.buildOptions(bgColorList,currentBgColor);
+      var edgeWidthList = ["1","2","3","4","5"];
+      var currentEdgeWidth = DG.data.style.edges.width; 
+      var edgeWidthOptions = DG.view.buildOptions(edgeWidthList,currentEdgeWidth);
+      var style = DG.data.style;
+      var dialogOptions = {
+          title: "Map style",
+          message: 'Choose style options' +
+               '<form class="form"> ' +
+               '<div class="row">  ' +
+               '<div class="col-md-6 form-group"> ' +
+               'Background Color <select class="form-control" id="bgColor">' +
+               bgColorOptions +
+               '</select>' +
+               '</div>' +
+               '</div>' +
+               '<div class="row">  ' +
+               '<div class="col-md-6 form-group"> ' +
+               'Edge Width <select class="form-control" id="edgeWidth">' +
+               edgeWidthOptions +
+               '</select>' +
+               '</div>' +
+               '</div></form>',
+          buttons: {
+             
+              save: {
+                  label: "Use selected",
+                  className: "btn-success",
+                  callback: function () {
+                      DG.data.style.bgColor = $("select#bgColor option:selected").text();
+                      DG.data.style.edges.width = $("select#edgeWidth option:selected").text();
+
+                  }
+              },
+              base: {
+                  label: "Use default",
+                  className: "btn-success",
+                  callback: function () {
+                      DG.data.style = DG.defaultStyle;
+                  }
+              }
+
+          }
+      };
+      console.dir(dialogOptions);
+    bootbox.dialog(dialogOptions);
+  },
+  
   // Arguments to the Vis.Network creation call ----------------------------------------------
   nodeDialog: function(newData,callback){
     bootbox.dialog({
@@ -230,57 +301,60 @@ var DG = {
      })		 
   },
   drawOptions: { 
-    //physics: {barnesHut: {enabled: false}},
-	configure: {enabled: false},
+    physics:{
+      enabled: true,
+      forceAtlas2Based:{}
+    },
+    configure: {enabled: false},
     manipulation: {
-	  enabled: true,
+      enabled: true,
       initiallyActive: false,		
-	  addNode: function(data,callback) {
-			/** data = {id: random unique id,
-			*           label: new,
-			*           x: x position of click (canvas space),
-			*           y: y position of click (canvas space),
-			*           allowedToMoveX: true,
-			*           allowedToMoveY: true
-			*          };
-			*/
-		var i = DG.data.nodes[DG.data.nodes.length - 1].id + 1;
+      addNode: function(data,callback) {
+            /** data = {id: random unique id,
+            *           label: new,
+            *           x: x position of click (canvas space),
+            *           y: y position of click (canvas space),
+            *           allowedToMoveX: true,
+            *           allowedToMoveY: true
+            *          };
+            */
+        var i = DG.data.nodes[DG.data.nodes.length - 1].id + 1;
 
-			var newData = DG.makeNode(i, DG.nameNode(i+1) ); 
-							// alter the data as you want.
-								// all fields normally accepted by a node can be used.
-		DG.nodesDataSet.add(newData);
+            var newData = DG.makeNode(i, DG.nameNode(i+1) ); 
+                            // alter the data as you want.
+                                // all fields normally accepted by a node can be used.
+        DG.nodesDataSet.add(newData);
 
-			callback(newData);  // call the callback to add a node.
-		},
-	  editNode: function(data,callback) {
-			/** data = {id:...,
-			*           label: ...,
-			*           group: ...,
-			*           shape: ...,
-			*           color: {
-			*             background:...,
-			*             border:...,
-			*             highlight: {
-			*               background:...,
-			*               border:...
-			*             }
-			*           }
-			*          };
-			*/
+            callback(newData);  // call the callback to add a node.
+        },
+      editNode: function(data,callback) {
+            /** data = {id:...,
+            *           label: ...,
+            *           group: ...,
+            *           shape: ...,
+            *           color: {
+            *             background:...,
+            *             border:...,
+            *             highlight: {
+            *               background:...,
+            *               border:...
+            *             }
+            *           }
+            *          };
+            */
 
-			var newData = data; // alter the data as you want.
-								// all fields normally accepted by a node can be used.
-		  DG.nodeDialog(newData,callback);
-		},
-		editEdge: function(data,callback) {
-			/** data = {id: edgeID,
-			*           from: nodeId1,
-			*           to: nodeId2,
-			*          };
-			*/
-			var newData = data; // alter the data as you want, except for the ID.
-								// all fields normally accepted by an edge can be used.a
+            var newData = data; // alter the data as you want.
+                                // all fields normally accepted by a node can be used.
+          DG.nodeDialog(newData,callback);
+        },
+        editEdge: function(data,callback) {
+            /** data = {id: edgeID,
+            *           from: nodeId1,
+            *           to: nodeId2,
+            *          };
+            */
+            var newData = data; // alter the data as you want, except for the ID.
+                                // all fields normally accepted by an edge can be used.a
             bootbox.dialog({
               title:"Edit Path between Locations",
               message: '<div class="row">  ' +
@@ -309,51 +383,69 @@ var DG = {
                 
 
             })
-		  
-		},
-		addEdge: function(data,callback) {
-			// data = {from: nodeId1, to: nodeId2};
-		 var newData = {};
-			 for (var attrname in data) { newData[attrname] = data[attrname]; }
-		 newData.label = DG.randomEdgeLabel();
+          
+        },
+        addEdge: function(data,callback) {
+            // data = {from: nodeId1, to: nodeId2};
+         var newData = {};
+             for (var attrname in data) { newData[attrname] = data[attrname]; }
+         newData.label = DG.randomEdgeLabel();
 
-		 DG.edgesDataSet.add(newData);
-		 // check or alter data as you see fit.
-			 callback(newData);       // call the callback to connect the nodes.
-		},
-		deleteNode: function(data,callback) {
-		 //   data = {nodes: [selectedNodeIds], edges: [selectedEdgeIds]};
-		  var newData = data; // alter the data as you want.
-							   //  the same data structure is required.
-				  // WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
-		  DG.edgesDataSet.remove(newData.edges);
-		  DG.nodesDataSet.remove(newData.nodes);
+         DG.edgesDataSet.add(newData);
+         // check or alter data as you see fit.
+             callback(newData);       // call the callback to connect the nodes.
+        },
+        deleteNode: function(data,callback) {
+         //   data = {nodes: [selectedNodeIds], edges: [selectedEdgeIds]};
+          var newData = data; // alter the data as you want.
+                               //  the same data structure is required.
+                  // WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
+          DG.edgesDataSet.remove(newData.edges);
+          DG.nodesDataSet.remove(newData.nodes);
           DG.fillKey();
-		  callback(newData);  // call the callback to delete the objects.
-		},
+          callback(newData);  // call the callback to delete the objects.
+        },
         deleteEdge: function(data,callback) {
         // duping deleteNode in translation from 3.6 to 4.4 for now, probably needs revision
-		 //   data = {nodes: [selectedNodeIds], edges: [selectedEdgeIds]};
-		  var newData = data; // alter the data as you want.
-							   //  the same data structure is required.
-				  // WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
-		  DG.edgesDataSet.remove(newData.edges);
+         //   data = {nodes: [selectedNodeIds], edges: [selectedEdgeIds]};
+          var newData = data; // alter the data as you want.
+                               //  the same data structure is required.
+                  // WILL NEED TO REMOVE THEM FROM THE LISTS IN DG.data
+          DG.edgesDataSet.remove(newData.edges);
           DG.fillKey();
-		  callback(newData);  // call the callback to delete the objects.
-		}
+          callback(newData);  // call the callback to delete the objects.
+        }
     }
   },
   data: { nodes:[],
-		  edges:[],
-		  notes: '',
+          edges:[],
+          notes: '',
           monsterTags:[],
           monsters: {},
           nodeTags:[],
           edgeTags:[],
           nodeTable: [],
-          edgeTable: []
+          edgeTable: [],
+          style: {
+            border: 'gray',
+            highlightBorder: 'black',
+            fontsize: 14,
+            shape: "box",
+            bgColor: "lightgray",
+            highlightBgColor: "lightgray",
+            edges: { width: 1 }
+          },
+      
         },
-              
+  defaultStyle: {
+            border: 'gray',
+            highlightBorder: 'black',
+            fontsize: 14,
+            shape: "box",
+            bgColor: "lightgray",
+            highlightBgColor: "lightgray",
+            edges: { width: 1 }
+          },           
   nodesDataSet:"uninitialized",
   edgesDataSet:"uninitialized",
   // Shared variables
@@ -427,7 +519,7 @@ var DG = {
     var m = array.length, t, i;
     // While there remain elements to shuffle
     while (m) {
-      // Pick a remaining element�
+      // Pick a remaining element
       i = Math.floor(Math.random() * m--);
       // And swap it with the current element.
       t = array[m];
@@ -520,21 +612,20 @@ var DG = {
     }
     
   },
+
   makeNode: function(id,label) { 
-  var border, bgColor;
+  var border = DG.data.style.border, bgColor = DG.data.style.bgColor, shape = DG.data.style.shape, fontSize = DG.data.style.fontSize, highlightBgColor = DG.data.style.highlightBgColor, highLightBorder = DG.data.style.highlightBorder;
   var contents = DG.makeContents(DG.data.dungeonLevel);
   DG.addMonstersToList();
-  if (DG.data.locationType ==
-  "wilds") {  bgColor = "lightgreen";  border = 'green' } else {  bgColor = "lightgray";  border = 'gray' }
   return {  id: id, 
-            shape: "box",
-            fontSize: 14,
+            shape: shape,
+            fontSize: fontSize,
             color: {
               background: bgColor,
               border: border,
               highlight: {
-                background: bgColor,
-                border: 'black'
+                background: highlightBgColor,
+                border: highLightBorder
               }
             },                                          
             label: label, 
@@ -544,7 +635,7 @@ var DG = {
   makeEdge: function(startNode,endNode) { 
     if (startNode === undefined) {return "error"};
     if (endNode === undefined) {return "error"};
-    return {from: startNode, to: endNode, label: this.randomEdgeLabel()};
+    return {from: startNode, to: endNode, label: this.randomEdgeLabel(), width: DG.data.style.edges.width };
   },
   linksOnNode: function(nodeId) { return edges = DG.data.edges.filter(function( edge ) {
     return (edge.from === nodeId || edge.to === nodeId); });
@@ -616,7 +707,6 @@ var DG = {
         return DG.drawOne(DG.stock.nodeLabels).label;        
     }
    },
-   
           
   randomEdgeLabel: function(){
     if (DG.data.locationType == "wilds"){return this.drawOne(this.wild.edgeLabels)}
@@ -956,76 +1046,76 @@ var DG = {
   return item;},
   randomMinorMagicItem: function(treasureLevel){ // will need much more detail later and more items in big hoards
     var item = DG.drawOne(DG.stock.minorMagicItems);
-  if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
-  if (item === "scroll") { item = DG.genScroll(treasureLevel)};
+    if (item === "potion") { item = "Potion of " + DG.drawOne(DG.stock.potions)};
+    if (item === "scroll") { item = DG.genScroll(treasureLevel)};
     if (item === "trinket") { item = DG.genTrinket(treasureLevel)};
   return item;},
   genSword: function(treasureLevel){
     var sword = DG.drawOne(DG.stock.swords);
-  var bonus = 1;
-  var powerList = [];
-  for (i = 0; i < treasureLevel +2; i +=1){
-    if (DG.rollTwo()){bonus +=1};
-    if (DG.rollTwo()) {powerList.push(DG.drawOne(DG.stock.swordPowers))};
-  }
-  if (powerList.indexOf("Cursed") === -1 ){
-    sword += " +" + bonus;
-  } else {
-    sword += " -" + bonus + " Cursed";
-    powerList.remove(["Cursed"]);
-  }
-  powerList = DG.arrayToSet(powerList);
-  if (powerList !== []){
-    sword += ", " + powerList.join(', ');
+    var bonus = 1;
+    var powerList = [];
+    for (i = 0; i < treasureLevel +2; i +=1){
+      if (DG.rollTwo()){bonus +=1};
+      if (DG.rollTwo()) {powerList.push(DG.drawOne(DG.stock.swordPowers))};
+    }
+    if (powerList.indexOf("Cursed") === -1 ){
+      sword += " +" + bonus;
+    } else {
+      sword += " -" + bonus + " Cursed";
+      powerList.remove(["Cursed"]);
+    }
+    powerList = DG.arrayToSet(powerList);
+    if (powerList !== []){
+      sword += ", " + powerList.join(', ');
     }	  
 
-  return sword;
+    return sword;
   },
   genWeapon: function(treasureLevel){
     var weapon = DG.drawOne(DG.stock.weapons);
-  var bonus = 1;
-  var powerList = [];
-  for (i = 0; i < treasureLevel +1; i +=1){
-    if (DG.rollTwo()){bonus +=1};
-    if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.weaponPowers))};
-  }
-  if (powerList.indexOf("Cursed") === -1 ){
-    weapon += " +" + bonus;
-  } else {
-    weapon += " -" + bonus + " Cursed";
-    powerList.remove(["Cursed"]);
+    var bonus = 1;
+    var powerList = [];
+    for (i = 0; i < treasureLevel +1; i +=1){
+      if (DG.rollTwo()){bonus +=1};
+      if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.weaponPowers))};
+    }
+    if (powerList.indexOf("Cursed") === -1 ){
+      weapon += " +" + bonus;
+    } else {
+      weapon += " -" + bonus + " Cursed";
+      powerList.remove(["Cursed"]);
 
-  }
-  powerList = DG.arrayToSet(powerList);
-  if (powerList !== []){
-    weapon += ", " + powerList.join(', ');
+    }
+    powerList = DG.arrayToSet(powerList);
+    if (powerList !== []){
+      weapon += ", " + powerList.join(', ');
     }	  
 
 
-  return weapon;
+    return weapon;
   },
   genArmor: function(treasureLevel){
-    var armor = DG.drawOne(DG.stock.armor);
+      var armor = DG.drawOne(DG.stock.armor);
 
-  var bonus = 1;
-  var powerList = [];
-  for (i = 0; i < treasureLevel +1; i +=1){
-    if (DG.rollTwo()){bonus +=1};
-    if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.armorPowers))};
-  }
-  if (powerList.indexOf("Cursed") === -1 ){
-    armor += " +" + bonus;
-  } else {
-    armor += " -" + bonus + " Cursed";
-    powerList.remove(["Cursed"]);
+      var bonus = 1;
+      var powerList = [];
+      for (i = 0; i < treasureLevel +1; i +=1){
+        if (DG.rollTwo()){bonus +=1};
+        if (DG.rollOne()) {powerList.push(DG.drawOne(DG.stock.armorPowers))};
+      }
+      if (powerList.indexOf("Cursed") === -1 ){
+        armor += " +" + bonus;
+      } else {
+        armor += " -" + bonus + " Cursed";
+        powerList.remove(["Cursed"]);
 
-  }
-  powerList = DG.arrayToSet(powerList);
-  if (powerList !== []){
-    armor += ", " + powerList.join(', ');
-    }	  
+      }
+      powerList = DG.arrayToSet(powerList);
+      if (powerList !== []){
+        armor += ", " + powerList.join(', ');
+        }	  
 
-  return armor;
+      return armor;
   },
   genWand: function(treasureLevel){
     var wand = "Wand of " + DG.drawOne(DG.stock.wands);

@@ -30,6 +30,11 @@ function bindButtons() {
       DG.themeBox(); 
   });
   
+  var styleButton = document.getElementById("style");
+    styleButton.addEventListener("click", function() { 
+      DG.styleBox(); 
+  });
+  
   var keyButton = document.getElementById("scroll-to-key");
   keyButton.addEventListener("click", function() { DG.scrollToKey(); $(this).hide(); $("#scroll-to-top").show(); } );
 
