@@ -48,6 +48,21 @@ var DG = {
       })
       console.log(optionsList);
       return optionsList;
+    },
+    selectControl: function(selectId,options){
+      var selectHtml = '<select class="form-control" id="' + selectId + '">' + options + '</select>';
+      return selectHtml;
+    },
+    controlDiv: function(label, control ) {
+      var divHtml = '<div class="row">  ' +
+                    '<div class="col-md-6 form-group"> ' +
+                    label + control +
+                    '</div></div>';
+      return divHtml;
+    },
+    blankForm: function(formControls) {
+      var formHtml = '<form class="form"> ' + formControls + '</form>';    
+      return formHtml;
     }
   },
   // Theming dialog
@@ -141,30 +156,41 @@ var DG = {
     //style dialog
   styleBox: function(){
       var bgColorList = ["white", "wheat", "salmon", "lightblue", "lightgreen", "lightgray"];
+      var solidColorList = ["gray", "black", "red", "green", "blue", "maroon", "brown", 'darkblue', 'gunmetal'];
+      var shapeList = ["box","ellipse","circle","database","text","diamond","dot", "star", "triangle","triangleDown","square"];
+      var widthList = ["0","1","2","3","4","5","6","8","10"];
+      var radiusList = ["0","1","2","3","4","5","6","8","10"];        
+      var sizeList = ["5", "10","15","20","25","30"];
+      
       var currentBgColor = DG.data.style.bgColor;
+      var currentBorderColor = DG.data.style.border;
+      var currentEdgeWidth = DG.data.style.edges.width;
+      var currentBorderWidth = DG.data.style.borderWidth;
+      var currentShape = DG.data.style.shape;
+      var currentSize = DG.data.style.size;
+      var currentBoxBorderRadius = DG.data.style.borderRadius;
+      
       var bgColorOptions = DG.view.buildOptions(bgColorList,currentBgColor);
-      var edgeWidthList = ["1","2","3","4","5"];
-      var currentEdgeWidth = DG.data.style.edges.width; 
-      var edgeWidthOptions = DG.view.buildOptions(edgeWidthList,currentEdgeWidth);
+      var borderColorOptions = DG.view.buildOptions(solidColorList,currentBorderColor);   
+      var edgeWidthOptions = DG.view.buildOptions(widthList,currentEdgeWidth);
+      var borderWidthOptions = DG.view.buildOptions(widthList,currentBorderWidth);
+      var shapeOptions = DG.view.buildOptions(shapeList, currentShape);
+      var sizeOptions = DG.view.buildOptions(sizeList, currentSize);
+      var boxBorderRadiusOptions = DG.view.buildOptions(radiusList,currentBoxBorderRadius);
+      
       var style = DG.data.style;
       var dialogOptions = {
           title: "Map style",
           message: 'Choose style options' +
-               '<form class="form"> ' +
-               '<div class="row">  ' +
-               '<div class="col-md-6 form-group"> ' +
-               'Background Color <select class="form-control" id="bgColor">' +
-               bgColorOptions +
-               '</select>' +
-               '</div>' +
-               '</div>' +
-               '<div class="row">  ' +
-               '<div class="col-md-6 form-group"> ' +
-               'Edge Width <select class="form-control" id="edgeWidth">' +
-               edgeWidthOptions +
-               '</select>' +
-               '</div>' +
-               '</div></form>',
+               DG.view.blankForm (
+                 DG.view.controlDiv('Background Color ', DG.view.selectControl("bgColor",bgColorOptions) )+ 
+                 DG.view.controlDiv('Border Color ', DG.view.selectControl("borderColor",borderColorOptions) )+                                
+                 DG.view.controlDiv('Edge Width ', DG.view.selectControl("edgeWidth",edgeWidthOptions) ) +
+                 DG.view.controlDiv('Node Shape ', DG.view.selectControl("shape",shapeOptions) ) +
+                 DG.view.controlDiv('Node Size (if label outside) ', DG.view.selectControl("nodeSize",sizeOptions) ) + 
+                 DG.view.controlDiv('Border radius (if box shape) ', DG.view.selectControl("boxBorderRadius",boxBorderRadiusOptions) ) +                    
+                 DG.view.controlDiv('Border Width ', DG.view.selectControl("borderWidth",borderWidthOptions) ) 
+               ),
           buttons: {
              
               save: {
@@ -172,8 +198,13 @@ var DG = {
                   className: "btn-success",
                   callback: function () {
                       DG.data.style.bgColor = $("select#bgColor option:selected").text();
+                      DG.data.style.highlightBgColor = $("select#bgColor option:selected").text();
+                      DG.data.style.border = $("select#borderColor option:selected").text();
                       DG.data.style.edges.width = $("select#edgeWidth option:selected").text();
-
+                      DG.data.style.borderWidth = $("select#borderWidth option:selected").text();
+                      DG.data.style.shape = $("select#shape option:selected").text();
+                      DG.data.style.size = parseInt($("select#nodeSize option:selected").text());
+                      DG.data.style.borderRadius = parseInt($("select#boxBorderRadius option:selected").text());
                   }
               },
               base: {
@@ -428,9 +459,12 @@ var DG = {
           edgeTable: [],
           style: {
             border: 'gray',
+            borderWidth: 1,
+            borderRadius: 6,
             highlightBorder: 'black',
             fontsize: 14,
             shape: "box",
+            size: 20,
             bgColor: "lightgray",
             highlightBgColor: "lightgray",
             edges: { width: 1 }
@@ -439,9 +473,12 @@ var DG = {
         },
   defaultStyle: {
             border: 'gray',
+            borderWidth: 1,
+            borderRadius: 6,
             highlightBorder: 'black',
             fontsize: 14,
             shape: "box",
+            size: 20,
             bgColor: "lightgray",
             highlightBgColor: "lightgray",
             edges: { width: 1 }
@@ -614,15 +651,29 @@ var DG = {
   },
 
   makeNode: function(id,label) { 
-  var border = DG.data.style.border, bgColor = DG.data.style.bgColor, shape = DG.data.style.shape, fontSize = DG.data.style.fontSize, highlightBgColor = DG.data.style.highlightBgColor, highLightBorder = DG.data.style.highlightBorder;
+  var border = DG.data.style.border,
+    borderWidth = DG.data.style.borderWidth,
+    borderRadius =  DG.data.style.borderRadius,   
+    borderWidthSelected = borderWidth * 1.2,
+    bgColor = DG.data.style.bgColor, 
+    shape = DG.data.style.shape,
+    size = DG.data.style.size,     
+    fontSize = DG.data.style.fontSize, 
+    highlightBgColor = DG.data.style.highlightBgColor, 
+    highLightBorder = DG.data.style.highlightBorder;
+  
   var contents = DG.makeContents(DG.data.dungeonLevel);
   DG.addMonstersToList();
   return {  id: id, 
             shape: shape,
+            size: size,
             fontSize: fontSize,
+            borderWidth: borderWidth,
+            borderWidthSelected: borderWidthSelected,
+            shapeProperties: { borderRadius: borderRadius},
             color: {
               background: bgColor,
-              border: border,
+              border: border,             
               highlight: {
                 background: highlightBgColor,
                 border: highLightBorder
