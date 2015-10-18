@@ -53,6 +53,10 @@ var DG = {
       var selectHtml = '<select class="form-control" id="' + selectId + '">' + options + '</select>';
       return selectHtml;
     },
+    textInputControl: function(inputId,initialValue){
+      var inputHtml = "<input id='" + inputId + "' type='text' value='"+ initialValue + "'>" + "</input>";
+      return inputHtml;
+    },
     controlDiv: function(label, control ) {
       var divHtml = '<div class="row">  ' +
                     '<div class="col-md-6 form-group"> ' +
@@ -169,6 +173,7 @@ var DG = {
       var currentShape = DG.data.style.shape;
       var currentSize = DG.data.style.size;
       var currentBoxBorderRadius = DG.data.style.borderRadius;
+      var currentFontFace = DG.data.style.fontFace;
       
       var bgColorOptions = DG.view.buildOptions(bgColorList,currentBgColor);
       var borderColorOptions = DG.view.buildOptions(solidColorList,currentBorderColor);   
@@ -183,6 +188,7 @@ var DG = {
           title: "Map style",
           message: 'Choose style options' +
                DG.view.blankForm (
+                 DG.view.controlDiv('Font ', DG.view.textInputControl('fontFace', currentFontFace ) )+
                  DG.view.controlDiv('Background Color ', DG.view.selectControl("bgColor",bgColorOptions) )+ 
                  DG.view.controlDiv('Border Color ', DG.view.selectControl("borderColor",borderColorOptions) )+                                
                  DG.view.controlDiv('Edge Width ', DG.view.selectControl("edgeWidth",edgeWidthOptions) ) +
@@ -197,6 +203,8 @@ var DG = {
                   label: "Use selected",
                   className: "btn-success",
                   callback: function () {
+                      console.dir ($("input#fontFace"))
+                      DG.data.style.fontFace = $("input#fontFace").val();
                       DG.data.style.bgColor = $("select#bgColor option:selected").text();
                       DG.data.style.highlightBgColor = $("select#bgColor option:selected").text();
                       DG.data.style.border = $("select#borderColor option:selected").text();
@@ -462,7 +470,8 @@ var DG = {
             borderWidth: 1,
             borderRadius: 6,
             highlightBorder: 'black',
-            fontsize: 14,
+            fontSize: 14,
+            fontFace: "arial", 
             shape: "box",
             size: 20,
             bgColor: "lightgray",
@@ -476,7 +485,8 @@ var DG = {
             borderWidth: 1,
             borderRadius: 6,
             highlightBorder: 'black',
-            fontsize: 14,
+            fontSize: 14,
+            fontFace: "arial",
             shape: "box",
             size: 20,
             bgColor: "lightgray",
@@ -658,7 +668,8 @@ var DG = {
     bgColor = DG.data.style.bgColor, 
     shape = DG.data.style.shape,
     size = DG.data.style.size,     
-    fontSize = DG.data.style.fontSize, 
+    fontSize = DG.data.style.fontSize,
+    fontFace = DG.data.style.fontFace,    
     highlightBgColor = DG.data.style.highlightBgColor, 
     highLightBorder = DG.data.style.highlightBorder;
   
@@ -667,7 +678,7 @@ var DG = {
   return {  id: id, 
             shape: shape,
             size: size,
-            fontSize: fontSize,
+            font: { size: fontSize, face: fontFace },
             borderWidth: borderWidth,
             borderWidthSelected: borderWidthSelected,
             shapeProperties: { borderRadius: borderRadius},
@@ -686,7 +697,7 @@ var DG = {
   makeEdge: function(startNode,endNode) { 
     if (startNode === undefined) {return "error"};
     if (endNode === undefined) {return "error"};
-    return {from: startNode, to: endNode, label: this.randomEdgeLabel(), width: DG.data.style.edges.width };
+    return {from: startNode, to: endNode, label: this.randomEdgeLabel(), width: DG.data.style.edges.width, font: {face: DG.data.style.fontFace, size: DG.data.style.fontSize }};
   },
   linksOnNode: function(nodeId) { return edges = DG.data.edges.filter(function( edge ) {
     return (edge.from === nodeId || edge.to === nodeId); });
