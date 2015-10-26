@@ -1083,13 +1083,42 @@ var DG = {
   },
   
   detailNpcs: function(monsterLevel, monsterCount, monsterType,wrap ){
-    var npcBlock = "";
-    for (var i = 0; i < monsterCount; i++){
-      if (DG.rollTwo()) { npcBlock += DG.randomAttitude(monsterType) + " ";};
+    console.log ("monsterCount expected: " + monsterCount);
+    var npcBlock = "";  
+    for (var n = 0; n < monsterCount; n++){
+      console.log("npc " + n);
+      npcBlock += DG.drawOne(DG.names.begin) + DG.drawOne(DG.names.end) + ': '; 
+      var statList = DG.stock.npcStats.slice(0);
+      var statsToDraw = DG.rollDie(-1,4);
+      var stat, popResult;
+
+      if (statsToDraw > 0){
+        for ( sd = 0; sd < statsToDraw; sd += 1){
+          popResult = DG.shufflePopOne(statList);
+          stat = popResult[0][DG.rollDie(0,2)],
+          statList = popResult[1];
+          npcBlock += stat; 
+          if (sd < statsToDraw - 1){
+            npcBlock += ", ";
+          }
+        }
+      } 
+      
+      if (DG.rollTwo()) { 
+        if (statsToDraw > 0){ npcBlock += ", "; }
+        npcBlock += DG.randomAttitude(monsterType) + " ";
+      } else { npcBlock += " "}
       npcBlock += DG.randomNpcClass() + " ";
-      npcBlock += DG.getNpcLevel(monsterLevel) + " ";  
+      var npcLevel = DG.getNpcLevel(monsterLevel);
+      npcBlock += npcLevel;
+      if (npcLevel > DG.rollDie(0,10)){
+        npcBlock += ", has " + DG.randomMagicItem(Math.round((npcLevel -2) /2));
+      }
+ 
+            
       if (wrap){ npcBlock += "<br>"; } else {  npcBlock += "\n"; }     
     }
+    
     return npcBlock;
   },
   tagMatch: function(itemTags,themeTags){
