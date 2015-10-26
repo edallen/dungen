@@ -5,6 +5,6 @@ It will probably be of interest mainly to gamers that like OSR RPGs.
 
 It runs at http://meta-studios.com/dg/dungen.html. Discussion is mostly on G+ and my Ruminations of a Geek blog linked at the top of the app page.
 
-Looking into what license is appropriate, will probably go with MIT.
+MIT license
 
 
