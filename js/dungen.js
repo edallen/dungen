@@ -34,19 +34,22 @@ var DG = {
   lfToBr: function(text) { return text.replace(new RegExp('\r?\n','g'), '<br>');},
 
   view: {
+    solidColorList: ["gray", "black", "red", "green", "blue", "maroon", "brown", 'darkblue', 'gunmetal'],
+    bgColorList: ["white", "wheat", "salmon", "lightblue", "lightgreen", "lightgray"],
+    shapeList: ["box","ellipse","circle","database","text","diamond","dot", "star", "triangle","triangleDown","square"],
+    widthList: ["0","1","2","3","4","5","6","8","10"],
+    radiusList: ["0","1","2","3","4","5","6","8","10"],        
+    sizeList: ["5", "10","15","20","25","30"],
     buildOptions: function(options,selected){
       var optionsList = ""
       options.map(function(option){
           optionsList += "<option";
-          console.log("option: " + option);
-          console.log("selected: " + selected);
           if (selected == option){ optionsList += " selected='selected'"; }
           optionsList += ">"; 
           optionsList += option; 
           optionsList += "</option>"; 
           return optionsList;
       })
-      console.log(optionsList);
       return optionsList;
     },
     selectControl: function(selectId,options){
@@ -57,16 +60,51 @@ var DG = {
       var inputHtml = "<input id='" + inputId + "' type='text' value='"+ initialValue + "'>" + "</input>";
       return inputHtml;
     },
-    controlDiv: function(label, control ) {
+    inputTag: function(idName, placeHolder, value) {
+      return '<input id="' + idName + '" name="' + idName + '" type="text" placeholder="' + placeHolder + '" value="' + value + '" class="form-control input-md"/> ' 
+    },
+    controlDiv: function(label, control, colNum ) {
       var divHtml = '<div class="row">  ' +
-                    '<div class="col-md-6 form-group"> ' +
-                    label + control +
-                    '</div></div>';
+                    DG.view.colDiv( label + control, colNum) +
+                    '</div>';
+      return divHtml;
+    },
+    colDiv: function(contents, colNum){ 
+      var divHtml = '<div class="col-md-' + colNum + ' form-group"> ' +
+                    contents +
+                    '</div>'
+      return divHtml;
+    },
+    rowDiv: function(contents){
+       var divHtml = '<div class="row">  ' +
+                     contents + 
+                    '</div>';
+      return divHtml;
+    },
+    label4: function(labelFor, labelText){
+      return '<label class="col-md-4 control-label" for="' + labelFor + '">' + labelText + '</label>';
+    },
+    formGroupDiv: function(contents){
+      var divHtml = '<div class="form-group"> ' + contents + '</div>';
       return divHtml;
     },
     blankForm: function(formControls) {
-      var formHtml = '<form class="form"> ' + formControls + '</form>';    
+      var formHtml = '<form class="form"> ' + formControls + '</form>' + '<br> ';    
       return formHtml;
+    },
+    checkBoxSet: function(allTags, tagData, className ) {
+      var allTagsLength = allTags.length;
+      var checkBoxes = '';
+       for(var i = 0; i < allTagsLength ; i++){ 
+         if (tagData.indexOf(allTags[i]) !== -1 ){ checkedAttribute = "checked "; }
+         else { checkedAttribute = ""; }
+         checkBoxes += '<input class="' + className + '" id = "' + allTags[i] + '" ' +
+        'name = "' + allTags[i] + '" ' +
+        'type = "checkbox" value ="' + allTags[i] + '" ' +
+        checkedAttribute +
+        '>' + allTags[i] + '</input><br>';
+       }
+      return checkBoxes; 
     }
   },
   // Theming dialog
@@ -77,51 +115,23 @@ var DG = {
     var monsterTags = DG.stock.monsterTags;
     var nodeTags = DG.stock.nodeTags;
     var edgeTags = DG.stock.edgeTags;
-    var monsterTagsLength = monsterTags.length;
-    var nodeTagsLength = nodeTags.length;
-    var edgeTagsLength = edgeTags.length;
-
+ 
     var checkedAttribute = "";
-    for(var i = 0; i < monsterTagsLength ; i++){
-      if (DG.data.monsterTags.indexOf(monsterTags[i]) !== -1 ){ checkedAttribute = "checked "; }
-      else { checkedAttribute = ""; }
-      monsterCheckboxes += '<input class="monsterTag" id = "' + monsterTags[i] + '" ' +
-      'name = "' + monsterTags[i] + '" ' +
-      'type = "checkbox" value ="' + monsterTags[i] + '" ' +
-      checkedAttribute +
-      '>' + monsterTags[i] + '</input><br>';
-    }   
-    for(var i = 0; i < nodeTagsLength ; i++){
-      if (DG.data.nodeTags.indexOf(nodeTags[i]) !== -1 ){ checkedAttribute = "checked "; }
-      else { checkedAttribute = ""; }
-      nodeCheckboxes += '<input class="nodeTag" id = "' + nodeTags[i] + '" ' +
-      'name = "' + nodeTags[i] + '" ' +
-      'type = "checkbox" value ="' + nodeTags[i] + '" ' +
-      checkedAttribute +
-      '>' + nodeTags[i] + '</input><br>';
-    } 
-    for(var i = 0; i < edgeTagsLength ; i++){
-      if (DG.data.edgeTags.indexOf(edgeTags[i]) !== -1 ){ checkedAttribute = "checked "; }
-      else { checkedAttribute = ""; }
-      edgeCheckboxes += '<input class="edgeTag" id = "' + edgeTags[i] + '" ' +
-      'name = "' + edgeTags[i] + '" ' +
-      'type = "checkbox" value ="' + edgeTags[i] + '" ' +
-      checkedAttribute +
-      '>' + edgeTags[i] + '</input><br>';
-    }     
+
+    monsterCheckboxes = DG.view.checkBoxSet(monsterTags, DG.data.monsterTags, "monsterTag");
+    nodeCheckboxes    = DG.view.checkBoxSet(nodeTags, DG.data.nodeTags, "nodeTag");
+    edgeCheckboxes    = DG.view.checkBoxSet(edgeTags, DG.data.edgeTags, "edgeTag");
+
     bootbox.dialog({
         title:"Select Theme",
-        message:"Monster keywords:" +
-        '<form class="form"> ' +        
-        '<div class="row">  ' +
-        
-        '<div class="col-md-6 form-group"> ' + monsterCheckboxes + 
-        
-        '</div>'+
-        '<div class="col-md-6 form-group"> Nodes (not for Wilds yet)<br>' + nodeCheckboxes + '<br><br>Edges (not for Wilds yet)<br>' + edgeCheckboxes +
-        
-        '</div>'+
-        ' </div> </form><br> ',
+        message:"Choose tags to build a theme" +
+        DG.view.blankForm(        
+          DG.view.rowDiv(      
+            DG.view.colDiv( "Favored Monsters<br>" + monsterCheckboxes, 6 ) + 
+            DG.view.colDiv('Nodes (not for Wilds yet)<br>' + nodeCheckboxes, 6 ) + 
+            DG.view.colDiv( '<br><br>Edges (not for Wilds yet)<br>' + edgeCheckboxes, 6) 
+          ) 
+        ) ,
         buttons:{
           save:{ 
                  label: "Use selected",
@@ -159,60 +169,101 @@ var DG = {
   
     //style dialog
   styleBox: function(){
-      var bgColorList = ["white", "wheat", "salmon", "lightblue", "lightgreen", "lightgray"];
-      var solidColorList = ["gray", "black", "red", "green", "blue", "maroon", "brown", 'darkblue', 'gunmetal'];
-      var shapeList = ["box","ellipse","circle","database","text","diamond","dot", "star", "triangle","triangleDown","square"];
-      var widthList = ["0","1","2","3","4","5","6","8","10"];
-      var radiusList = ["0","1","2","3","4","5","6","8","10"];        
-      var sizeList = ["5", "10","15","20","25","30"];
-      
+
       var currentBgColor = DG.data.style.bgColor;
       var currentBorderColor = DG.data.style.border;
       var currentEdgeWidth = DG.data.style.edges.width;
+      var currentEdgeColor = DG.data.style.edges.color.color;
       var currentBorderWidth = DG.data.style.borderWidth;
       var currentShape = DG.data.style.shape;
       var currentSize = DG.data.style.size;
       var currentBoxBorderRadius = DG.data.style.borderRadius;
       var currentFontFace = DG.data.style.fontFace;
       
-      var bgColorOptions = DG.view.buildOptions(bgColorList,currentBgColor);
-      var borderColorOptions = DG.view.buildOptions(solidColorList,currentBorderColor);   
-      var edgeWidthOptions = DG.view.buildOptions(widthList,currentEdgeWidth);
-      var borderWidthOptions = DG.view.buildOptions(widthList,currentBorderWidth);
-      var shapeOptions = DG.view.buildOptions(shapeList, currentShape);
-      var sizeOptions = DG.view.buildOptions(sizeList, currentSize);
-      var boxBorderRadiusOptions = DG.view.buildOptions(radiusList,currentBoxBorderRadius);
+      var bgColorOptions = DG.view.buildOptions(DG.view.bgColorList,currentBgColor);
+      var borderColorOptions = DG.view.buildOptions(DG.view.solidColorList,currentBorderColor);
+      var edgeColorOptions = DG.view.buildOptions(DG.view.solidColorList,currentEdgeColor);        
+      var edgeWidthOptions = DG.view.buildOptions(DG.view.widthList,currentEdgeWidth);
+      var borderWidthOptions = DG.view.buildOptions(DG.view.widthList,currentBorderWidth);
+      var shapeOptions = DG.view.buildOptions(DG.view.shapeList, currentShape);
+      var sizeOptions = DG.view.buildOptions(DG.view.sizeList, currentSize);
+      var boxBorderRadiusOptions = DG.view.buildOptions(DG.view.radiusList,currentBoxBorderRadius);
       
       var style = DG.data.style;
       var dialogOptions = {
           title: "Map style",
           message: 'Choose style options' +
                DG.view.blankForm (
-                 DG.view.controlDiv('Font ', DG.view.textInputControl('fontFace', currentFontFace ) )+
-                 DG.view.controlDiv('Background Color ', DG.view.selectControl("bgColor",bgColorOptions) )+ 
-                 DG.view.controlDiv('Border Color ', DG.view.selectControl("borderColor",borderColorOptions) )+                                
-                 DG.view.controlDiv('Edge Width ', DG.view.selectControl("edgeWidth",edgeWidthOptions) ) +
-                 DG.view.controlDiv('Node Shape ', DG.view.selectControl("shape",shapeOptions) ) +
-                 DG.view.controlDiv('Node Size (if label outside) ', DG.view.selectControl("nodeSize",sizeOptions) ) + 
-                 DG.view.controlDiv('Border radius (if box shape) ', DG.view.selectControl("boxBorderRadius",boxBorderRadiusOptions) ) +                    
-                 DG.view.controlDiv('Border Width ', DG.view.selectControl("borderWidth",borderWidthOptions) ) 
+                 DG.view.controlDiv('Font ', DG.view.textInputControl('fontFace', currentFontFace ), "6" )+
+                 DG.view.controlDiv('Background Color ', DG.view.selectControl("bgColor",bgColorOptions), "6" )+ 
+                 DG.view.controlDiv('Border Color ', DG.view.selectControl("borderColor",borderColorOptions), "6" )+                                
+                 DG.view.controlDiv('Edge Width ', DG.view.selectControl("edgeWidth",edgeWidthOptions), "6" ) +
+                 DG.view.controlDiv('Edge Color ', DG.view.selectControl("edgeColor",edgeColorOptions), "6" )+  
+                 
+                 DG.view.controlDiv('Node Shape ', DG.view.selectControl("shape",shapeOptions), "6" ) +
+                 DG.view.controlDiv('Node Size (if label outside) ', DG.view.selectControl("nodeSize",sizeOptions), "6" ) + 
+                 DG.view.controlDiv('Border radius (if box shape) ', DG.view.selectControl("boxBorderRadius",boxBorderRadiusOptions), "6" ) +                    
+                 DG.view.controlDiv('Border Width ', DG.view.selectControl("borderWidth",borderWidthOptions), "6" ) 
                ),
           buttons: {
              
               save: {
-                  label: "Use selected",
+                  label: "Use at next generation",
                   className: "btn-success",
                   callback: function () {
-                      console.dir ($("input#fontFace"))
                       DG.data.style.fontFace = $("input#fontFace").val();
                       DG.data.style.bgColor = $("select#bgColor option:selected").text();
                       DG.data.style.highlightBgColor = $("select#bgColor option:selected").text();
                       DG.data.style.border = $("select#borderColor option:selected").text();
                       DG.data.style.edges.width = $("select#edgeWidth option:selected").text();
+                      DG.data.style.edges.color.color = $("select#edgeColor option:selected").text();
                       DG.data.style.borderWidth = $("select#borderWidth option:selected").text();
                       DG.data.style.shape = $("select#shape option:selected").text();
                       DG.data.style.size = parseInt($("select#nodeSize option:selected").text());
                       DG.data.style.borderRadius = parseInt($("select#boxBorderRadius option:selected").text());
+                  }    
+              },
+              apply: {
+                  label: "Apply to current dungeon",
+                  className: "btn-success",
+                  callback: function () {
+                      var fontFace = $("input#fontFace").val();
+                      var bgColor = $("select#bgColor option:selected").text();
+                      var highlightBgColor = $("select#bgColor option:selected").text();
+                      var border = $("select#borderColor option:selected").text();
+                      var edgesWidth = $("select#edgeWidth option:selected").text();
+                      var edgeColor = $("select#edgeColor option:selected").text();
+                      var borderWidth = $("select#borderWidth option:selected").text();
+                      var shape = $("select#shape option:selected").text();
+                      var size = parseInt($("select#nodeSize option:selected").text());
+                      var borderRadius = parseInt($("select#boxBorderRadius option:selected").text());
+                      
+                      DG.data.style.fontFace = fontFace;
+                      DG.data.style.bgColor = bgColor;
+                      DG.data.style.highlightBgColor = highlightBgColor;
+                      DG.data.style.border = border;
+                      DG.data.style.edges.width = edgesWidth;
+                      DG.data.style.edges.color = {color: edgeColor};
+                      DG.data.style.borderWidth = borderWidth;
+                      DG.data.style.shape = shape;
+                      DG.data.style.size = size;
+                      DG.data.style.borderRadius = borderRadius;
+                      
+                      $.each(DG.data.nodes, function (index, node) { 
+                        node.borderWidth = borderWidth;
+                        node.color.background = bgColor;
+                        node.color.highlight.background = highlightBgColor;
+                        node.color.border = border;
+                        node.shape = shape;
+                        node.size = size;
+                        node.shapeProperties.borderRadius = borderRadius;
+                      });
+                      
+                      $.each(DG.data.edges, function (index, edge) { 
+                        edge.width = edgesWidth;
+                        edge.color = {color: edgeColor};
+                      });
+                      DG.initNetwork();
                   }
               },
               base: {
@@ -225,29 +276,60 @@ var DG = {
 
           }
       };
-      console.dir(dialogOptions);
     bootbox.dialog(dialogOptions);
   },
   
   // Arguments to the Vis.Network creation call ----------------------------------------------
   nodeDialog: function(newData,callback){
+   
+    var node = DG.nodesDataSet.get(newData.id)    
+    var currentBgColor = node.color.background;
+    var currentBorderColor = node.color.border;
+    var currentBorderWidth = node.borderWidth;
+    var currentShape = node.shape;
+    var currentSize = node.size;
+    var currentBoxBorderRadius = node.shapeProperties.borderRadius;
+    var currentFontFace = node.font.face;
+    
+    var bgColorOptions = DG.view.buildOptions(DG.view.bgColorList,currentBgColor);
+    var borderColorOptions = DG.view.buildOptions(DG.view.solidColorList,currentBorderColor);   
+    var borderWidthOptions = DG.view.buildOptions(DG.view.widthList,currentBorderWidth);
+    var shapeOptions = DG.view.buildOptions(DG.view.shapeList, currentShape);
+    var sizeOptions = DG.view.buildOptions(DG.view.sizeList, currentSize);
+    var boxBorderRadiusOptions = DG.view.buildOptions(DG.view.radiusList,currentBoxBorderRadius);
+    
+
+    var textAreaTag = function(idName, placeHolder, value, rows, cols) {
+      var html = '<textarea id="' + idName + '" name="' + idName + '" type="text" placeholder="' + placeHolder + 
+      '" value="' + value + '" class="form-control" rows="' + rows + '" columns = "' + cols + '">' + value + '</textarea>' ; 
+      return html;
+    };
+    var buttonTag = function(id,label){
+      return '<button id="' + id + '">' + label + '</button>'
+    };
     bootbox.dialog({
       title:"Edit Location",
-      message: '<div class="row">  ' +
-        '<div class="col-md-12"> ' +
-        '<form class="form"> ' +
-        '<div class="form-group"> ' +
-        '<label class="col-md-4 control-label" for="name">Name</label> ' +
-        '<input id="location_name" name="location_name" type="text" placeholder="Location name" value="' + DG.nodesDataSet.get(newData.id).label +
-          '" class="form-control input-md"/> ' +
-        '</div>'+
-
-        '<div class="form-group"> ' +
-          '<label class="col-md-4 control-label" for="description">Description</label> ' +
-          '<textarea id="location_description" name="location_description" type="text"  placeholder="Location description" value="' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '" '+
-          'class="form-control" rows="8" columns = "30">' + DG.brToLf(DG.nodesDataSet.get(newData.id).title) + '</textarea>'+
-        '</div> ' +
-        '</form><button id="reroll_node_title">Reroll</button> </div>  </div>',
+      message: DG.view.rowDiv (
+        DG.view.colDiv(
+          DG.view.blankForm(
+            DG.view.formGroupDiv(
+              DG.view.label4('name','Name') + 
+              DG.view.inputTag('location_name', 'Location name',  node.label ) 
+            ) +
+            DG.view.formGroupDiv(
+              DG.view.label4('description','Description') +
+              textAreaTag("location_description","Location description", DG.brToLf(node.title), 8, 30)
+            ) +
+                 DG.view.controlDiv('Font ', DG.view.textInputControl('fontFace', currentFontFace ), "6" )+
+                 DG.view.controlDiv('Background Color ', DG.view.selectControl("bgColor",bgColorOptions), "6" )+ 
+                 DG.view.controlDiv('Border Color ', DG.view.selectControl("borderColor",borderColorOptions), "6" )+                                
+                 DG.view.controlDiv('Node Shape ', DG.view.selectControl("shape",shapeOptions), "6" ) +
+                 DG.view.controlDiv('Node Size (if label outside) ', DG.view.selectControl("nodeSize",sizeOptions), "6" ) + 
+                 DG.view.controlDiv('Border radius (if box shape) ', DG.view.selectControl("boxBorderRadius",boxBorderRadiusOptions), "6" ) +                    
+                 DG.view.controlDiv('Border Width ', DG.view.selectControl("borderWidth",borderWidthOptions), "6" ) 
+          ) +
+          buttonTag("reroll_node_title",'Reroll') , 12)
+        ),
       buttons: {
           save: {
             label: "Save",
@@ -255,6 +337,14 @@ var DG = {
             callback: function() {
             newData.label =  $('#location_name').val();
             newData.title =  DG.lfToBr($('#location_description').val());
+            newData.font.face = $("input#fontFace").val();
+            newData.color.background = $("select#bgColor option:selected").text();
+            newData.color.highlight.background = $("select#bgColor option:selected").text();
+            newData.color.border = $("select#borderColor option:selected").text();
+            newData.borderWidth = $("select#borderWidth option:selected").text();
+            newData.shape = $("select#shape option:selected").text();
+            newData.size = parseInt($("select#nodeSize option:selected").text());
+            newData.shapeProperties.borderRadius = parseInt($("select#boxBorderRadius option:selected").text());
             DG.addMonstersToList();
             DG.nodesDataSet.update(newData);
             DG.fillKey();
@@ -303,23 +393,22 @@ var DG = {
    var toNodeId = thisEdge.to;
      bootbox.dialog({
       title:"Edit Path between Locations",
-      message: '<div class="row">  ' +
-        '<div class="col-md-12"> ' +
-        '<form class="form"> ' +
-        '<div class="form-group"> ' +
-        '<label class="col-md-4 control-label" for="name">Name</label> ' +
-        '<input id="edge_name" name="edge_name" type="text" placeholder="Path name" value="' + thisEdge.label +
-          '" class="form-control input-md"/> ' +
-        '</div>'+
-        '<div class="form-group"> ' +
-          '<label class="col-md-4 control-label" for="fromNode">From</label> ' +
-          '<select id="fromNode">' + DG.fromOptions(fromNodeId) + '</select>' +
-        '</div>'+
-        '<div class="form-group"> ' +
-          '<label class="col-md-4 control-label" for="toNode">To</label> ' +
-          '<select id="toNode">' + DG.toOptions(toNodeId) + '</select>' +
-        '</div>'+
-        '</form> </div>  </div>',
+      message: DG.view.rowDiv(
+        DG.view.colDiv(
+        DG.view.blankForm(
+          DG.view.formGroupDiv(
+            DG.view.label4('edgeName','Name') +
+            DG.view.inputTag("edge_name", "Path name", thisEdge.label )
+          ) +        
+           DG.view.formGroupDiv(
+            DG.view.label4('fromNode','From') + 
+            DG.view.selectControl("fromNode", DG.fromOptions(fromNodeId) )
+          ) +
+           DG.view.formGroupDiv(
+            DG.view.label4('toNode','To') + 
+            DG.view.selectControl("toNode", DG.fromOptions(toNodeId) )
+          )
+        ), 12 ) ),
       buttons: {
           save: {
             label: "Save",
@@ -392,28 +481,39 @@ var DG = {
             *           to: nodeId2,
             *          };
             */
+            
             var newData = data; // alter the data as you want, except for the ID.
                                 // all fields normally accepted by an edge can be used.a
+                        
+            var currentEdgeColor;
+             
+            if (typeof (newData.color === 'undefined') ) {           
+                newData.color = DG.data.style.edges.color;
+            }    
+            currentEdgeColor = newData.color.color; 
+
+            var edgeColorOptions = DG.view.buildOptions(DG.view.solidColorList,currentEdgeColor); 
+                               
             bootbox.dialog({
               title:"Edit Path between Locations",
-              message: '<div class="row">  ' +
-                '<div class="col-md-12"> ' +
-                '<form class="form"> ' +
-                '<div class="form-group"> ' +
-                '<label class="col-md-4 control-label" for="name">Name</label> ' +
-                '<input id="edge_name" name="edge_name" type="text" placeholder="Path name" value="' + DG.edgesDataSet.get(newData.id).label +
-                  '" class="form-control input-md"/> ' +
-                '</div>'+
-                '</form> </div>  </div>',
+              message: DG.view.rowDiv (
+                DG.view.colDiv(
+                  DG.view.blankForm(
+                    DG.view.formGroupDiv(
+                      DG.view.label4('name','Name') + 
+                      DG.view.inputTag("edge_name", "Path name", DG.edgesDataSet.get(newData.id).label  )            
+                ) +
+                 DG.view.controlDiv('Color ', DG.view.selectControl("edgeColor",edgeColorOptions), "6" )     
+                ), 12 )),
               buttons: {
                   save: {
                     label: "Save",
                     className: "btn-success",
                     callback: function() {
-                    newData.label =  $('#edge_name').val();
-
-                    DG.edgesDataSet.update(newData);
-                    callback(newData);
+                      newData.label =  $('#edge_name').val();
+                      newData.color.color = $("select#edgeColor option:selected").text();
+                      DG.edgesDataSet.update(newData);
+                      callback(newData);
 
                     }
                   }
@@ -476,7 +576,7 @@ var DG = {
             size: 20,
             bgColor: "lightgray",
             highlightBgColor: "lightgray",
-            edges: { width: 1 }
+            edges: { width: 1, color: { color: 'gray'} }
           },
       
         },
@@ -491,7 +591,7 @@ var DG = {
             size: 20,
             bgColor: "lightgray",
             highlightBgColor: "lightgray",
-            edges: { width: 1 }
+            edges: { width: 1, color: { color: 'gray'}  }
           },           
   nodesDataSet:"uninitialized",
   edgesDataSet:"uninitialized",
@@ -614,11 +714,16 @@ var DG = {
     selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
     dungeonData = localStorage[selectedKey];
     if (dungeonData !== "unloaded"){
-        DG.data = JSON.parse(dungeonData);
+        var savedData = JSON.parse(dungeonData);
+        DG.data = $.extend(DG.data, savedData);
         DG.initNetwork();
         document.getElementById("dungeon_name").text = selectedKey;
         document.getElementById("dungeon_name").value = selectedKey;
         $("#notes").val(DG.data.notes);
+        // update styles loaded from saved dungeons, without losing styles that are actually set
+        DG.data.style = $.extend(DG.data.style, DG.data.defaultStyle);
+        DG.data.style = $.extend(DG.data.style, savedData.style);
+        // might have to go deeper...
   }  
   },  
 
@@ -824,7 +929,7 @@ var DG = {
   // simple at first
   // Then introduce int 
     var possibleRelationships = DG.stock.relationships.filter(function( rel ) { return  rel.min_subject_int <= intel }  );
-    console.log(possibleRelationships);
+    
     possibleRelationships = possibleRelationships.filter(function( rel ) { return rel.min_target_int <= targetInt }  ); 
     var relationship = DG.drawOne(possibleRelationships);
     return relationship[plurality];
@@ -1483,5 +1588,7 @@ DG.linkStrats = {
   }
   }
 };
+
+
 
 
