@@ -16,7 +16,7 @@ function postLoadInitialize(){
 	    DG.edgeDialog(DG.edgesDataSet.get(this.id),function(){console.log("called from table");})
 	 });
      
-   };
+   }
    DG.digDungeon();
    bindButtons();
    observeTable();
