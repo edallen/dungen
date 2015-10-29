@@ -1,0 +1,51 @@
+Things to do:
+
+Relationships need work to add directionality.
+
+Allow style dialog to restyle current map.
+
+Add node restyling in node editor.
+
+Add edge restyling in edge editor.
+
+Magic effects for books
+
+More staves
+
+Connect hooks and oddities to the theme tagging system.
+
+Add a random name generator and use it for NPCs and some monsters.
+
+Flesh out the wilderness generator.
+
+Monster customizer
+
+Novel monster type generator
+
+Add races to NPCs?
+
+Add personal items and treasure to NPCs?
+
+Give NPcs a goal and resident/visiting/raiding/passing through status?
+
+Decouple magic item frequency from amount of treasure generated for node or have it replace some?
+
+Should theme alter NPC class distribution?
+
+Add notes re notice/reaction?
+
+Add the concept of length to edges and a theme setting to bias for long or short distances. Short would have more door/archway/short hall type links.
+
+Add level entrances as room features.
+
+
+Refactor other dialogs to extract HTML to functions.
+
+
+Map library and dungen derived stocker.
+
+
+
+
+
+
