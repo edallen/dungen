@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>DunMap Dungeon Map Stocker, v 0.1 pre-alpha</title>
+    <title>DunMap Dungeon Map Stocker, v 0.2 pre-alpha</title>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
     <link href="vis/vis.css" rel="stylesheet" type="text/css" />
@@ -9,7 +9,7 @@
 <body>
 
 <h3 style="padding-left: 50px">  <b>DunMap</b> <small>Dungeon Map Stocker, Bride of <a href="dungen.html">DunGen</a> by Ed Allen: <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> & <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></small></h3>
-<p>Choose the Level. Enter your map's URL and click Load Map. When you see the map, click in rooms to place room numbers. you can drag numbers around too. Contents for rooms will randomly generate as you place them. The node editor will let you edit or reroll contents. Save & reload is not yet implemented in this version. </p>
+<p>Choose the Level. Enter your map's URL and click Load Map. When you see the map, click in rooms to place room numbers. you can drag numbers around too. Contents for rooms will randomly generate as you place them. The node editor will let you edit or reroll contents. </p>
 <button id="scroll-to-key" class="fixed-nav">Key</button>
 <button id= "scroll-to-top" class="fixed-nav" style="display: none">Top</button>
 <div class="container-fluid">
@@ -56,7 +56,7 @@
 
     <button id="export" style="margin-right: 20px">Export</button>
     <button id="import">Import</button>
-    <p>(Import does not know about the map image and will not place nodes correctly yet, they don't record their location. Coming soon...) Export dumps the data for the current dungeon into the field below. Copy and paste into an email or a file to move to another computer.
+    <p> Export dumps the data for the current dungeon into the field below. Copy and paste into an email or a file to move to another computer.
         Paste into the field there and click Import to load it. Careful editing in this field is possible. Save with a name on the destination computer.</p>
     <textarea id="export-import" cols='120' rows='10' ></textarea></div>
 </div>
@@ -68,11 +68,11 @@
     DunGen saves to your browser's "LocalStorage" not to a server. <b>Clearing all LocalStorage will wipe out any saved and edited dungeons.</b></p>
 </div>
 <h3>New features and plans</h3>
-<p>This is pre-alpha quality, purely experimental at the moment. Even more than DunGen, it really wants
+<p>This is pre-alpha quality, still experimental at the moment. Even more than DunGen, it really wants
     as much screen space as you can throw at it, so will be bad on a phone.
 
 I threw and example map into the input field. Replace with the URL to any map you want. With the way it is set up currently, wider is better than taller on most monitors. I'll add an option to rotate tall maps eventually, or change dimensions of the canvases to suit the maps.</p>
-All save features are broken and hidden at the moment. Getting this out as is for people to start to play with it, for some feedback on what works and what else might work for you, while I keep hacking away at it.
+Save and restore seems to be basically working, but there probably will be bugs to resolve with window size changes. Getting this out as is for people to start to play with it, for some feedback on what works and what else might work for you, while I keep hacking away at it.
 <p>
     Comments welcome at the Ruminations blog linked above or on G+. If you like hacking, take a look at the dungen_stock.js file first.
     It's pretty easy to customize content there. DunGen is now up on <a href ='https://github.com/edallen/dungen'>Github</a>.
