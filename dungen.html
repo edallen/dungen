@@ -42,7 +42,6 @@
   <label for="treasureMultiplier" style="padding-right: 5px">Treasure X </label><input id="treasureMultiplier" value='1.0' size='3'></input>
   <button class= "btn-small" id="regenerate">Generate</button>
   <button class= "btn-small" id="wilds">Wilds</button>
-  <button class= "btn-small" id="redraw" style="display:none">Redraw</button>
   <label for="dungeon_name">Name for save </label><input id="dungeon_name" placeholder="Name the dungeon" ></input>
   <button class= "btn-small" id="save" >Save</button>  
   <select id="saved" >
@@ -54,7 +53,9 @@
 
 
   <button id="move_table"style="display:none">Move Table for Printing</button>
-  <div id="dungeon"></div>
+  <div id="positioner"  style="position: relative;">
+    <div id="dungeon"></div>
+  </div>
   <span class="clear-both"></span>
 
   <div id="table-holder">
@@ -82,11 +83,8 @@ If you need to clear all cached data in your browser for some reason, please exp
 DunGen saves to your browser's "LocalStorage" not to a server. <b>Clearing all LocalStorage will wipe out any saved and edited dungeons.</b></p>
 
 <h3>New features and plans</h3>
-<p> NPCs now get names, rough stats like "smart" for high INT, and "delicate" for low CON, and some have magic items (no effort for class suitability yet). Name generation is in a rough beginning state, and will improve.</p>
-<p> There is a style button now that goes to a dialog box to set up style of nodes and edges for generation and the current map. You can also style options in the individual node and edge edit dialogs.</p>
-<p> The initial version of relationships among denizens is in place. It will get better.</p>
-<p>The wilds still need a lot of work.</p>
-
+<p> Check out <a href="dunmap.html">DunMap</a>. It's a DunGen spinoff in which you load a map image from the web or your hard drive (file://path_to_the_file), click and drag to mark locations, and random stock that
+map from the same random generation tables. The initial release was November 4.</p>
 
 <p>
 Comments welcome at the Ruminations blog linked above or on G+. If you like hacking, take a look at the dungen_stock.js file first. 

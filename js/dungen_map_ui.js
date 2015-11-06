@@ -1,14 +1,15 @@
 // UI elements
+// ADJUST for Map Page
 
-var regenerateButton = document.getElementById("regenerate");
+var regenerateButton = document.getElementById("load_stock");
 regenerateButton.addEventListener("click", function () {
   DG.digDungeon("dungeon");
 });
-
-var wildsButton = document.getElementById("wilds");
-wildsButton.addEventListener("click", function () {
-  DG.digDungeon("wilds");
-});
+//
+//var wildsButton = document.getElementById("wilds");
+//wildsButton.addEventListener("click", function () {
+//  DG.map.initMap("wilds");
+//});
 
 var saveButton = document.getElementById("save");
 saveButton.addEventListener("click", function () {
@@ -93,8 +94,8 @@ DG.ui = {
     var key = "";
     for (i = 0; i < localStorage.length; i += 1) {
       key = localStorage.key(i);
-      if (key.substring(0,3) != "DM:") {
-        keys.push(key);
+      if (key.substring(0,3) === "DM:") {
+        keys.push(key.substring(3));
       }
     }
 
@@ -113,7 +114,7 @@ DG.ui = {
     }
   },
   saveDungeon: function () {
-    var key = document.getElementById("dungeon_name").value;
+    var key = "DM:" + document.getElementById("dungeon_name").value;
     var dungeonString = JSON.stringify(DG.data);
     localStorage[key] = dungeonString;
     var dungeonSelect = document.getElementById("saved");
@@ -122,16 +123,20 @@ DG.ui = {
   loadDungeon: function () {
     var dungeonSelect = document.getElementById("saved");
     var selectedKey = "";
+    var namespacedKey = "";
     var dungeonData = "unloaded";
     if (dungeonSelect.selectedIndex == -1) {
       alert("No dungeon selected to load");
       return null;
     }
     selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
-    dungeonData = localStorage[selectedKey];
+    namespacedKey = "DM:" + selectedKey;
+    dungeonData = localStorage[namespacedKey];
     if (dungeonData !== "unloaded") {
       var savedData = JSON.parse(dungeonData);
       DG.data = $.extend(DG.data, savedData);
+      $("#map_url").val(DG.data.imageSource);
+      DG.loadMapImage();
       DG.initNetwork();
       document.getElementById("dungeon_name").text = selectedKey;
       document.getElementById("dungeon_name").value = selectedKey;
@@ -146,9 +151,10 @@ DG.ui = {
   deleteDungeon: function () {
     var dungeonSelect = document.getElementById("saved");
     var selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
+    var namespacedKey = "DM:" + selectedKey;
     var message = "Permanently delete dungeon " + selectedKey + " from storage?";
     if (confirm(message)) {
-      localStorage.removeItem(selectedKey);
+      localStorage.removeItem(namespacedKey);
       DG.ui.populateSavedSelect();
     }
   },

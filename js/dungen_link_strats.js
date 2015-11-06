@@ -33,6 +33,7 @@ DG.linkStrats = {
       DG.linkNodes(startEdge, endEdge);
     }
   },
+
   randomAllLink: function (linksToMake) {
     DG.linkStrats.randomLink(linksToMake);
     var nodes = DG.allNodeIds().slice();

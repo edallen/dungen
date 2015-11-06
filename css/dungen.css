@@ -2,10 +2,27 @@ td.dungen{
   font-size: 75%;
 }
 
-div#dungeon{float: left;
-           margin-left: 20px;
-           width: 90%;
-           height: 80%}
+div#positioner {
+    float: left;
+    margin-left: 20px;
+    width: 90%;
+    height: 80%
+}
+div#dungeon{
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%
+    }
+canvas#dungeon_map{
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    }
+
 table#dungeon_key{ clear: both;
                   width:90%; }
 				  
