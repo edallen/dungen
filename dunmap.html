@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>DunMap Dungeon Map Stocker, v 0.2 pre-alpha</title>
+    <title>DunMap Dungeon Map Stocker, v 0.3</title>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
     <link href="vis/vis.css" rel="stylesheet" type="text/css" />
@@ -8,8 +8,8 @@
 </head>
 <body>
 
-<h3 style="padding-left: 50px">  <b>DunMap</b> <small>Dungeon Map Stocker, Bride of <a href="dungen.html">DunGen</a> by Ed Allen: <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> & <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></small></h3>
-<p>Choose the Level. Enter your map's URL and click Load Map. When you see the map, click in rooms to place room numbers. you can drag numbers around too. Contents for rooms will randomly generate as you place them. The node editor will let you edit or reroll contents. </p>
+<h3 style="padding-left: 50px">  <b>DunMap</b> Dungeon Map Stocker v 0.3, Bride of <a href="dungen.html">DunGen</a> by Ed Allen: <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> & <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></small></h3>
+<p>Choose the Level. Enter your map's URL and click Load Map or pick one from the menu. When you see the map, click in rooms to place room numbers and drag to reposition.  Contents for rooms will randomly generate as you place them. The node editor will let you edit or reroll contents. </p>
 <button id="scroll-to-key" class="fixed-nav">Key</button>
 <button id= "scroll-to-top" class="fixed-nav" style="display: none">Top</button>
 <div class="container-fluid">
@@ -25,7 +25,11 @@
     <button class= "btn-small" id="theme">Theme</button>
     <button class= "btn-small" id="style">Style</button>
     <label for="treasureMultiplier" style="padding-right: 5px">Treasure X </label><input id="treasureMultiplier" value='1.0' size='3'></input>
-    <label for="map_url" style="padding-right: 5px">Image URL</label><input id="map_url" size="60" placeholder="URL of source map" value="http://2.bp.blogspot.com/-JpzHDN3kKF0/VA5sgJIqJnI/AAAAAAAABnY/U-Xx1BtK35A/s1600/stone_walls_curve.png" />
+    <label for="map_url" style="padding-right: 5px">Image URL</label>
+    <select id="map_url_select">
+
+    </select>
+    <input id="map_url" size="30" placeholder="URL of source map" value="http://2.bp.blogspot.com/-JpzHDN3kKF0/VA5sgJIqJnI/AAAAAAAABnY/U-Xx1BtK35A/s1600/stone_walls_curve.png" />
     <button class= "btn-small" id="load_stock">Load Map</button>
 
     <label for="dungeon_name">Name for save </label><input id="dungeon_name" placeholder="Name the dungeon"></input>
@@ -68,11 +72,16 @@
     DunGen saves to your browser's "LocalStorage" not to a server. <b>Clearing all LocalStorage will wipe out any saved and edited dungeons.</b></p>
 </div>
 <h3>New features and plans</h3>
-<p>This is pre-alpha quality, still experimental at the moment. Even more than DunGen, it really wants
-    as much screen space as you can throw at it, so will be bad on a phone.
+<p>Map Artists: If you have posted maps online that you would like included in the convenience dropdown menu, let me know on G+ or a comment on my <a href="http://geekruminations.blogspot.com" target="_blank">Ruminations of a Geek</a> blog, either specific maps or point me to a collection page and I'll find the URLs there. I figure on including artists' names or initials before the map titles, and then
+going hierarchical by the artist's name as the first level once the list gets long enough to be awkward as a single list, with credits section below linking back to your pages.
+This version reworks the canvases to keep reloaded room numbers in place. Anything you saved before this release will need dragging into place once, sorry for the alpha pain there.
+</p>
+<h3>Image Link Credits</h3>
+<p>
+    EA: Ed Allen<br>
+    BL: <a href="https://www.flickr.com/photos/britishlibrary/"  target="_blank">British Library Flickr</a> of free images from old books
+</p>
 
-I threw and example map into the input field. Replace with the URL to any map you want. With the way it is set up currently, wider is better than taller on most monitors. I'll add an option to rotate tall maps eventually, or change dimensions of the canvases to suit the maps.</p>
-Save and restore seems to be basically working, but there probably will be bugs to resolve with window size changes. Getting this out as is for people to start to play with it, for some feedback on what works and what else might work for you, while I keep hacking away at it.
 <p>
     Comments welcome at the Ruminations blog linked above or on G+. If you like hacking, take a look at the dungen_stock.js file first.
     It's pretty easy to customize content there. DunGen is now up on <a href ='https://github.com/edallen/dungen'>Github</a>.

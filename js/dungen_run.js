@@ -14,22 +14,18 @@ function postLoadInitialize(){
          console.log("called from table");
        })
      });
-     if (page === "graph"){
-       $('table.dungen').on('click', 'tr.edge_row', function () {
-         DG.edgeDialog(DG.edgesDataSet.get(this.id), function () {
-           console.log("called from table");
-         })
-       });
-     }
-   }
-  DG.digDungeon();
-   if (typeof(DG.digDungeon) == "function") {
-      observeTable("graph");
-   }
-   else {// on map page
-     observeTable("map");
+
+     $('table.dungen').on('click', 'tr.edge_row', function () {
+       DG.edgeDialog(DG.edgesDataSet.get(this.id), function () {
+         console.log("called from table");
+       })
+     });
+
    }
   populateUI();
+  DG.digDungeon();
+  observeTable();
+
    if (ua.indexOf("Chrome") > 0) {  $("button#chrome-dl").show(); }
 
 }
