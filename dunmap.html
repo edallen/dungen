@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>DunMap Dungeon Map Stocker, v 0.3</title>
+    <title>DunMap Dungeon Map Stocker</title>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
     <link href="vis/vis.css" rel="stylesheet" type="text/css" />
@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<h3 style="padding-left: 50px">  <b>DunMap</b><small> Dungeon Map Stocker v 0.3, Bride of <a href="dungen.html">DunGen</a> by Ed Allen: <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> & <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></small></h3>
+<h3 style="padding-left: 50px">  <b>DunMap</b><small> Dungeon Map Stocker v 0.4, Bride of <a href="dungen.html">DunGen</a> by Ed Allen: <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> & <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></small></h3>
 <p>Choose the Level. Enter your map's URL and click Load Map or pick one from the menu. When you see the map, click in rooms to place room numbers and drag to reposition.  Contents for rooms will randomly generate as you place them. The node editor will let you edit or reroll contents. </p>
 <button id="scroll-to-key" class="fixed-nav">Key</button>
 <button id= "scroll-to-top" class="fixed-nav" style="display: none">Top</button>
@@ -55,27 +55,34 @@
     <div id="footer_notes" style="clear: both"><label for="notes">Notes</label><br>
         <textarea id="notes" cols='120' rows='10' ></textarea>
     </div>
-    <button id="toggle_reskin">Re-skin</button>
-    <p id="reskin" style = 'display: none'>Re-skin creatures or replace other repeating text in room descriptions and notes - there is no Undo so be careful.</p>
-    Replace <input id="text_from"/> with <input id="text_to"/> in Notes and all Location Descriptions. <button id="replace">Re-skin</button>
-    <button id="toggle_import_export">Import and Export</button><div id="import_export" style='display: none'>
+    <br>
+    <div id="reskin_div">
+        <h4>Re-skin creatures and treasures</h4>
+      <p id="reskin" >Re-skin creatures or replace other repeating text in room descriptions and notes - there is no Undo so be careful.</p>
+      Replace <input id="text_from"/> with <input id="text_to"/> in Notes and all Location Descriptions. <button id="replace">Make the change</button>
+    </div>
+    <br>
+
+    <button id="toggle_import_export">Import and Export</button>
+    <div id="import_export" style='display: none'>
 
     <button id="export" style="margin-right: 20px">Export</button>
     <button id="import">Import</button>
     <p> Export dumps the data for the current dungeon into the field below. Copy and paste into an email or a file to move to another computer.
         Paste into the field there and click Import to load it. Careful editing in this field is possible. Save with a name on the destination computer.</p>
-    <textarea id="export-import" cols='120' rows='10' ></textarea></div>
+    <textarea id="export-import" cols='120' rows='10' ></textarea>
+        <p>To manually save and use the dungeon outside this page, copy the text of the room contents table and notes field and paste into another file,
+            and use the Download Image button on Chrome or the right click menu to save the image as a PNG.
+            If you need to clear all cached data in your browser for some reason, please export if you'll want to use a dungeon in DunGen again or manually save of any dungeons you care about first.
+            DunGen saves to your browser's "LocalStorage" not to a server. <b>Clearing all LocalStorage will wipe out any saved and edited dungeons.</b></p>
+    </div>
 </div>
 <br>
-
-<p>To manually save and use the dungeon outside this page, copy the text of the room contents table and notes field and paste into another file,
-    and use the Download Image button on Chrome or the right click menu to save the image as a PNG.
-    If you need to clear all cached data in your browser for some reason, please export if you'll want to use a dungeon in DunGen again or manually save of any dungeons you care about first.
-    DunGen saves to your browser's "LocalStorage" not to a server. <b>Clearing all LocalStorage will wipe out any saved and edited dungeons.</b></p>
 
 <h3>New features and plans</h3>
 <p>The (Clicks add/Clicks locked) button toggles whether clicks on the map add markers. So far, I can't lock the dragging of markers, still investigating.</p>
 <p>The Style dialog now includes font size! You can adjust the size of numbers on the map. Color coming soon.</p>
+<p>Notes field: Wandering Monsters and Relationship addition with nodes fixed to a first approximation.</p>
 <p>Map Artists: If you have posted maps online that you would like included in the convenience dropdown menu, let me know on G+ or a comment on my <a href="http://geekruminations.blogspot.com" target="_blank">Ruminations of a Geek</a> blog, either specific map names and image URLs or point me to a collection page and I'll find the URLs there. You can also reshare a G+ post with a map you want included to me. I figure on including artists' names or initials before the map titles, and then
 going hierarchical by the artist's name as the first level once the list gets long enough to be awkward as a single list, with credits section below linking back to your pages.
 This version reworks the canvases to keep reloaded room numbers in place. Anything you saved before this release will need dragging into place once, sorry for the alpha pain there.

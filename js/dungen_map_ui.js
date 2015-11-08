@@ -59,6 +59,9 @@ lockButton.on("click", function () {
   }
 });
 
+$("#toggle_import_export").on("click",function() {
+  $("#import_export").toggle();
+});
 var keyButton = document.getElementById("scroll-to-key");
 keyButton.addEventListener("click", function () {
   DG.scrollToKey();
