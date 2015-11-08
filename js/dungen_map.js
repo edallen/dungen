@@ -177,11 +177,10 @@ DG.linkNodes = function (startEdge, endEdge) {
   }
   DG.data.edges.push(DG.makeEdge(startEdge, endEdge));
 };
-
-DG.nodeMoved = function (node,x,y) {
-
-}
-
+//
+//DG.nodeMoved = function (node,x,y) {
+//
+//}
 DG.makeNode = function (id, label, x, y) {
   var border = DG.data.style.border,
     borderWidth = DG.data.style.borderWidth,
@@ -243,7 +242,8 @@ DG.drawOptions = {
   configure: {enabled: false},
   interaction: {
     dragView: false,
-    zoomView: false
+    zoomView: false,
+    dragNodes: true
   },
   manipulation: {
     enabled: true,
@@ -391,7 +391,7 @@ DG.initNetwork = function () {
   DG.fillKey();
 
   DG.network.on("click", function (event) {
-    console.dir(event);
+    if ( DG.ui.locked() ){return false;}
     if (event.edges.length == 0 && event.nodes.length == 0){
 
       DG.drawOptions.manipulation.addNode(event.pointer.canvas,function(){/*EMPTY CALLBACK FOR NOW*/});

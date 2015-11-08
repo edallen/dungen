@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<h3 style="padding-left: 50px">  <b>DunGen</b> <small>Pointcrawl Dungeon Generator by Ed Allen: <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> & <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a></small></h3>
+<h3 style="padding-left: 50px">  <b>DunGen</b> <small>Pointcrawl Dungeon Generator by Ed Allen: <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> & <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a> </small>  New! Checkout <a href="dunmap.html">DunMap</a></h3>
 <button id="scroll-to-key" class="fixed-nav">Key</button>
 <button id= "scroll-to-top" class="fixed-nav" style="display: none">Top</button>
 <div class="container-fluid">
@@ -39,10 +39,10 @@
   </select>
   <button class= "btn-small" id="theme">Theme</button>
   <button class= "btn-small" id="style">Style</button>
-  <label for="treasureMultiplier" style="padding-right: 5px">Treasure X </label><input id="treasureMultiplier" value='1.0' size='3'></input>
+  <label for="treasureMultiplier" style="padding-right: 5px">Treasure X </label><input id="treasureMultiplier" value='1.0' size='3'/>
   <button class= "btn-small" id="regenerate">Generate</button>
   <button class= "btn-small" id="wilds">Wilds</button>
-  <label for="dungeon_name">Name for save </label><input id="dungeon_name" placeholder="Name the dungeon" ></input>
+  <label for="dungeon_name">Name for save </label><input id="dungeon_name" placeholder="Name the dungeon" />
   <button class= "btn-small" id="save" >Save</button>  
   <select id="saved" >
      <option>Saved Dungeons</option>
@@ -52,10 +52,9 @@
   <button id= "chrome-dl" type="button" onclick="DG.chromeSaveImage()" style="display:none" >Download Image</button>
 
 
-  <button id="move_table"style="display:none">Move Table for Printing</button>
-  <div id="positioner"  style="position: relative;">
-    <div id="dungeon"></div>
-  </div>
+  <button id="move_table" style="display:none">Move Table for Printing</button>
+  <div id="dungeon" class="graph"></div>
+
   <span class="clear-both"></span>
 
   <div id="table-holder">
@@ -67,7 +66,7 @@
     <textarea id="notes" cols='120' rows='10' ></textarea></div>
   <h3>Re-skin</h3> 
   <p>Re-skin creatures or replace other repeating text in room descriptions and notes - there is no Undo so be careful.</p>
-  Replace <input id="text_from"></input> with <input id="text_to"></input> in Notes and all Location Descriptions. <button id="replace">Re-skin</button>
+  Replace <input id="text_from"/> with <input id="text_to"/> in Notes and all Location Descriptions. <button id="replace">Re-skin</button>
   <h3>Import and Export</h3>
     <button id="export" style="margin-right: 20px">Export</button>
     <button id="import">Import</button>

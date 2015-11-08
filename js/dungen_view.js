@@ -4,7 +4,8 @@ DG.view = {
     shapeList: ["box", "ellipse", "circle", "database", "text", "diamond", "dot", "star", "triangle", "triangleDown", "square"],
     widthList: ["0", "1", "2", "3", "4", "5", "6", "8", "10"],
     radiusList: ["0", "1", "2", "3", "4", "5", "6", "8", "10"],
-    sizeList: ["5", "10", "15", "20", "25", "30"],
+    sizeList: ["3", "5", "8", "10", "15", "20", "25", "30"],
+    textSizeList: ["10","12","14","16","18","20","22","24","28","32","36","40"],
     buildOptions: function (options, selected) {
     var optionsList = "";
     options.map(function (option) {
@@ -89,10 +90,12 @@ DG.styleBox = function () {
   var currentBorderWidth = DG.data.style.borderWidth;
   var currentShape = DG.data.style.shape;
   var currentSize = DG.data.style.size;
+  var currentNodeTextSize = DG.data.style.fontSize;
   var currentBoxBorderRadius = DG.data.style.borderRadius;
   var currentFontFace = DG.data.style.fontFace;
 
   var bgColorOptions = DG.view.buildOptions(DG.view.bgColorList, currentBgColor);
+  var nodeTextSizeOptions = DG.view.buildOptions(DG.view.textSizeList, currentNodeTextSize);
   var borderColorOptions = DG.view.buildOptions(DG.view.solidColorList, currentBorderColor);
   var edgeColorOptions = DG.view.buildOptions(DG.view.solidColorList, currentEdgeColor);
   var edgeWidthOptions = DG.view.buildOptions(DG.view.widthList, currentEdgeWidth);
@@ -107,15 +110,15 @@ DG.styleBox = function () {
     message: 'Choose style options' +
     DG.view.blankForm(
       DG.view.controlDiv('Font ', DG.view.textInputControl('fontFace', currentFontFace), "6") +
+      DG.view.controlDiv('Font Size',DG.view.selectControl("nodeTextSize", nodeTextSizeOptions), "6") +
       DG.view.controlDiv('Background Color ', DG.view.selectControl("bgColor", bgColorOptions), "6") +
       DG.view.controlDiv('Border Color ', DG.view.selectControl("borderColor", borderColorOptions), "6") +
-      DG.view.controlDiv('Edge Width ', DG.view.selectControl("edgeWidth", edgeWidthOptions), "6") +
-      DG.view.controlDiv('Edge Color ', DG.view.selectControl("edgeColor", edgeColorOptions), "6") +
-
       DG.view.controlDiv('Node Shape ', DG.view.selectControl("shape", shapeOptions), "6") +
       DG.view.controlDiv('Node Size (if label outside) ', DG.view.selectControl("nodeSize", sizeOptions), "6") +
       DG.view.controlDiv('Border radius (if box shape) ', DG.view.selectControl("boxBorderRadius", boxBorderRadiusOptions), "6") +
-      DG.view.controlDiv('Border Width ', DG.view.selectControl("borderWidth", borderWidthOptions), "6")
+      DG.view.controlDiv('Border Width ', DG.view.selectControl("borderWidth", borderWidthOptions), "6") +
+      DG.view.controlDiv('Edge Width ', DG.view.selectControl("edgeWidth", edgeWidthOptions), "6") +
+      DG.view.controlDiv('Edge Color ', DG.view.selectControl("edgeColor", edgeColorOptions), "6")
     ),
     buttons: {
 
@@ -124,6 +127,7 @@ DG.styleBox = function () {
         className: "btn-success",
         callback: function () {
           DG.data.style.fontFace = $("input#fontFace").val();
+          DG.data.style.fontSize = parseInt($("select#nodeTextSize option:selected").text());
           DG.data.style.bgColor = $("select#bgColor option:selected").text();
           DG.data.style.highlightBgColor = DG.data.style.bgColor;
           DG.data.style.border = $("select#borderColor option:selected").text();
@@ -140,6 +144,7 @@ DG.styleBox = function () {
         className: "btn-success",
         callback: function () {
           var fontFace = $("input#fontFace").val();
+          var fontSize = parseInt($("select#nodeTextSize option:selected").text());
           var bgColor = $("select#bgColor option:selected").text();
           var highlightBgColor = bgColor;
           var border = $("select#borderColor option:selected").text();
@@ -151,6 +156,7 @@ DG.styleBox = function () {
           var borderRadius = parseInt($("select#boxBorderRadius option:selected").text());
 
           DG.data.style.fontFace = fontFace;
+          DG.data.style.fontSize = fontSize;
           DG.data.style.bgColor = bgColor;
           DG.data.style.highlightBgColor = highlightBgColor;
           DG.data.style.border = border;
@@ -162,6 +168,8 @@ DG.styleBox = function () {
           DG.data.style.borderRadius = borderRadius;
 
           $.each(DG.data.nodes, function (index, node) {
+            node.font.face = fontFace;
+            node.font.size = fontSize;
             node.borderWidth = borderWidth;
             node.color.background = bgColor;
             node.color.highlight.background = highlightBgColor;
@@ -202,12 +210,14 @@ DG.nodeDialog = function (newData, callback) {
   var currentSize = node.size;
   var currentBoxBorderRadius = node.shapeProperties.borderRadius;
   var currentFontFace = node.font.face;
+  var currentFontSize = node.font.size;
 
   var bgColorOptions = DG.view.buildOptions(DG.view.bgColorList, currentBgColor);
   var borderColorOptions = DG.view.buildOptions(DG.view.solidColorList, currentBorderColor);
   var borderWidthOptions = DG.view.buildOptions(DG.view.widthList, currentBorderWidth);
   var shapeOptions = DG.view.buildOptions(DG.view.shapeList, currentShape);
   var sizeOptions = DG.view.buildOptions(DG.view.sizeList, currentSize);
+  var fontSizeOptions = DG.view.buildOptions(DG.view.textSizeList, currentFontSize);
   var boxBorderRadiusOptions = DG.view.buildOptions(DG.view.radiusList, currentBoxBorderRadius);
 
 
@@ -233,6 +243,7 @@ DG.nodeDialog = function (newData, callback) {
             textAreaTag("location_description", "Location description", DG.brToLf(node.title), 8, 30)
           ) +
           DG.view.controlDiv('Font ', DG.view.textInputControl('fontFace', currentFontFace), "6") +
+          DG.view.controlDiv('Font Size ', DG.view.selectControl("fontSize", fontSizeOptions), "6") +
           DG.view.controlDiv('Background Color ', DG.view.selectControl("bgColor", bgColorOptions), "6") +
           DG.view.controlDiv('Border Color ', DG.view.selectControl("borderColor", borderColorOptions), "6") +
           DG.view.controlDiv('Node Shape ', DG.view.selectControl("shape", shapeOptions), "6") +
@@ -250,8 +261,9 @@ DG.nodeDialog = function (newData, callback) {
           newData.label = $('#location_name').val();
           newData.title = DG.lfToBr($('#location_description').val());
           newData.font.face = $("input#fontFace").val();
+          newData.font.size = parseInt($("select#fontSize option:selected").text());
           newData.color.background = $("select#bgColor option:selected").text();
-          newData.color.highlight.background = $("select#bgColor option:selected").text();
+          newData.color.highlight.background =  newData.color.background;
           newData.color.border = $("select#borderColor option:selected").text();
           newData.borderWidth = $("select#borderWidth option:selected").text();
           newData.shape = $("select#shape option:selected").text();

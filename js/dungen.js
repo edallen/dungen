@@ -918,7 +918,7 @@ var DG = {
     // concatenate the phrase and add it to the list
 
     return relationsList;
-  },
+  }
 
 
 };

@@ -46,6 +46,19 @@ styleButton.addEventListener("click", function () {
   DG.styleBox();
 });
 
+var lockButton = $("button#lock");
+lockButton.on("click", function () {
+  if (lockButton.data("status")=== "locked"){
+    lockButton.data("status","unlocked");
+    lockButton.text("Clicks add");
+    DG.network.interaction.dragNodes = true;
+  }else{
+    lockButton.data("status","locked");
+    lockButton.text("Clicks locked");
+    DG.network.interaction.dragNodes = false;
+  }
+});
+
 var keyButton = document.getElementById("scroll-to-key");
 keyButton.addEventListener("click", function () {
   DG.scrollToKey();
@@ -96,6 +109,10 @@ function populateUI() {
 }
 
 DG.ui = {
+  locked: function(){
+    if ($("button#lock").data("status") === "locked"){return true}
+    else {return false}
+  },
   mapImages: function() {
 
   var imageArray= [
@@ -161,11 +178,9 @@ DG.ui = {
         keys.push(key.substring(3));
       }
     }
-
     if (keys.length > 0) {
       DG.ui.addOptionsToSelect(dungeonSelect, keys);
     }
-
   },
   addOptionsToSelect: function (select, optionsList) {
 
