@@ -1,4 +1,4 @@
-
+DG.isMap = true;
 
 DG.data= {
   nodes: [],
@@ -200,6 +200,8 @@ DG.makeNode = function (id, label, x, y) {
     y = id * 5;
   }
   var contents = DG.makeContents(DG.data.dungeonLevel);
+  console.dir(DG.monsterHold);
+  DG.addMonsterRelationship();
   DG.addMonstersToList();
   return {
     id: id,

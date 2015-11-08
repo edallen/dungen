@@ -1,4 +1,5 @@
 
+DG.isMap = false;
 
 DG.data= {
   nodes: [],
@@ -189,6 +190,7 @@ DG.makeNode = function (id, label) {
     highLightBorder = DG.data.style.highlightBorder;
 
   var contents = DG.makeContents(DG.data.dungeonLevel);
+
   DG.addMonstersToList();
   return {
     id: id,

@@ -119,6 +119,15 @@ var DG = {
     }
 
   },
+  addMonsterRelationship: function () {
+    // used by map to add relationships as node are added.
+    if (DG.monsterHold !== undefined) {
+       if(DG.rollFour()){
+         DG.data.notes += DG.newRelationship(DG.monsterHold)  + "\n";
+         $("#notes").val(DG.data.notes);
+       }
+    }
+  },
 
   setRandomRoomCount: function () {
     DG.roomCount = DG.rollDie(DG.minRooms, (DG.maxRooms - DG.minRooms));
@@ -152,6 +161,7 @@ var DG = {
     }
 
     DG.data.baseMonsters = [DG.drawOne(monsterSourceList[DG.data.dungeonLevel])];
+
     if (DG.rollFour()) {
       DG.data.baseMonsters.push(DG.drawOne(monsterSourceList[DG.data.dungeonLevel]))
     }
@@ -850,13 +860,17 @@ var DG = {
 
   wanderingMonstersNote: function () {
     var monsterList = "Wandering Monsters\n";
-    var monsterCount = Math.round(DG.data.nodes.length / 6) + 1;
-    if (DG.rollThree()) {
-      monsterCount += 1
+    var monsterCount = 0;
+    if(DG.isMap) { monsterCount = 4 + DG.rollDie(1, 8) } else {
+      monsterCount = Math.round(DG.data.nodes.length / 6) + 1;
+      if (DG.rollThree()) {
+        monsterCount += 1
+      }
+      if (DG.rollThree()) {
+        monsterCount += 1
+      }
     }
-    if (DG.rollThree()) {
-      monsterCount += 1
-    }
+
     for (var i = 1; i <= monsterCount; i += 1) {
       monsterList += ("" + i + ": " + DG.randomMonsters(DG.data.dungeonLevel, false) + "\n");
       DG.addMonstersToList();
@@ -867,11 +881,6 @@ var DG = {
     var relationsList = "";
     var relationship = "";
     var monster = {};
-    var target = {};
-    var intel;
-    var targetInt;
-    var plurality;
-    var name;
     // before this method need to have a hash of rolled monsters to their number
     // store in a temp value when rolled
     // commit to the hash when a node's title is set or a wandering monster is set
@@ -881,33 +890,7 @@ var DG = {
       if (DG.data.monsters.hasOwnProperty(prop)) {
         if (DG.rollFour()) {
           monster = DG.data.monsters[prop];
-          target = DG.data.monsters[DG.drawOne(Object.keys(DG.data.monsters))];
-          if (target === monster) {
-            target = DG.data.monsters[DG.drawOne(Object.keys(DG.data.monsters))];
-            if (target === monster) {
-              target = DG.data.monsters[DG.drawOne(Object.keys(DG.data.monsters))];
-            }
-          }
-          if (target.count > 1) {
-            targetName = target.name
-          } else {
-            targetName = target.single_name
-          }
-
-          intel = monster["int"];
-          if (monster.count > 1) {
-            plurality = "plural_text";
-            name = monster.name;
-
-          } else {
-
-            plurality = "single_text";
-            name = monster.single_name;
-
-          }
-          targetInt = target["int"];
-
-          relationship = "The " + name + " " + DG.randomRelationship(intel, targetInt, plurality) + " the " + targetName + ".";
+          relationship = DG.newRelationship(monster);
           relationsList += relationship + "\n";
         }
       }
@@ -918,8 +901,46 @@ var DG = {
     // concatenate the phrase and add it to the list
 
     return relationsList;
-  }
+  },
+  newRelationship: function(monster){
+    var target = {};
+    var relationship = "";
+    var target = {};
+    var intel;
+    var targetInt;
+    var plurality;
+    var name;
 
+    target = DG.data.monsters[DG.drawOne(Object.keys(DG.data.monsters))];
+    if (target === monster) {
+      target = DG.data.monsters[DG.drawOne(Object.keys(DG.data.monsters))];
+      if (target === monster) {
+        target = DG.data.monsters[DG.drawOne(Object.keys(DG.data.monsters))];
+      }
+    }
+    if (target.count > 1) {
+      targetName = target.name
+    } else {
+      targetName = target.single_name
+    }
+
+    intel = monster["int"];
+    if (monster.count > 1) {
+      plurality = "plural_text";
+      name = monster.name;
+
+    } else {
+
+      plurality = "single_text";
+      name = monster.single_name;
+
+    }
+    targetInt = target["int"];
+
+    relationship = "The " + name + " " + DG.randomRelationship(intel, targetInt, plurality) + " the " + targetName + ".";
+    return relationship;
+
+  }
 
 };
 
