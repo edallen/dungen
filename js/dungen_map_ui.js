@@ -123,6 +123,8 @@ DG.ui = {
     ["EA: Megadungeon Level 1","http://4.bp.blogspot.com/-0pr_RVQvg-8/VDYZ2G7RZvI/AAAAAAAAB7g/nh3T30dPSEs/s1600/Level1.png"],
     ["EA: Great Hall","http://1.bp.blogspot.com/-eYinXW0HVSw/VDDyu4oliXI/AAAAAAAAB6M/VED9x6DcxdQ/s1600/great%2Bhall-partially%2Bedited.png"],
     ["EA: Shadowkarst", "http://3.bp.blogspot.com/-2fhW-crpV44/U-fupnMFSGI/AAAAAAAABhA/HtcHzc7QfmE/s1600/Shadownkarst.png"],
+    ["EA: The Devil's Staircase", "https://4.bp.blogspot.com/-2_86MwGxbiE/UvEr6D_mVBI/AAAAAAAAAtI/SZOwC3_h7TA/s1600/devils_staircase.png"],
+    ["EA: Jagged Dungeon", "http://3.bp.blogspot.com/-U24J91n4lkU/VkGNG59iDAI/AAAAAAAAC84/tV1hUf2vaAA/s1600/ragged_dungeon.png"],
     ["EA: Fool's Rest", "http://1.bp.blogspot.com/-ApTeB99Mm3w/UzsnXvsbloI/AAAAAAAABPM/zuFgEED7ezQ/s1600/dungeon0401.jpg"],
     ["EA: Rough Stone Tomb", "http://4.bp.blogspot.com/-uw6z3dJxS2E/VA53qig107I/AAAAAAAABn4/EwTFgIWLt6o/s1600/big_rock_walls_1.png"],
     ["EA: Rough Tombs","http://3.bp.blogspot.com/-xBFa8wO5LdY/VA5smHdNqpI/AAAAAAAABno/WugXGscb3Ls/s1600/big_rock_walls_2.png"],

@@ -1141,6 +1141,7 @@ DG.stock = {
     "note that reveals a villain's intentions",
     "journal",
     "document",
+    "a page torn from a book",
     "handbill",
     "symbolic piece of jewelry",
     "portrait locket",

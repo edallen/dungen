@@ -84,6 +84,31 @@ var DG = {
     item = list.pop();
     return [item, list];
   },
+  wiki: function (string) {
+    var reInsert = /{{(.*?)}}/;
+    var match;
+    var matchValue;
+    var replaceText;
+    var matchSplit;
+    var matchFunc;
+    while(match = reInsert.exec(string)){
+      replaceText = "";
+      matchValue = match[1];
+      matchSplit = matchValue.split(",");
+      matchFunc = matchSplit[0];
+      console.log(matchValue);
+      if (typeof(DG[matchFunc]) === "function"){
+        console.log("function");
+        replaceText = DG.wiki(DG[matchFunc].apply(DG,matchSplit.slice(1)));
+      } else {
+        console.log("broken");
+        replaceText = matchValue;
+      }
+      string = string.replace(match[0], replaceText);
+    }
+
+    return string;
+  },
   arrayToSet: function (a) {
     var hash = {};
     for (var i = 0; i < a.length; i++)
@@ -855,7 +880,7 @@ var DG = {
 
   },
   populateNotes: function () {
-    return DG.wanderingMonstersNote() + "\n" + DG.relationsNote();
+    return DG.wiki(DG.drawOne(DG.names.dungeonNames)) +"\n\n" + DG.wanderingMonstersNote() + "\n" + DG.relationsNote();
   },
 
   wanderingMonstersNote: function () {
