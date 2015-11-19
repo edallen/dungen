@@ -101,6 +101,7 @@ DG.names = {
     "mar",
     "son",
     "thor",
+    "lund",
     "dor",
     "vil",
     "skand",
@@ -166,9 +167,9 @@ DG.names = {
     "wulf",
     "osi"
   ],
-  dungeonPlaces: ["dungeon","temple","fortress","caverns","ruins","castle","shrine","entombed city","necropolis","forgotten city","tomb","tombs","palace","mines","crypts"],  // might source from the list of theme tags instead
-  iconicNouns: ["sun","moon","sky","mountain","blades","sword","wolf","snake","lost","night"],
-  thematicNouns: ["blood","bone","sorcery","flames","fire","ice","shadow"],
+  dungeonPlaces: ["dungeon", "temple", "fortress", "caverns", "ruins", "castle", "shrine", "entombed city", "necropolis", "forgotten city", "tomb", "tombs", "palace", "mines", "crypts"],  // might source from the list of theme tags instead
+  iconicNouns: ["sun", "moon", "sky", "mountain", "blades", "sword", "wolf", "snake", "lost", "night"],
+  thematicNouns: ["blood", "bone", "sorcery", "flames", "fire", "ice", "shadow"],
   darkEmotions: ["fear",
     "madness",
     "darkness",
@@ -176,7 +177,7 @@ DG.names = {
     "terror",
     "pain"],
 
-  dungeonNames:[
+  dungeonNames: [
     "The {{dungeonPlace,c}} of the {{iconicNoun,c}}",
     "The {{dungeonPlace,c}} of {{thematicNoun,c}}",
     "The {{dungeonPlace,c}} of {{scaryAdjective,c}} {{thematicNoun,c}}",
@@ -205,26 +206,26 @@ DG.names = {
     "cult"
   ], // might want to source from a boss monster, or include the value generated in the monsters list
   scaryAdjectives: [
-      "dark",
-      "",
-      "ice",
-      "elemental",
-      "imprisoned",
-      "undying",
-      "lost",
-      "sinister",
-      "{{darkColor,c}}",
-      "forbidding",
-      "eternal",
-      "{{bossType}}",
-      "corrupted",
-      "fallen",
-      'iron',
-      "shadow",
-      "nightmare",
-      "deadly",
-      "bloody",
-      "mad"
+    "dark",
+    "",
+    "ice",
+    "elemental",
+    "imprisoned",
+    "undying",
+    "lost",
+    "sinister",
+    "{{darkColor,c}}",
+    "forbidding",
+    "eternal",
+    "{{bossType}}",
+    "corrupted",
+    "fallen",
+    'iron',
+    "shadow",
+    "nightmare",
+    "deadly",
+    "bloody",
+    "mad"
   ],
   darkColors: [
     "red",
@@ -237,91 +238,387 @@ DG.names = {
     "crimson",
     "golden",
     "blood red"
+  ],
+  angloSaxonMaleNames: [
+    'Aelle',
+    'Aelfwine',
+    'Aedelbert',
+    'Aedelfrid',
+    'Aedelhun',
+    'Aedelred',
+    'Aedelwald',
+    'Aedelwalh',
+    'Alchfrid',
+    'Aldfrid',
+    'Aldhelm',
+    'Alduini',
+    'Aldwulf',
+    'Alduulf',
+    'Alric',
+    'Andhun',
+    'Anna',
+    'Bercthun',
+    'Bertwald',
+    'Berctuald',
+    'Caedmon',
+    'Caelin',
+    'Cearl',
+    'Ceolwulf',
+    'Ceoluulf',
+    'Immin',
+    'Irminric',
+    'Octa',
+    'Oeric',
+    'Offa',
+    'Osfrid',
+    'Osred',
+    'Osric',
+    'Oswald',
+    'Osuald',
+    'Oswy',
+    'Oswyn',
+    'Peada',
+    'Penda',
+    'Raegenhere',
+    'Raegenheri',
+    'Redwald',
+    'Ricbert',
+    'Ricberct',
+    'Sabert',
+    'Saberct',
+    'Saba',
+    'Sebbi',
+    'Sigbert',
+    'Sigberct',
+    'Sighard',
+    'Sighere',
+    'Sigheri',
+    'Swefred',
+    'Suefred',
+    'Swidhelm',
+    'Thrydwulf',
+    'Tondbert',
+    'Tondberct',
+    'Tondhere',
+    'Tondheri',
+    'Wictred',
+    'Wilfrid',
+    'Wini',
+    'Wuffa',
+    'Wuscfrea',
+    'Wulfhere',
+    'Yffi'],
+  angloSaxonFemaleNames: [
+    'Acha',
+    'Aelffled',
+    'Aelbfled',
+    'Aedelberga',
+    'Tata',
+    'Aedeldreda',
+    'Aedelthryd',
+    'Aedelhild',
+    'Breguswid',
+    'Coenberg',
+    'Quoenburg',
+    'Cyneburg',
+    'Cynwise',
+    'Eabae',
+    'Eanfled',
+    'Earcongota',
+    'Edyd',
+    'Eadgyd',
+    'Hilda',
+    'Hild',
+    'Osdryd',
+    'Tortgyd',
+    'Sexburg'
+  ],
+
+  theNameWords: [
+    "{{darkColor,c}}",
+    "{{scaryAdjective,c}}",
+    'bald',
+    'hairy',
+    'fat',
+    'tall',
+    'short',
+    'ugly',
+    'blunt',
+    'bold',
+    'slow',
+    'strong',
+    'daring',
+    'brave',
+    'white',
+    'redeless',
+    'loud',
+    'silent',
+    'weasel',
+    'wild',
+    //Thanks to http://www.medievalists.net/2014/06/01/viking-nicknames/  where I found some of these
+    'bent',
+    'younger',
+    'elder',
+    'dream interpreter',
+    'slighter',
+    'witch-breaker',
+    'child sparer',
+    'haggler',
+    'fast sailing',
+    'lefthanded',
+    'clumsy',
+    'leather-neck',
+    'squint-eyed',
+    'troll burster',
+    'wordsmith',
+    'second-sighted',
+    'ball breaker',
+    'twist-breeks',
+    'horse-gelder',
+    'moss-neck',
+    'big',
+    'blue-cheek',
+    'honest',
+    'loser',
+    'blind',
+    'dreamer',
+    'rabbit',
+    'knife',
+    'toothless',
+    'stout',
+    'great heart',
+    'pious',
+    'damned',
+    'troublemaker',
+    'lazy',
+    'sow',
+    'hard',
+    'shoeless',
+    'hook',
+    'dog',
+    'rat',
+    'cat',
+    'orc slayer'
+  ],
+  dwarfPrefixes: [
+    "battle",
+    "iron",
+    "stone",
+    "gold",
+    "silver",
+    "long",
+    "short",
+    "deep",
+    "blood",
+    "true"
+  ],
+  dwarfSuffixes: [
+    "hammer",
+    "mountain",
+    "tunnel",
+    "delving",
+    "axe",
+    "sword",
+    "beard",
+    "head",
+    "hand",
+    "shield",
+    "shovel",
+    "pick",
+    "luck",
+    "born",
+    "kenning",
+    "kin",
+    "son",
+    "founder",
+    "smith"
+  ],
+  placePrefixes: [
+  "House ",
+  "Clan ",
+  "Old ",
+  "New ",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  ""
+],
+  firstNames: [
+    "{{angloSaxonMaleName}}",
+    "{{angloSaxonMaleName}}",
+    "{{angloSaxonFemaleName}}",
+    "{{oldCharName}}",
+    "{{oldCharName}}",
+    "{{oldCharName}}",
+    "{{oldCharName}}",
+    "{{oldCharName}}",
+    "{{oldCharName}}",
+    "{{oldCharName}}"
   ]
+
 };
 DG.characterNames = [
-  "{{firstName}}",
-  "{[firstName}} {{lastName}}",
-  "{{firstName}} of {{placeName}}",
-  "{{firstName}} {{nickname}}",
+  "{{firstName,c}}",
+  "{{firstName,c}} {{lastName,c}}",
+  "{{firstName,c}} of {{placePrefix,c}}{{placeName,c}}",
+  "{{firstName,c}} {{nicknamePattern,c}}",
+  "{{firstName,c}} '{{nicknamePattern,c}}' {{lastName,c}}",
+];
+
+DG.nicknamePatterns = [
+  "the {{theNameWord,c}}",
+  "{{nickname,c}}"
 ];
 
 DG.nicknames = [
-  " the {{darkColor,c}}",
-  " the {{scaryAdjective,c}}"
+  "hairybreeks",
+  "longshanks",
+  'pole-leg',
+  "pinchpenny",
+  'hard-rule',
+  'war-tooth',
+  "lackwit",
+  'longshield',
+  'quicktongue',
+  'loudsnore',
+  "{{dwarfPrefix}}{{dwarfSuffix}}",
+  "{{dwarfPrefix}}{{dwarfSuffix}}",
+  'bear bait',
+  'fastpence',
+  'keeneye',
+  "ale lover",
+  'boneshaver',
+  'two sheds',
+  'cutter',
+  'rage',
+  'hairycheek',
+  'third life',
+  'ratface',
+  'scarface',
+  'horsehung',
+  "thinhair",
+  'irontooth',
+  "foul fart",
+  "berserk's killer",
+  "ill-luck",
+  'slender-leg',
+  "bignose"
 ];
 
-DG.firstName = function(cap){
-  var string = DG.drawOne(DG.names.begin) + DG.drawOne(DG.names.end) // needs to build a good string, placeholder
-  return DG.toCase(string,cap);
+DG.dwarfPrefix = function(){
+  var string = DG.drawOne(DG.names.dwarfPrefixes); // needs to build a good string, placeholder
+  return string;
 };
 
-DG.lastName = function(cap){
-  var string = DG.drawOne(DG.names.begin) + DG.drawOne(DG.names.end) // needs to build a good string, placeholder
-  return DG.toCase(string,cap);
+DG.dwarfSuffix = function(){
+  var string = DG.drawOne(DG.names.dwarfSuffixes); // needs to build a good string, placeholder
+  return string;
 };
 
-DG.nickname = function(cap){
-  var string = DG.drawOne(DG.nicknames); 
-  return DG.toCase(string,cap);
+DG.angloSaxonMaleName = function(){
+  var string = DG.drawOne(DG.names.angloSaxonMaleNames); // needs to build a good string, placeholder
+  return string;
 };
 
-DG.dungeonPlace = function(cap){
+DG.angloSaxonFemaleName = function(){
+  var string = DG.drawOne(DG.names.angloSaxonFemaleNames); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.firstName = function (cap) {
+  var string = "";
+  string = DG.wiki(DG.drawOne(DG.names.firstNames));
+  return DG.toCase(string, cap);
+};
+
+DG.placePrefix = function (cap) {
+  var string = DG.drawOne(DG.names.placePrefixes); // needs to build a good string, placeholder
+  return DG.toCase(string, cap);
+};
+
+DG.theNameWord = function (cap) {
+  var string = DG.wiki(DG.drawOne(DG.names.theNameWords));
+  return DG.toCase(string, cap);
+};
+
+DG.lastName = function (cap) {
+  var string = DG.drawOne(DG.names.begin) + DG.drawOne(DG.names.end); // needs to build a good string, placeholder
+  return DG.toCase(string, cap);
+};
+
+DG.nickname = function (cap) {
+  var string = DG.wiki(DG.drawOne(DG.nicknames));
+  return DG.toCase(string, cap);
+};
+
+DG.nicknamePattern = function () {
+  var string = DG.wiki(DG.drawOne(DG.nicknamePatterns));
+  return string;
+};
+
+DG.dungeonPlace = function (cap) {
   var string = DG.drawOne(DG.names.dungeonPlaces);
-  return DG.toCase(string,cap);
+  return DG.toCase(string, cap);
 };
 
-DG.darkColor = function(cap){
+DG.darkColor = function (cap) {
   var string = DG.drawOne(DG.names.darkColors);
-  return DG.toCase(string,cap);
+  return DG.toCase(string, cap);
 };
 
-DG.iconicNoun = function(cap){
+DG.iconicNoun = function (cap) {
   var string = DG.drawOne(DG.names.iconicNouns);
-  return DG.toCase(string,cap);
+  return DG.toCase(string, cap);
 };
 
-DG.thematicNoun = function(cap){
+DG.thematicNoun = function (cap) {
   var string = DG.drawOne(DG.names.thematicNouns);
-  return DG.toCase(string,cap);
+  return DG.toCase(string, cap);
 };
 
-DG.darkEmotion = function(cap){
+DG.darkEmotion = function (cap) {
   var string = DG.drawOne(DG.names.darkEmotions);
-  return DG.toCase(string,cap);
+  return DG.toCase(string, cap);
 };
 
-DG.scaryAdjective = function(cap){
-  var string = DG.drawOne(DG.names.scaryAdjectives);
-  return DG.toCase(string,cap);
+DG.scaryAdjective = function (cap) {
+  var string = DG.wiki(DG.drawOne(DG.names.scaryAdjectives));
+  return DG.toCase(string, cap);
 };
 
-DG.bossType = function(cap){
+DG.bossType = function (cap) {
   var string = DG.drawOne(DG.names.bossTypes);
-  return DG.toCase(string,cap);
+  return DG.toCase(string, cap);
 };
 
-DG.oldCharName = function(cap){
+DG.oldCharName = function (cap) {
   var string = DG.drawOne(DG.names.begin) + DG.drawOne(DG.names.end) // needs to build a good string, placeholder
-  return DG.toCase(string,cap);
+  return DG.toCase(string, cap);
 };
 
-DG.placeName = function(cap){
+DG.placeName = function (cap) {
   var string = DG.drawOne(DG.names.begin) + DG.drawOne(DG.names.end) // needs to build a good string, placeholder
-  return DG.toCase(string,cap);
+  return DG.toCase(string, cap);
 };
 
-DG.characterName = function(cap){
+DG.characterName = function () {
   var string = DG.drawOne(DG.characterNames)  // needs to build a good string, placeholder
-  return DG.toCase(string,cap);
+  return string;
 };
 
 
-DG.toCase = function(str,cap){
-  if (cap === "c"){
-     //http://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript/196991#196991
-     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+DG.toCase = function (str, cap) {
+  if (cap === "c") {
+    //http://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript/196991#196991
+    return str.replace(/\w\S*/g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
   }
-  else { return str }
+  else {
+    return str
+  }
   // can add in downcasing later
 };

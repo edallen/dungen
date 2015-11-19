@@ -534,7 +534,7 @@ var DG = {
     var npcBlock = "";
     for (var n = 0; n < monsterCount; n++) {
       console.log("npc " + n);
-      npcBlock += DG.drawOne(DG.names.begin) + DG.drawOne(DG.names.end) + ': ';
+      npcBlock += DG.wiki(DG.characterName()) + ': ';
       var statList = DG.stock.npcStats.slice(0);
       var statsToDraw = DG.rollDie(-1, 4);
       var stat, popResult;
@@ -690,63 +690,25 @@ var DG = {
     return hoard;
   },
   randomMagicItem: function (treasureLevel) { // will need much more detail later and more items in big hoards
-    var item = DG.drawOne(DG.stock.magicItems);
-    if (item === "potion") {
-      item = "Potion of " + DG.drawOne(DG.stock.potions)
-    }
-    if (item === "sword") {
-      item = DG.genSword(treasureLevel)
-    }
-    if (item === "weapon") {
-      item = DG.genWeapon(treasureLevel)
-    }
-
-    if (item === "armor") {
-      item = DG.genArmor(treasureLevel)
-    }
-
-    if (item === "wand") {
-      item = DG.genWand(treasureLevel)
-    }
-    if (item === "ring") {
-      item = DG.genRing(treasureLevel)
-    }
-    if (item === "staff") {
-      item = DG.genStaff(treasureLevel)
-    }
-    if (item === "book") {
-      item = DG.genBook(treasureLevel)
-    }
-    if (item === "scroll") {
-      item = DG.genScroll(treasureLevel)
-    }
-    if (item === "trinket") {
-      item = DG.genTrinket(treasureLevel)
-    }
-    if (item === "miscellaneous") {
-      item = DG.genMisc(treasureLevel)
-    }
+    DG.treasureLevel = treasureLevel;
+    var item = DG.wiki(DG.drawOne(DG.stock.magicItems));
 
     return item;
+  },
+  potion: function (treasureLevel){
+   return "Potion of " + DG.drawOne(DG.stock.potions);
   },
   randomMinorMagicItem: function (treasureLevel) { // will need much more detail later and more items in big hoards
-    var item = DG.drawOne(DG.stock.minorMagicItems);
-    if (item === "potion") {
-      item = "Potion of " + DG.drawOne(DG.stock.potions)
-    }
-    if (item === "scroll") {
-      item = DG.genScroll(treasureLevel)
-    }
-    if (item === "trinket") {
-      item = DG.genTrinket(treasureLevel)
-    }
+    var item = DG.wiki(DG.drawOne(DG.stock.minorMagicItems));
     return item;
   },
-  genSword: function (treasureLevel) {
+  sword: function (treasureLevelArg) {
+
+    var treasureLevel = treasureLevelArg || DG.treasureLevel
     var sword = DG.drawOne(DG.stock.swords);
     var bonus = 1;
     var powerList = [];
-    for (i = 0; i < treasureLevel + 2; i += 1) {
+    for (i = 0; i < treasureLevel + 1; i += 1) {
       if (DG.rollTwo()) {
         bonus += 1
       }
@@ -767,7 +729,9 @@ var DG = {
 
     return sword;
   },
-  genWeapon: function (treasureLevel) {
+  weapon: function (treasureLevelArg) {
+
+    var treasureLevel = treasureLevelArg || DG.treasureLevel
     var weapon = DG.drawOne(DG.stock.weapons);
     var bonus = 1;
     var powerList = [];
@@ -794,7 +758,8 @@ var DG = {
 
     return weapon;
   },
-  genArmor: function (treasureLevel) {
+  armor: function (treasureLevelArg) {
+    var treasureLevel = treasureLevelArg || DG.treasureLevel
     var armor = DG.drawOne(DG.stock.armor);
 
     var bonus = 1;
@@ -821,31 +786,31 @@ var DG = {
 
     return armor;
   },
-  genWand: function (treasureLevel) {
-    var wand = "Wand of " + DG.drawOne(DG.stock.wands);
+  wand: function (treasureLevel) {
+    var wand = "Wand of " + DG.wiki(DG.drawOne(DG.stock.wands));
     return wand;
   },
-  genRing: function (treasureLevel) {
-    var ring = "Ring of " + DG.drawOne(DG.stock.rings);
+  ring: function (treasureLevel) {
+    var ring = "Ring of " + DG.wiki(DG.drawOne(DG.stock.rings));
     return ring;
   },
-  genMisc: function (treasureLevel) {
-    var misc = DG.drawOne(DG.stock.miscellaneous);
+  miscMagicItem: function (treasureLevel) {
+    var misc = DG.wiki(DG.drawOne(DG.stock.miscellaneous));
     return misc;
   },
-  genStaff: function (treasureLevel) {
-    var staff = "Staff of " + DG.drawOne(DG.stock.staves);
+  staff: function (treasureLevel) {
+    var staff = "Staff of " + DG.wiki(DG.drawOne(DG.stock.staves));
     return staff;
   },
-  genBook: function (treasureLevel) {
-    var book = DG.drawOne(DG.stock.books);
+  book: function (treasureLevel) {
+    var book = DG.wiki(DG.drawOne(DG.stock.books));
     return book;
   },
-  genScroll: function (treasureLevel) {
-    var scroll = DG.drawOne(DG.stock.scrolls);
+  scroll: function (treasureLevel) {
+    var scroll = DG.wiki(DG.drawOne(DG.stock.scrolls));
     return scroll;
   },
-  genTrinket: function (treasureLevel) {
+  trinket: function (treasureLevel) {
     var trinket = DG.drawOne(DG.stock.trinkets);
     return trinket;
   },

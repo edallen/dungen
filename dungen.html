@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<h3 style="padding-left: 50px">  <b>DunGen</b> <small>Pointcrawl Dungeon Generator by Ed Allen: <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> & <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a> </small>  New! Checkout <a href="dunmap.html">DunMap</a></h3>
+<h3 style="padding-left: 50px">  <b>DunGen</b> <small>Pointcrawl Dungeon Generator by Ed Allen: <a href = "https://sites.google.com/site/hobbyhovel">Ed's Hobby Hovel</a> & <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a> ----------  New! Checkout  </small><a href="dunmap.html">DunMap</a></h3>
 <button id="scroll-to-key" class="fixed-nav">Key</button>
 <button id= "scroll-to-top" class="fixed-nav" style="display: none">Top</button>
 <div class="container-fluid">
@@ -24,14 +24,14 @@
   </select>
   <select id="size">
     <option value = "5,10">small (5 - 10)</option>
-    <option value = "11,20">medium (11 - 20)</option>
+    <option value = "11,20" selected="true" >medium (11 - 20)</option>
     <option value = "21,40">large (21 - 40)</option>
     <option value = "41,60">huge (41 - 60)</option>
     <option value = "61,100">enormous (61 - 100)</option>
   </select>
-  <select id="pattern"> 
-    <option value="branch" >Branched</option>
+  <select id="pattern">
     <option value="branch_loops" >Branched with loops</option>
+    <option value="branch" >Branched</option>
     <!-- <option value="mixed" >Mixed</option> -->
     <option value="grid" >Grid</option> 
 	<option value="random" >Random</option>
