@@ -82,9 +82,12 @@ If you need to clear all cached data in your browser for some reason, please exp
 DunGen saves to your browser's "LocalStorage" not to a server. <b>Clearing all LocalStorage will wipe out any saved and edited dungeons.</b></p>
 
 <h3>New features and plans</h3>
-<p> Check out <a href="dunmap.html">DunMap</a>. It's a DunGen spinoff in which you load a map image from the web or your hard drive (file://path_to_the_file), click and drag to mark locations, and random stock that
-map from the same random generation tables. The initial release was November 4.</p>
-<p>I think Wilds content is broken currently and using the dungeon monster lists, probably a bug in extracting DunMap code to separate files.</p>
+<p>More name roots, so there should be more variety, settlement names get some geographical references added in like "bridge" and "hill". There is a new NPC
+naming pattern that makes organizations they are affiliated with for some of them. There are two new lists in the Notes field, one of nearby settlements and
+one of organizations, both stock from NPC generation or a few a put in if no NPCs generated any. The settlements don't integrate right with the Wilds yet, still acting like a dungeon. I intend to
+have some of the Wilds nodes generate as settlements with names and not have it put in the distance/direction references. Put in a minor tweak to suppress some magic staves and shift them to wands
+  to make the odds work out better. Historical name lists are expanded in the data but temporarily disabled while I work out a UI element to toggle them.</p>
+
 <p>
 Comments welcome at the Ruminations blog linked above or on G+. If you like hacking, take a look at the dungen_stock.js file first. 
 It's pretty easy to customize content there. DunGen is now up on <a href ='https://github.com/edallen/dungen'>Github</a>.

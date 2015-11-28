@@ -68,6 +68,10 @@ var DG = {
   rollFive: function () {
     return Math.random() < 0.83334;
   },
+  rollPareto: function(alpha,xmin){
+    var u = Math.random();
+    return Math.round(xmin / Math.pow(u, 1/alpha));
+  },
   rollOther: function (start, size, excludedRoll) {
     var roll = excludedRoll;
     while (roll == excludedRoll) {
@@ -75,7 +79,8 @@ var DG = {
     }
     return roll;
   },
-  drawOne: function (list) {
+  drawOne: function drawOne(list) {
+    if (typeof drawOne.caller != "undefined" ) {console.dir(drawOne.caller)};
     return list[DG.rollDie(0, list.length)];
   },
   shufflePopOne: function (list) {
@@ -148,7 +153,15 @@ var DG = {
     // used by map to add relationships as node are added.
     if (DG.monsterHold !== undefined) {
        if(DG.rollFour()){
-         DG.data.notes += DG.newRelationship(DG.monsterHold)  + "\n";
+         var newNote = DG.newRelationship(DG.monsterHold)  + "\n";
+         var marker = "End of Monster Relations";
+         if (DG.data.notes.indexOf(marker) === -1 ){
+           DG.data.notes +=  newNote;
+         }
+         else
+         {
+           DG.data.notes = DG.data.notes.replace(marker, newNote + marker)
+         }
          $("#notes").val(DG.data.notes);
        }
     }
@@ -799,7 +812,11 @@ var DG = {
     return misc;
   },
   staff: function (treasureLevel) {
-    var staff = "Staff of " + DG.wiki(DG.drawOne(DG.stock.staves));
+    //powerful staves need to be less frequent, so swap in wands for most
+    console.log("treasureLevel: " + treasureLevel);
+    var staff = "";
+    if ( treasureLevel > 3 ){ staff = "Staff of " + DG.wiki(DG.drawOne(DG.stock.staves)); }
+    else { staff = DG.wand(treasureLevel) }
     return staff;
   },
   book: function (treasureLevel) {
@@ -845,7 +862,41 @@ var DG = {
 
   },
   populateNotes: function () {
-    return DG.wiki(DG.drawOne(DG.names.dungeonNames)) +"\n\n" + DG.wanderingMonstersNote() + "\n" + DG.relationsNote();
+    return DG.wiki(DG.drawOne(DG.names.dungeonNames)) +"\n\n" +
+      DG.wanderingMonstersNote() + "\n" +
+      DG.relationsNote() + "\n\n" +
+      DG.organizationsNote() + '\n\n' +
+      DG.settlementsNote();
+  },
+
+  settlementsNote: function () {
+    if (DG.data.settlements.length < 3 ){
+      DG.newSettlementName('c');
+      DG.newSettlementName('c');
+      DG.newSettlementName('c');
+    }
+    var note ="Settlements in the area:\n";
+    var len = DG.data.settlements.length;
+    for (var s = 0; s < len; s ++) {
+      var sett = DG.data.settlements[s];
+      var sdata = sett[1];
+      var description = "population: " + sdata.population + ", " + sdata.prosperity + ', ' + sdata.direction;
+      note += sett[0] + ", " + description + '.\n' ; }
+    note += "End of Settlements\n"
+    return note;
+  },
+
+  organizationsNote: function () {
+    if (DG.data.organizations.length < 3 ){
+      DG.newAffiliationName('c');
+      DG.newAffiliationName('c');
+    }
+    var note = "Organizations with interests or members in the dungeon:\n";
+    var len = DG.data.organizations.length;
+    for (var s = 0; s < len; s ++) {
+      note += DG.capFirstChar(DG.data.organizations[s]) +'\n';}
+    note += "End of Organizations\n"
+    return note;
   },
 
   wanderingMonstersNote: function () {
@@ -868,7 +919,7 @@ var DG = {
     return monsterList;
   },
   relationsNote: function () {
-    var relationsList = "";
+    var relationsList = "Monster Relations\n";
     var relationship = "";
     var monster = {};
     // before this method need to have a hash of rolled monsters to their number
@@ -889,7 +940,7 @@ var DG = {
     // get a relation compatible with it as the subject
     // Get a target compatible with the relationship from this level or "another level"
     // concatenate the phrase and add it to the list
-
+    relationsList += "End of Monster Relations\n"
     return relationsList;
   },
   newRelationship: function(monster){

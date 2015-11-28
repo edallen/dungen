@@ -1,6 +1,9 @@
 DG.isMap = true;
 
 DG.data= {
+  historicalNames: false,
+  settlements: [],
+  organizations: [],
   nodes: [],
   edges: [],
   notes: '',

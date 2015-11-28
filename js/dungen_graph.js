@@ -2,6 +2,9 @@
 DG.isMap = false;
 
 DG.data= {
+  historicalNames: false,
+  settlements: [],
+  organizations: [],
   nodes: [],
     edges: [],
     notes: '',
@@ -412,7 +415,7 @@ DG.randomNodeLabel = function () {
 
 DG.randomEdgeLabel = function () {
   if (DG.data.locationType == "wilds") {
-    return this.drawOne(this.wild.edgeLabels)
+    return this.drawOne(this.wild.edgeLabels);
   }
   else {
     if (DG.data.edgeTable === undefined) {

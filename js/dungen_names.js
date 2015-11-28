@@ -1,3 +1,138 @@
+DG.characterNames = [
+  "{{firstName,c}}",
+  "{{firstName,c}} {{lastName,c}}",
+  "{{firstName,c}} of {{settlementName,c}}",
+  "{{firstName,c}} of {{affiliationName,c}}",
+  "{{firstName,c}} {{nicknamePattern,c}}",
+  "{{firstName,c}} '{{nicknamePattern,c}}' {{lastName,c}}"
+];
+
+DG.affiliationNames = [
+  "the {{scaryAdjective}} {{organization}}",
+  "the {{organization}} of {{organizationTopic}}",
+  "the {{scaryAdjective}} {{organization}} of {{organizationTopic}}",
+  "the {{color}} {{organization}}",
+  "House {{lastName,c}}",
+  "Clan {{lastName,c}}"
+];
+
+DG.colors = [
+  "red",
+  "black",
+  "blue",
+  "white",
+  "purple",
+  "green",
+  "golden",
+  "silver",
+  "gray",
+  "yellow",
+  "{{darkColor}}"
+];
+DG.organizations = [
+  "clan",
+  "house",
+  "company",
+  'council',
+  'order',
+  'knights',
+  'circle',
+  'scholars',
+  'dancers',
+  'thieves',
+  'band',
+  'guild',
+  'assassins',
+  'brotherhood',
+  'sisters',
+  'slaves',
+  'cult',
+  'congregation',
+  'syndicate',
+  'temple',
+  'church',
+  'monastery',
+  'ministry',
+  'wagoners',
+  'caravan',
+  'garrison',
+  'city',
+  'guard',
+  'watch',
+  'wizards',
+  'bandits',
+  'pirates',
+  'fleet',
+  'avatars',
+  'servants',
+  'guardians',
+  'merchants',
+  'students',
+  'sages',
+  'swords',
+  'army',
+  'legion',
+  'squadron',
+  'regiment',
+  'warband',
+  'children'
+];
+DG.organizationTopics = [
+  "the {{color}} {{thematicNoun}}",
+  "the {{color}} {{iconicNoun}}",
+  "the {{lastName}}s",
+  "{{settlementName}}",
+  "{{scaryAdjective}} {{oldCharName}}",
+  "the {{scaryAdjective}} {{thematicNoun}}",
+  "the {{scaryAdjective}} {{iconicNoun}}"
+];
+
+DG.nicknamePatterns = [
+  "the {{theNameWord,c}}",
+  "{{nickname,c}}"
+];
+
+DG.nicknames = [
+  "hairybreeks",
+  "longshanks",
+  'pole-leg',
+  "pinchpenny",
+  'hard-rule',
+  'war-tooth',
+  "lackwit",
+  'longshield',
+  'quicktongue',
+  'loudsnore',
+  "{{dwarfPrefix}}{{dwarfSuffix}}",
+  "{{dwarfPrefix}}{{dwarfSuffix}}",
+  'bear bait',
+  'fastpence',
+  'keeneye',
+  'warhound',
+  'blackblade',
+  'strongbow',
+  'the dire',
+  'the huntsman',
+  'the {{darkColor}}',
+  "ale lover",
+  'boneshaver',
+  'two sheds',
+  'cutter',
+  'rage',
+  'hairycheek',
+  'third life',
+  'ratface',
+  'scarface',
+  'horsehung',
+  "thinhair",
+  'irontooth',
+  "foul fart",
+  "berserk's killer",
+  "ill-luck",
+  'slender-leg',
+  "bignose"
+];
+
 DG.names = {
   begin: [
     "An",
@@ -91,91 +226,157 @@ DG.names = {
     "Quo",
     "Re",
     "Ri",
-    "Zis"
+    "Zis",
+    "Zul"
   ],
   end: [
-    "ril",
-    "rond",
-    "ala",
-    "dred",
-    "mar",
-    "son",
-    "thor",
-    "lund",
-    "dor",
-    "vil",
-    "skand",
-    "and",
-    "don",
-    "vis",
-    "kal",
-    "lak",
-    "van",
-    "ma",
-    "nis",
-    "wain",
-    "nor",
-    "sud",
-    "ben",
-    "lor",
-    "tin",
-    "wil",
-    "vela",
-    "mersh",
-    "okar",
-    "try",
-    "by",
-    "gast",
-    "ond",
-    "trigg",
-    "essa",
-    "aisa",
-    "tros",
-    "eddin",
-    "karth",
-    "vend",
-    "tros",
-    "nos",
     "a",
     "ae",
-    "e",
-    "ty",
-    "el",
-    "buck",
-    "voss",
-    "sind",
-    "ban",
     "amin",
-    "win",
-    "stin",
-    "vita",
-    "mund",
-    "zor",
-    "azor",
-    "vinc",
-    "us",
-    "zul",
+    "aisa",
+    "ala",
     "ana",
+    "and",
+    "anic",
+    "ano",
+    "ato",
+    'ax',
+    "azor",
+    "ban",
+    "ben",
+    "buck",
+    "bo",
+    "by",
+    "cho",
+    "con",
+    "cen",
+    'cor',
+    "corl",
+    'col',
+    'cel',
+    'din',
+    'dil',
+    'da',
+    'dar',
+    'dam',
+    'dan',
+    'dang',
+    'den',
+    'del',
+    'dei',
+    'des',
+    "don",
+    "dor",
+    "dost",
+    "dred",
+    "e",
+    "eddin",
+    "el",
+    "essa",
+    'ex',
+    "fen",
+    "fil",
+    "fer",
+    "gar",
+    "gan",
+    "gast",
+    "hor",
+    "hen",
+    "her",
+    "hill",
+    "halt",
+    "ick",
+    "is",
+    "ian",
+    "iam",
+    'ix',
+    "kar",
+    "kal",
+    "karth",
+    "kien",
+    "ken",
+    "kin",
+    "la",
+    "lak",
+    "lor",
+    "lund",
+    "ly",
+    "ma",
+    "man",
+    "mar",
+    "mersh",
+    "min",
+    "mit",
+    "mir",
+    "mo",
+    "mund",
+    "nis",
+    "nor",
+    "nos",
+    'o',
     "omor",
     "omir",
-    "ato",
-    "ano",
-    "dost",
-    "ick",
+    "ond",
+    'os',
+    "okar",
+    "osi",
+    'ox',
+    "pan",
+    "pend",
+    "quin",
+    "rel",
+    "ril",
+    "rond",
+    'ron',
+    'san',
+    'sark',
+    'sen',
+    "sind",
+    "son",
+    'skar',
+    "skand",
+    "stin",
+    "sud",
+    "thor",
+    "tin",
+    "try",
+    "trigg",
+    "tros",
+    "tros",
+    "ty",
+    "us",
+    'un',
+    'unt',
+    'ux',
+    "van",
+    "vil",
+    "voss",
+    "vela",
+    "vend",
+    "vita",
+    "vis",
+    "vinc",
+    "win",
+    "win",
+    "wil",
     "wick",
-    "anic",
+    "wain",
     "wulf",
-    "osi"
+    'x',
+    'y',
+    'yan',
+    "zul",
+    "zor"
   ],
-  dungeonPlaces: ["dungeon", "temple", "fortress", "caverns", "ruins", "castle", "shrine", "entombed city", "necropolis", "forgotten city", "tomb", "tombs", "palace", "mines", "crypts"],  // might source from the list of theme tags instead
-  iconicNouns: ["sun", "moon", "sky", "mountain", "blades", "sword", "wolf", "snake", "lost", "night"],
-  thematicNouns: ["blood", "bone", "sorcery", "flames", "fire", "ice", "shadow"],
   darkEmotions: ["fear",
     "madness",
     "darkness",
     "remorse",
     "terror",
     "pain"],
+  dungeonPlaces: ["dungeon", "temple", "sanctum", "fortress", "caverns", "ruins", "castle", "shrine", "entombed city", "necropolis", "forgotten city", "tomb", "tombs", "palace", "mines", "crypts"],  // might source from the list of theme tags instead
+  iconicNouns: ["shield", "sanctum", "stag", "horse", "dragon", "tower", "throne", "{{book}}", "sun", "quest", "skull", "wall", "moon", "sky", "tree", "temple", "child", "woman", "man", "queen", "king", "mountain", "blades", "sword", 'beast', "wolf", "snake", "spider", "lost", 'star', "night"],
+  thematicNouns: ["blood", "bone", "sorcery", "flames", "vitriol", "hate", "fire", "ice", "damned", "shadow", "death", "resistance"],
 
   dungeonNames: [
     "The {{dungeonPlace,c}} of the {{iconicNoun,c}}",
@@ -185,10 +386,10 @@ DG.names = {
     "The {{dungeonPlace,c}} of {{placeName,c}}",
     "{{oldCharName,c}}'s Lair",
     "Lair of the of the {{scaryAdjective,c}} {{bossType,c}}",
-    "The {{dungeonPlace,c}} of {{scaryAdjective,c}} {{oldCharName,c}}",
-    "The  {{scaryAdjective,c}} {{dungeonPlace,c}} of {{placeName,c}}",
+    "The {{dungeonPlace,c}} of {{scaryAdjective,c}} {{placeName,c}}",
+    "The {{scaryAdjective,c}} {{dungeonPlace,c}} of {{placeName,c}}",
     "{{dungeonPlace,c}} of the {{scaryAdjective,c}} {{bossType,c}}",
-    "{{placeName,c}}, {{dungeonPlace,c}} of {{darkEmotion,c}}",
+    "{{placeName,c}}, the {{dungeonPlace,c}} of {{darkEmotion,c}}",
     "{{placeName,c}} {{dungeonPlace,c}}"
   ],
   bossTypes: [
@@ -207,7 +408,7 @@ DG.names = {
   ], // might want to source from a boss monster, or include the value generated in the monsters list
   scaryAdjectives: [
     "dark",
-    "",
+    "withering",
     "ice",
     "elemental",
     "imprisoned",
@@ -221,8 +422,19 @@ DG.names = {
     "corrupted",
     "fallen",
     'iron',
+    'poisionous',
+    "sacred",
+    'evil',
+    'righteous',
+    'monstrous',
+    'corrupted',
+    'unholy',
+    'holy',
+    'ominous',
+    'sinful',
+    'ghastly',
     "shadow",
-    "nightmare",
+    "nightmarish",
     "deadly",
     "bloody",
     "mad"
@@ -264,7 +476,6 @@ DG.names = {
     'Caelin',
     'Cearl',
     'Ceolwulf',
-    'Ceoluulf',
     'Immin',
     'Irminric',
     'Octa',
@@ -333,7 +544,406 @@ DG.names = {
     'Tortgyd',
     'Sexburg'
   ],
-
+  norseFemaleNames: [
+    'Alfhild',
+    'Alva',
+    "Astrid",
+    "Borghild",
+    "Brynhild",
+    'Birgit',
+    "Birgitta",
+    "Brita",
+    "Dagmar",
+    "Dagrun",
+    "Eir",
+    "Freydis",
+    "Freyja",
+    "Frey",
+    "Gerd",
+    "Gudrun",
+    "Gunnhild",
+    "Gunnvor",
+    "Hilde",
+    "Ingrid",
+    "Ragnhild",
+    "Ranveig",
+    "Sigrid",
+    'Sigrunn',
+    'Siv',
+    'Solveig',
+    'Svanhild',
+    'Torhild',
+    'Torunn',
+    'Turid',
+    'Vigdis',
+    'Yngvild'
+    ],
+  norseMaleNames: [
+    'Aleifr',
+    'Alf',
+    'Alvar',
+    'Agmundr',
+    'Aki',
+    'Aage',
+    "Arnbjorg",
+    "Arnfinn",
+    'Arne',
+    'Arvid',
+    'Asa',
+    "Asgeir",
+    'Aslaug',
+    "Baldur",
+    "Bard",
+    "Bergljot",
+    'Bjorn',
+    "Bjarni",
+    "Canute",
+    'Cnut',
+    "Dag",
+    'Eirik',
+    'Einar',
+    "Erland",
+    'Erling',
+    'Eystein',
+    "Finn",
+    "Frodi",
+    'Geir',
+    'Gisle',
+    'Gunnar',
+    'Harald',
+    "Hakon",
+    'Inge',
+    'Ivar',
+    'Knut',
+    'Leif',
+    'Magnus',
+    'Olaf',
+    'Olav',
+    'Rolf',
+    'Sigurd',
+    'Snorre',
+    'Steinar',
+    'Torstein',
+    'Thor',
+    'Trygve',
+    'Ulf',
+    'Valdemar',
+    'Vidar',
+    'Yngve'
+  ],
+  frankishMaleNames: [
+     'Abbo',
+     'Adalbert',
+     'Adaldag',
+     'Adalhard',
+     'Adelard',
+     'Aega',
+     'Agilbert',
+     'Agobard',
+     'Aigulf',
+     'Alberic',
+     'Allowin',
+     'Amalricus',
+     'Amand',
+     'Amator',
+     'Angegisis',
+     'Angilbart',
+     'Angilbert',
+     'Anno',
+     'Ansegisel',
+     'Anskar',
+     'Arbitio',
+     'Arbogast',
+     'Arbogastes',
+     'Arculf',
+     'Arnoul',
+     'Arnulf',
+     'Artaud',
+     'Asselin',
+     'Atacinus',
+     'Audoen',
+     'Audomar',
+     'Audoneus',
+     'Audramnus',
+     'Baugulf',
+     'Bauto',
+     'Bavo',
+     'Benild',
+     'Berchar',
+     'Berengar',
+     'Bernard',
+     'Berno',
+     'Bero',
+     'Bertelis',
+     'Berthaire',
+     'Bertin',
+     'Bertulf',
+     'Besso',
+     'Birinus',
+     'Blutmund',
+     'Boso',
+     'Bovo',
+     'Brice',
+     'Britius',
+     'Brocard',
+     'Bruno',
+     'Burchard',
+     'Butilin',
+     'Carloman',
+     'Cassyon',
+     'Ceufroy',
+     'Charibert',
+     'Charles',
+     'Cheldric',
+     'Childebert',
+     'Childebrand',
+     'Childeric',
+     'Chilperic',
+     'Chlodmer',
+     'Chlodowig',
+     'Chlotar',
+     'Chrodegang',
+     'Clodomir',
+     'Clotaire',
+     'Clothair',
+     'Clovis',
+     'Corbinian',
+     'Cyr',
+     'Cyricus',
+     'Dado',
+     'Dagobert',
+     'Dalfin',
+     'Dodo',
+     'Dreux',
+     'Drogo',
+     'Dudon',
+     'Ebbo',
+     'Ebroin',
+     'Ebrulf',
+     'Einhard',
+     'Emme',
+     'Emmeran',
+     'Engilbert',
+     'Enurchus',
+     'Erchinoald',
+     'Evroul',
+     'Evroult',
+     'Fardulf',
+     'Faro',
+     'Flodoard',
+     'Folcard',
+     'Folmar',
+     'Fredegar',
+     'Fridolin',
+     'Fridugis',
+     'Fulbert',
+     'Fulk',
+     'Fulrad',
+     'Gerbert',
+     'Gereon',
+     'Gerold',
+     'Gifemund',
+     'Giseler',
+     'Giso',
+     'Godobald',
+     'Godun',
+     'Goisfrid',
+     'Goscelin',
+     'Gouzlim',
+     'Gozbert',
+     'Gozolon',
+     'Grifo',
+     'Grimald',
+     'Grimbald',
+     'Gunthar',
+     'Guntramn',
+     'Hagen',
+     'Halinard',
+     'Hartmut',
+     'Helinand',
+     'Helisachar',
+     'Heribert',
+     'Hildebald',
+     'Hildebold',
+     'Hildeprand',
+     'Hilduin',
+     'Hincmar',
+     'Hlodver',
+     'Huebald',
+     'Humbert',
+     'Hunald',
+     'Imbert',
+     'Imninon',
+     'Jocelin',
+     'Lambert',
+     'Lanfranc',
+     'Laudus',
+     'Lebuin',
+     'Ledger',
+     'Leger',
+     'Leodegar',
+     'Letard',
+     'Leufred',
+     'Leufroy',
+     'Leutfrid',
+     'Leuthere',
+     'Liudhard',
+     'Liudolf',
+     'Lo',
+     'Lothar',
+     'Lul',
+     'Lull',
+     'Maiuel',
+     'Maixent',
+     'Majorian',
+     'Mallobaudes',
+     'Mansuetus',
+     'Maraulf',
+     'Marcoul',
+     'Matfrid',
+     'Mauger',
+     'Médard',
+     'Meginhard',
+     'Merobaudes',
+     'Merovech',
+     'Nithard',
+     'Norbert',
+     'Nordbert',
+     'Notker',
+     'Odger',
+     'Odo',
+     'Odulf',
+     'Omer',
+     'Orderic',
+     'Otker',
+     'Ouen',
+     'Ouus',
+     'Pacatian',
+     'Pair',
+     'Pancras',
+     'Panteleon',
+     'Pepin',
+     'Philibert',
+     'Piligrim',
+     'Pippin',
+     'Poppo',
+     'Puvis',
+     'Radigis',
+     'Ragnfred',
+     'Razo',
+     'Reginald',
+     'Reginar',
+     'Remi',
+     'Reolus',
+     'Richomer',
+     'Richomeres',
+     'Riquier',
+     'Rothad',
+     'Samo',
+     'Sergius',
+     'Sicho',
+     'Sigebert',
+     'Sigibert',
+     'Suger',
+     'Suidbert',
+     'Suidger',
+     'Syagrius',
+     'Tassilo',
+     'Taurin',
+     'Tescelin',
+     'Thankmar',
+     'Théodard',
+     'Theodoric',
+     'Theodulf',
+     'Theodulph',
+     'Theudebert',
+     'Theuderic',
+     'Theutgaud',
+     'Thierry',
+     'Thietmar',
+     'Turpin',
+     'Vedast',
+     'Vicelin',
+     'Vigor',
+     'Vulmar',
+     'Waiofar',
+     'Wala',
+     'Walaric',
+     'Waldolanus',
+     'Waltgaud',
+     'Wandregisel',
+     'Wandregisilus',
+     'Wandrille',
+     'Warmann',
+     'Werinbert',
+     'Wibert',
+     'Wichmann',
+     'Willehad',
+     'Willibald',
+     'Willibrord',
+     'Wulfram',
+     'Zwentibold'
+  ],
+  frankishFemaleNames: [
+   'Adallinda',
+   'Adaltrude',
+   'Adelheid',
+   'Alpaida',
+   'Alpais',
+   'Ansgard',
+   'Aubirge',
+   'Audofleda',
+   'Baldechildis',
+   'Basina',
+   'Begga',
+   'Berenga',
+   'Bertha',
+   'Bertrada',
+   'Burgundefara',
+   'Clothild',
+   'Eadgithu',
+   'Emma',
+   'Engelberga',
+   'Ermengard',
+   'Ermentrudis',
+   'Fara',
+   'Fastrada',
+   'Foy',
+   'Genofeva',
+   'Gersvinda',
+   'Gisela',
+   'Gudula',
+   'Gudule',
+   'Gundrada',
+   'Herleva',
+   'Hildegard',
+   'Hildegarde',
+   'Hildegund',
+   'Hiltrude',
+   'Hodierna',
+   'Ingeltrude',
+   'Ingeltrudis',
+   'Joveta',
+   'Liobsynde',
+   'Liutgarde',
+   'Madelgarde',
+   'Mechtild',
+   'Moschia',
+   'Nantechildis',
+   'Oda',
+   'Ogiva',
+   'Plectrudis',
+   'Radogund',
+   'Rosamund',
+   'Rothaide',
+   'Rotrude',
+   'Rotrudis',
+   'Ruothilde',
+   'Theodelinda',
+   'Theoderada',
+   'Theutberga',
+   'Waldrada'
+  ],
   theNameWords: [
     "{{darkColor,c}}",
     "{{scaryAdjective,c}}",
@@ -434,79 +1044,219 @@ DG.names = {
     "smith"
   ],
   placePrefixes: [
-  "House ",
-  "Clan ",
-  "Old ",
-  "New ",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  ""
-],
+    "Old ",
+    "New ",
+    "Fort ",
+    "Castle ",
+    "Port ",
+    "Mount ",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  directions: [
+    "west",
+    "east",
+    "north",
+    "south"
+  ],
+  compassDirections:[
+    "west",
+    "east",
+    "north",
+    "south",
+    "southwest",
+    "southeast",
+    "northeast",
+    "northwest"
+    ],
+  travelTimes:[
+    "half a day's",
+    "a day's",
+    "two days",
+    "three days",
+    "four days",
+    "five days",
+    "six days",
+    "a week's",
+    'two weeks',
+    'three weeks',
+    "a month's"
+  ],
+  travelModes:[
+    'walk',
+    'walk',
+    'walk',
+    'ride',
+    'ride',
+    'sail'
+  ],
+  dungeonSettings:[
+    "beneath {{placeName}}",
+    "in the valley of {{placeName}}",
+    "under the Mountain of {{oldCharName}}",
+    "beneath the ruins of {{placeName}}",
+    "in the {{bodyPart}} of the god {{oldCharName}}"
+  ],
+  bodyParts:[
+    'belly',
+    'scrotum',
+    'eye',
+    'skull',
+    'head',
+    'arm',
+    'chest',
+    'leg'
+  ],
+  placeSuffixes: [
+    "hill",
+    "town",
+    "castle",
+    "ford",
+    "stone",
+    "river",
+    "gate",
+    "bridge",
+    "port",
+    " village",
+    " City",
+    "tower",
+    "bluff",
+    "ton",
+    " Woods",
+    "wood",
+    " Market",
+    "market",
+    "'s Town",
+    "'s Landing",
+    "land",
+    "'s Woods",
+    "'s Hill",
+    "'s Bend",
+    "'s Crossing",
+    "cross",
+    "'s Bridge",
+    "field",
+    "'s Field",
+    "'s Mountain",
+    " Castle",
+    "mount"
+  ],
+  settlementNames: [
+    "{{oldCharName}}",
+    "{{oldCharName}}",
+    "{{oldCharName}}{{placeSuffix}}",
+    "{{placePrefix}}{{oldCharName}}"
+  ],
   firstNames: [
+    "{{oldCharName}}",
+    "{{oldCharName}}"
+  ],
+  historicalFirstNames: [
     "{{angloSaxonMaleName}}",
     "{{angloSaxonMaleName}}",
     "{{angloSaxonFemaleName}}",
-    "{{oldCharName}}",
-    "{{oldCharName}}",
-    "{{oldCharName}}",
-    "{{oldCharName}}",
-    "{{oldCharName}}",
-    "{{oldCharName}}",
-    "{{oldCharName}}"
+    "{{frankishMaleName}}",
+    "{{frankishMaleName}}",
+    "{{frankishFemaleName}}",
+    "{{norseMaleName}}",
+    "{{norseMaleName}}",
+    "{{norseFemaleName}}"
   ]
 
 };
-DG.characterNames = [
-  "{{firstName,c}}",
-  "{{firstName,c}} {{lastName,c}}",
-  "{{firstName,c}} of {{placePrefix,c}}{{placeName,c}}",
-  "{{firstName,c}} {{nicknamePattern,c}}",
-  "{{firstName,c}} '{{nicknamePattern,c}}' {{lastName,c}}",
+
+DG.localityDescription = function(){;
+  var direction = DG.wiki("{{travelTime}} {{travelMode}} to the {{compassDirection}}")
+  var prosperity = DG.wiki("{{prosperity}}")
+  var population = DG.population();
+
+  return {'population': population, 'prosperity': prosperity, 'direction': direction }
+};
+
+DG.travelMode = function(){
+  return DG.wiki(DG.drawOne(DG.names.travelModes));
+}
+DG.compassDirection = function(){
+  var string = DG.drawOne(DG.names.compassDirections); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.settlementSize = function(){
+  var string = DG.drawOne(DG.settlementSizes); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.settlementSizes = [
+  "small",
+  "small",
+  "small",
+  "midsized",
+  "small",
+  "midsized",
+  "small",
+  "midsized",
+  "large",
+  "vast"
+];
+DG.population = function(){
+  var population = DG.rollPareto(0.7, 40);
+  return population;
+};
+
+DG.prosperity = function(){
+  var string = DG.drawOne(DG.prosperities); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.prosperities = [
+  "thriving",
+  "rich",
+  "opulent",
+  "wealthy",
+  "decaying",
+  "corrupt",
+  "stagnant",
+  "stagnant",
+  "growing",
+  "booming",
+  "divided",
+  "besieged",
+  "oppressed",
+  "surviving",
+  "shrinking",
+  "impoverished",
+  "impoverished",
+  "declining",
+  "barren",
+  "middling",
+  "haunted",
+  "accursed",
+  "gutted",
+  "half burnt",
+  "riven by vendetta",
+  "ordinary",
+  "middling",
+  "ordinary",
+  "economically mixed",
+  "destitute",
+  "destitute",
+  "bankrupt",
+  "depleted",
+  "poverty-stricken",
+  "ruined",
+  "damaged",
+  "wartorn",
+  "recovering",
+  "poor",
+  "poor",
+  "well off",
+  "prosperous",
+  "strapped"
 ];
 
-DG.nicknamePatterns = [
-  "the {{theNameWord,c}}",
-  "{{nickname,c}}"
-];
-
-DG.nicknames = [
-  "hairybreeks",
-  "longshanks",
-  'pole-leg',
-  "pinchpenny",
-  'hard-rule',
-  'war-tooth',
-  "lackwit",
-  'longshield',
-  'quicktongue',
-  'loudsnore',
-  "{{dwarfPrefix}}{{dwarfSuffix}}",
-  "{{dwarfPrefix}}{{dwarfSuffix}}",
-  'bear bait',
-  'fastpence',
-  'keeneye',
-  "ale lover",
-  'boneshaver',
-  'two sheds',
-  'cutter',
-  'rage',
-  'hairycheek',
-  'third life',
-  'ratface',
-  'scarface',
-  'horsehung',
-  "thinhair",
-  'irontooth',
-  "foul fart",
-  "berserk's killer",
-  "ill-luck",
-  'slender-leg',
-  "bignose"
-];
 
 DG.dwarfPrefix = function(){
   var string = DG.drawOne(DG.names.dwarfPrefixes); // needs to build a good string, placeholder
@@ -528,15 +1278,74 @@ DG.angloSaxonFemaleName = function(){
   return string;
 };
 
+DG.norseMaleName = function(){
+  var string = DG.drawOne(DG.names.norseMaleNames); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.norseFemaleName = function(){
+  var string = DG.drawOne(DG.names.norseFemaleNames); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.frankishMaleName = function(){
+  var string = DG.drawOne(DG.names.frankishMaleNames); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.frankishFemaleName = function(){
+  var string = DG.drawOne(DG.names.frankishFemaleNames); // needs to build a good string, placeholder
+  return string;
+};
+
 DG.firstName = function (cap) {
   var string = "";
-  string = DG.wiki(DG.drawOne(DG.names.firstNames));
+  if (typeof DG.data.historicalNames != "undefined" && DG.data.historicalNames) {
+    string = DG.wiki(DG.drawOne(DG.names.historicalFirstNames));
+  } else {
+    string = DG.wiki(DG.drawOne(DG.names.firstNames));
+  }
   return DG.toCase(string, cap);
 };
 
 DG.placePrefix = function (cap) {
-  var string = DG.drawOne(DG.names.placePrefixes); // needs to build a good string, placeholder
+  var string = DG.wiki(DG.drawOne(DG.names.placePrefixes)); // needs to build a good string, placeholder
   return DG.toCase(string, cap);
+};
+
+DG.placeSuffix = function () {
+  var string = DG.drawOne(DG.names.placeSuffixes); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.affiliationName = function () {
+  if (DG.rollThree() && DG.data.organizations.length > 0){
+    return DG.drawOne(DG.data.organizations);
+  }
+  if (DG.rollDie(1,20) < DG.data.organizations.length){
+    return DG.drawOne(DG.data.organizations);
+  }
+  return DG.newAffiliationName();
+};
+
+DG.newAffiliationName = function () {
+  var string = DG.toCase(DG.wiki(DG.drawOne(DG.affiliationNames)),'c'); // needs to build a good string, placeholder
+  DG.updateOrganizationsNote(string);
+  return string;
+};
+
+DG.updateOrganizationsNote = function(organization){
+  DG.data.organizations.push(organization);
+};
+
+DG.organization = function () {
+  var string = DG.wiki(DG.drawOne(DG.organizations)); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.organizationTopic = function () {
+  var string = DG.wiki(DG.drawOne(DG.organizationTopics)); // needs to build a good string, placeholder
+  return string;
 };
 
 DG.theNameWord = function (cap) {
@@ -560,7 +1369,7 @@ DG.nicknamePattern = function () {
 };
 
 DG.dungeonPlace = function (cap) {
-  var string = DG.drawOne(DG.names.dungeonPlaces);
+  var string = DG.wiki(DG.drawOne(DG.names.dungeonPlaces));
   return DG.toCase(string, cap);
 };
 
@@ -569,8 +1378,13 @@ DG.darkColor = function (cap) {
   return DG.toCase(string, cap);
 };
 
+DG.color = function () {
+  var string = DG.wiki(DG.drawOne(DG.colors));
+  return string;
+};
+
 DG.iconicNoun = function (cap) {
-  var string = DG.drawOne(DG.names.iconicNouns);
+  var string = DG.wiki(DG.drawOne(DG.names.iconicNouns));
   return DG.toCase(string, cap);
 };
 
@@ -589,31 +1403,61 @@ DG.scaryAdjective = function (cap) {
   return DG.toCase(string, cap);
 };
 
+DG.travelTime = function(){
+ return DG.wiki(DG.drawOne(DG.names.travelTimes));
+};
+
 DG.bossType = function (cap) {
   var string = DG.drawOne(DG.names.bossTypes);
   return DG.toCase(string, cap);
 };
 
 DG.oldCharName = function (cap) {
-  var string = DG.drawOne(DG.names.begin) + DG.drawOne(DG.names.end) // needs to build a good string, placeholder
+  var string = DG.wiki(DG.drawOne(DG.names.begin) + DG.drawOne(DG.names.end)); // needs to build a good string, placeholder
   return DG.toCase(string, cap);
 };
 
+DG.settlementName = function (cap) {
+  if (DG.rollThree() && DG.data.settlements.length > 0){
+    return DG.drawOne(DG.data.settlements)[0];
+  }
+  return DG.newSettlementName();
+};
+
+DG.newSettlementName =  function () {
+  var name = DG.toCase(DG.wiki(DG.drawOne(DG.names.settlementNames)),'c'); // needs to build a good string, placeholder
+  //side effect, caching name & description
+  DG.data.settlements.push([name, DG.localityDescription()]);
+  return name;
+};
+
 DG.placeName = function (cap) {
-  var string = DG.drawOne(DG.names.begin) + DG.drawOne(DG.names.end) // needs to build a good string, placeholder
+  var string = DG.oldCharName(cap); // needs to build a good string, placeholder
   return DG.toCase(string, cap);
 };
 
 DG.characterName = function () {
-  var string = DG.drawOne(DG.characterNames)  // needs to build a good string, placeholder
+  var string = DG.wiki(DG.drawOne(DG.characterNames));  // needs to build a good string, placeholder
   return string;
 };
 
+DG.capFirstChar = function(txt){
+  return txt.charAt(0).toUpperCase() + txt.substr(1);
+};
 
-DG.toCase = function (str, cap) {
+DG.toCase = function toCase(str, cap) {
+  if (str === undefined) {    if (typeof toCase.caller != "undefined" ) {
+    console.log("toCase called with undefined str by " + toCase.caller);}
+    return "";
+  }
   if (cap === "c") {
     //http://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript/196991#196991
     return str.replace(/\w\S*/g, function (txt) {
+      if (txt === 'of') {
+        return txt;
+      } else if  (txt === 'the'){
+        return txt;
+      }
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
   }
