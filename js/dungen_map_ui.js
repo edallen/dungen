@@ -120,6 +120,8 @@ DG.ui = {
 
   var imageArray= [
     ["Select a map",""],
+    ["EA: River Cavern 1", "https://lh3.googleusercontent.com/-hbgHpKa5fx4/Vph1EQDU3XI/AAAAAAAADKQ/XsaDJ2DTJc0/w530-h747-p-rw/16%2B-%2B1"],
+    ["EA: River Cavern 2", "https://lh3.googleusercontent.com/-sMEfIC-VvIo/VxsIUEqniQI/AAAAAAAADgQ/A6XxTqtdmnUbtOzUJNgWC530reTX8jugw/w530-h747-p-rw/f1aeb0dd-b0b1-4ac5-b92a-5fb00971fdd1"],
     ["EA: Megadungeon Level 1","http://4.bp.blogspot.com/-0pr_RVQvg-8/VDYZ2G7RZvI/AAAAAAAAB7g/nh3T30dPSEs/s1600/Level1.png"],
     ["EA: Great Hall","http://1.bp.blogspot.com/-eYinXW0HVSw/VDDyu4oliXI/AAAAAAAAB6M/VED9x6DcxdQ/s1600/great%2Bhall-partially%2Bedited.png"],
     ["EA: Shadowkarst", "http://3.bp.blogspot.com/-2fhW-crpV44/U-fupnMFSGI/AAAAAAAABhA/HtcHzc7QfmE/s1600/Shadownkarst.png"],
