@@ -92,7 +92,6 @@ $("#notes").on("clearText", function () {
 });
 $("body").on("click", "#reroll_node_title", function () {
   var contents = DG.brToLf(DG.makeContents(DG.data.dungeonLevel));
-  console.log(contents);
   $('textarea#location_description').html(contents);
 });
 

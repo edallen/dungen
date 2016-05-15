@@ -19,6 +19,7 @@ Array.prototype.remove = function () {
 // http://community.sitepoint.com/t/remove-the-element-from-array-a-if-it-exists-in-array-b/5958
 
 var DG = {
+  data: {},
   nodesDataSet: "uninitialized",
   edgesDataSet: "uninitialized",
   // Shared variables
@@ -48,10 +49,24 @@ var DG = {
   lfToBr: function (text) {
     return text.replace(new RegExp('\r?\n', 'g'), '<br>');
   },
-
+  includes: function(array,element){
+    if ($.inArray(element,array) > -1) { return true; } else { return false; }
+  },
   // Randomization Utilities -----------------------------------------------------------------
   rollDie: function (start, size) {
     return Math.floor(Math.random() * (size)) + start;
+  },
+  roll1d6: function (){
+    return DG.rollDie(1,6);
+  },
+  roll2d6: function (){
+    return DG.rollDie(1,6) + DG.rollDie(1,6);
+  },
+  roll3d6: function (){
+    return DG.rollDie(1,6) + DG.rollDie(1,6) + DG.rollDie(1,6);
+  },
+  roll3d4low: function(){
+    return Math.min(DG.rollDie(1,4), DG.rollDie(1,4), DG.rollDie(1,4));
   },
   rollOne: function () {
     return Math.random() < 0.16667;
@@ -80,7 +95,6 @@ var DG = {
     return roll;
   },
   drawOne: function drawOne(list) {
-    if (typeof drawOne.caller != "undefined" ) {console.dir(drawOne.caller)};
     return list[DG.rollDie(0, list.length)];
   },
   shufflePopOne: function (list) {
@@ -101,9 +115,9 @@ var DG = {
       matchValue = match[1];
       matchSplit = matchValue.split(",");
       matchFunc = matchSplit[0];
-      console.log(matchValue);
+  
       if (typeof(DG[matchFunc]) === "function"){
-        console.log("function");
+ 
         replaceText = DG.wiki(DG[matchFunc].apply(DG,matchSplit.slice(1)));
       } else {
         console.log("broken");
@@ -543,10 +557,9 @@ var DG = {
   },
 
   detailNpcs: function (monsterLevel, monsterCount, monsterType, wrap) {
-    console.log("monsterCount expected: " + monsterCount);
+    
     var npcBlock = "";
     for (var n = 0; n < monsterCount; n++) {
-      console.log("npc " + n);
       npcBlock += DG.wiki(DG.characterName()) + ': ';
       var statList = DG.stock.npcStats.slice(0);
       var statsToDraw = DG.rollDie(-1, 4);
@@ -813,7 +826,6 @@ var DG = {
   },
   staff: function (treasureLevel) {
     //powerful staves need to be less frequent, so swap in wands for most
-    console.log("treasureLevel: " + treasureLevel);
     var staff = "";
     if ( treasureLevel > 3 ){ staff = "Staff of " + DG.wiki(DG.drawOne(DG.stock.staves)); }
     else { staff = DG.wand(treasureLevel) }
@@ -831,6 +843,10 @@ var DG = {
     var trinket = DG.drawOne(DG.stock.trinkets);
     return trinket;
   },
+  oneHandWeapon: function() {return DG.drawOne(DG.stock.oneHandWeapons)},
+  twoHandWeapon: function() {return DG.drawOne(DG.stock.twoHandWeapons)},
+  throwingWeapon: function() {return DG.drawOne(DG.stock.throwingWeapons)},
+  missileWeapon: function() {return DG.drawOne(DG.stock.missileWeapons)},
   randomTrap: function (dungeonLevel) {
     // will tie to dungeonLevel later
     var trap = DG.drawOne(DG.stock.traps);

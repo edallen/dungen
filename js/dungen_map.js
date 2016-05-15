@@ -206,7 +206,7 @@ DG.makeNode = function (id, label, x, y) {
     y = id * 5;
   }
   var contents = DG.makeContents(DG.data.dungeonLevel);
-  console.dir(DG.monsterHold);
+
   DG.addMonsterRelationship();
   DG.addMonstersToList();
   return {
@@ -407,7 +407,6 @@ DG.initNetwork = function () {
   });
 
   DG.network.on("dragEnd", function (event) {
-    console.dir(event);
     if (event.nodes.length ==1 ){
         var eventNodeId = event.nodes[0]; // may be array position not ID
         var node = DG.network.body.nodes[eventNodeId];
