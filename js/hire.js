@@ -206,11 +206,13 @@ HR = {
 
     if (type === "servant") {HR.stats.hp = DG.roll1d6();}
     else if (type === "mercenary") {HR.stats.hp = DG.roll1d6() + 1;}
-    else{ 
-    for (var die = 1; die <= HR.stats.level; die++){  
-      HR.stats.hp +=  DG.roll1d6();
-    }} 
-
+    else{
+      for (var die = 1; die <= HR.stats.level; die++){
+        if (DG.includes(["Barbarian", "Fighter", "Ranger", "Paladin"],HR.stats.class))
+        { HR.stats.hp +=  DG.rollDie(1,8);}
+        else { HR.stats.hp +=  DG.roll1d6(); }
+      }
+    }
     HR.stats.hp += HR.stats.level * HR.conBonus();
     if (HR.stats.hp < 1){HR.stats.hp = 1;}
     return HR.stats.hp; 
@@ -218,7 +220,10 @@ HR = {
   weapons: function(type){
     if (type === "servant") {
       return DG.drawOne(["Knife", "Dagger", "Fists", "Fists", "Handaxe", "Staff", "Cudgel", "Club"]);
+    } else if (DG.includes(["Wizard", "Sorceror", "Warlock", "Illusionist"],HR.stats.class)){
+      return DG.drawOne([ "Daggers", "Staff", "Staff, Dagger"]);
     } else {
+      // will need to split out druids and monks, but for now...
       return DG.stock.weaponSet(); } 
   },
 
@@ -229,7 +234,6 @@ HR = {
     var name = DG.wiki(DG.characterName()) + ", " ;
     var type = DG.drawOne(["servant","servant","servant","mercenary","mercenary","mercenary","mercenary","leveled"]);
     var reason = HR.reason();
-    console.log("Reasonlog " + reason);
     var personality = HR.personality();
     var skills = HR.skills(type)  + HR.del();
     var race = HR.race() + " " ;

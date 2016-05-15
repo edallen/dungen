@@ -6,7 +6,7 @@ DG.stock = {
      lightArmors: ["unarmored", "hide", "gambeson", "gambeson", "studded leather", "leather", 'leather','studded leather'],
      allArmors: ["unarmored", "just helmet", "hide", "gambeson",  "leather",  "studded leather", "scale", "chainmail",  "chainmail", "scale", "scale","chainmail", "half plate", "plate"],
      unarmoredClasses: [ "Mage", "Shaman", "Sorceror", "Illusionist",  "Warlock", "Monk"],
-     lightArmoredClasses: ["Ranger", "Thief", "Barbarian", 'Druid', "Bard"],
+     lightArmoredClasses: ["Ranger", "Assassin", "Thief", "Barbarian", 'Druid', "Bard"],
      heavyArmoredClasses: ["Fighter", "Paladin", "Cleric"],
   // The class list is heavily weighted towards the original 3 + 1
   characterClasses: [
