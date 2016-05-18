@@ -1,0 +1,53 @@
+<html>
+<head>
+    <title>DunMap Dungeon Map Stocker</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+    <link href="vis/vis.css" rel="stylesheet" type="text/css" />
+    <link href="css/dungen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<h3 style="padding-left: 50px">  <b>DunList</b><small> Mobile Dungeon Stocklist  by Ed Allen</small></h3>
+Related:<a href="dungen.html">DunGen</a>, <a href="dunmap.html">DunMap</a> and <a href="hire.html">Hiring Hall</a>, Contact me: @edallen on Twitter, +EdAllen on G+, & blog <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a><p>Choose the Level. Enter your map's URL and click Load Map or pick one from the menu. When you see the map, click in rooms to place room numbers and drag to reposition.  Contents for rooms will randomly generate as you place them. The node editor will let you edit or reroll contents. </p>
+<button id="scroll-to-key" class="fixed-nav">Key</button>
+<button id= "scroll-to-top" class="fixed-nav" style="display: none">Top</button>
+<div class="container-fluid">
+    <select id="level">
+        <option value = "0">Level 1</option>
+        <option value = "1">Level 2</option>
+        <option value = "2">Level 3</option>
+        <option value = "3">Level 4</option>
+        <option value = "4">Level 5</option>
+        <option value = "5">Level 6</option>
+        <option value = "wilds">Wilds</option>
+    </select>
+
+    <button class= "btn-small" id="theme">Theme</button>
+    <button class= "btn-small" id="style">Style</button>
+    <label for="treasureMultiplier" style="padding-right: 5px">Treasure X </label><input id="treasureMultiplier" value='1.0' size='3' />
+
+
+    <label for="dungeon_name">Name for save </label><input id="dungeon_name" placeholder="Name the dungeon"/>
+    <button class= "btn-small" id="save" >Save</button>
+    <select id="saved">
+        <option>Saved Dungeons</option>
+    </select>
+    <button id="load">Load</button>
+    <button id="delete">Delete from storage</button>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!--<script  src="vendor/lodash.js"</script> -->
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootbox.min.js"></script>
+<script type="text/javascript" src="vis/vis.js"></script>
+<script type="text/javascript" src="js/dungen.js"></script>
+<script type="text/javascript" src="js/dungen_view.js"></script>
+<script type="text/javascript" src="js/dungen_list.js"></script>
+<script type="text/javascript" src="js/dungen_stock.js"></script>
+<script type="text/javascript" src="js/dungen_run.js"></script>
+<script type="text/javascript" src="js/dunlist_ui.js"></script>
+<script type="text/javascript" src="js/dungen_names.js"></script>
+</body>
+</html>
