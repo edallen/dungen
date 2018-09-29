@@ -90,6 +90,8 @@ DG.digDungeon = function (locationType) {
 
   DG.data.nodes = [];
   DG.data.edges = [];
+  DG.data.organizations = [];
+  DG.data.settlements = [];
   DG.data.monsters = {};
   DG.monsterHold = undefined;
   DG.data.locationType = locationType;
@@ -414,15 +416,15 @@ DG.initNetwork = function () {
 
         dataNode.x = node.x;
         dataNode.y = node.y;
-      }  
-        
+      }
+
   });
 
   DG.network.on("initRedraw", function (event) {
     DG.network.moveTo({position: {x:0, y:0}, scale: 1.0 });
   });
 
-  
+
 };
 
 
