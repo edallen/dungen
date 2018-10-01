@@ -1,5 +1,101 @@
+// need a better, more generalized approach to class weapon lists
+
+DG.setupHyperborea = function(){
+  DG.source.characterClasses = DG.stock.hyperborea.characterClasses;
+  DG.source.races = DG.stock.hyperborea.races;
+  DG.source.fighterClasses = DG.stock.hyperborea.fighterClasses;
+  DG.source.mageClasses = DG.stock.hyperborea.mageClasses;
+  DG.source.druidClasses = ["druid"];
+  DG.source.monkClasses = ["monk"];
+  DG.source.unarmoredClasses = DG.stock.unarmoredClasses;
+  DG.source.lightArmoredClasses = DG.stock.hyperborea.lightArmoredClasses;
+  DG.source.mediumArmoredClasses = DG.stock.hyperborea.mediumArmoredClasses;
+  DG.source.heavyArmoredClasses = DG.stock.hyperborea.heavyArmoredClasses;
+  DG.source.monkWeapons = [ "Fists", "Spear", "Daggers", "Sword", "Staff", "Jittes", "Tonfa", "Dagger"];
+  DG.source.servantWeapons = ["Knife", "Dagger", "Fists", "Fists", "Handaxe", "Staff", "Cudgel", "Club"];
+  DG.source.mageWeapons = [ "Daggers", "Staff", "Staff & Dagger"];
+  DG.source.druidWeapons = ["Knife", "Dagger", "Spear", "Sickle", "Shortsword","Handaxe", "Staff", "Cudgel", "Club", "Bow"];
+}
+DG.setupClassic = function(){
+  DG.source.characterClasses = DG.stock.characterClasses;
+  DG.source.races = DG.stock.humanWeightedPcRaces;
+  DG.source.fighterClasses = ["barbarian", "fighter", "ranger", "paladin"];
+  DG.source.mageClasses = ["wizard", "sorceror", "warlock", "illusionist"];
+  DG.source.druidClasses = ["druid"];
+  DG.source.monkClasses = ["monk"];
+  DG.source.unarmoredClasses = DG.stock.unarmoredClasses;
+  DG.source.lightArmoredClasses = DG.stock.lightArmoredClasses;
+  DG.source.mediumArmoredClasses = DG.stock.mediumArmoredClasses;
+  DG.source.heavyArmoredClasses = DG.stock.heavyArmoredClasses;
+  DG.source.monkWeapons = [ "Fists", "Spear", "Daggers", "Sword", "Staff", "Jittes", "Tonfa", "Dagger"];
+  DG.source.servantWeapons = ["Knife", "Dagger", "Fists", "Fists", "Handaxe", "Staff", "Cudgel", "Club"];
+  DG.source.mageWeapons = [ "Daggers", "Staff", "Staff & Dagger"];
+  DG.source.druidWeapons = ["Knife", "Dagger", "Spear", "Sickle", "Shortsword","Handaxe", "Staff", "Cudgel", "Club", "Bow"];
+}
 DG.data.settlements = [];
 DG.data.organizations = [];
+DG.source = {};
+
+DG.setSource = function(checked){
+  DG.hyperborea = checked;
+  if (DG.hyperborea){
+    DG.setupHyperborea();
+  }
+  else {
+    DG.setupClassic();
+  }
+};
+DG.setSource($('#hyperborea').is(':checked'));
+
+DG.source.mercenaryArmors = DG.stock.mercenaryArmors;
+DG.source.allArmors = DG.stock.allArmors;
+DG.source.lightArmors = DG.stock.lightArmors;
+DG.source.servantArmors = DG.stock.servantArmors;
+DG.source.weaponSet = DG.stock.weaponSet;
+DG.source.servantSkills = [
+    "Porter",
+    "Torchbearer",
+    "Porter",
+    "Torchbearer",
+    "Porter",
+    "Torchbearer",
+    "Charcoal burner",
+    "Farmer",
+    "Farmhand",
+    "Sailor",
+    "Ne'er do well",
+    "Lout",
+    "Lackey",
+    "Cook",
+    "Trapper",
+    "Scholar",
+    "Stablehand",
+    "Crafter",
+    "Barber Surgeon",
+    "Dogsbody",
+    "Domestic"
+  ];
+
+  DG.source.mercenarySkills = [
+    "Mercenary",
+    "Soldier",
+    "Guard",
+    "Mercenary",
+    "Soldier",
+    "Guard",
+    "Bandit",
+    "Brigand",
+    "Thug",
+    "Huntsman",
+    "Hunter",
+    "Warrior",
+    "Graverobber",
+    "Berserk",
+    "Armsman",
+    "Guide",
+    "Pirate"
+  ];
+
 HR = {
   rollStats: function(){
     var staLine;
@@ -34,7 +130,7 @@ HR = {
   add10guys: function(){
     var list;
     var guy;
-    for (gc = 1; gc <= 10; gc++){ 
+    for (gc = 1; gc <= 10; gc++){
       guy = HR.oneGuy();
       HR.addToList(guy);
     }
@@ -43,69 +139,27 @@ HR = {
     var list;
     list = "";
     var maxcnt = DG.roll1d6();
-     for (gc = 1; gc <= maxcnt; gc++){ 
+     for (gc = 1; gc <= maxcnt; gc++){
       guy = HR.oneGuy();
       HR.addToList(guy);
     }
   },
   del: function del(){ return "\n"},
-  servantSkills: [
-    "Porter", 
-    "Torchbearer", 
-    "Porter", 
-    "Torchbearer", 
-    "Porter", 
-    "Torchbearer", 
-    "Charcoal burner", 
-    "Farmer",
-    "Farmhand",
-    "Sailor", 
-    "Ne'er do well",
-    "Lout", 
-    "Lackey",
-    "Cook", 
-    "Trapper", 
-    "Scholar", 
-    "Stablehand", 
-    "Crafter", 
-    "Barber Surgeon", 
-    "Dogsbody", 
-    "Domestic" 
-   ],
-   mercenarySkills: [
-     "Mercenary",
-     "Soldier",
-     "Guard",
-     "Mercenary",
-     "Soldier",
-     "Guard",
-     "Bandit",     
-     "Brigand",
-     "Thug",
-     "Huntsman",
-     "Hunter",
-     "Warrior",
-     "Graverobber",
-     "Berserk",
-     "Armsman",
-     "Guide",
-     "Pirate"
-   ],
   skills: function skills (type){
     if (type === "servant"){
-      return DG.drawOne(HR.servantSkills);
-    } else if (type === "mercenary"){ return DG.drawOne(HR.mercenarySkills); }
+      return DG.drawOne(DG.source.servantSkills);
+    } else if (type === "mercenary"){ return DG.drawOne(DG.source.mercenarySkills); }
     else { // levelled
       HR.stats.level = DG.roll3d4low();
-      HR.stats.class =  DG.capFirstChar(DG.drawOne( DG.stock.characterClasses ));
-      return  HR.stats.class + " " + HR.stats.level;
+      HR.stats.class =  DG.drawOne( DG.source.characterClasses );
+      return  DG.capFirstChar(HR.stats.class) + " " + HR.stats.level;
     }
   },
   personality: function(){
     if (DG.rollThree() ){ return DG.drawOne(DG.stock.allAttitudes) + " " ; }
     else {return ""};
   },
-  reason: function(){ if (DG.rollFour()){return ""} 
+  reason: function(){ if (DG.rollFour()){return ""}
    return "" + HR.del() + "Reason to hire on: " + DG.drawOne([
      "Needs the money to eat",
      "Nearly broke",
@@ -129,7 +183,7 @@ HR = {
      "Attracted to a PC",
      "Finds something admirable about a PC",
      "Wants revenge on a PC",
-     "Doppelganger",   
+     "Doppelganger",
      "To spy on the party for someone powerful",
      "Cultist with a mission",
      "Proselytizer",
@@ -143,59 +197,51 @@ HR = {
      "Vampire bitten, starting to hunger and wants to find a place in the dungeon out of the light",
      "Lycanthrope bitten and feels the change coming on",
      "A personal quest"
-  ]); 
+  ]);
   },
-  race: function(){ return DG.capFirstChar(DG.drawOne([
-  "human", 
-  "human", 
-  "human", 
-  "human", 
-  "human", 
-  "human", 
-  "dwarf", 'elf',
-  "dwarf", 'elf',
-  'halfling','half-elf','gnome','half-orc']) ); },
+  race: function(){ return DG.capFirstChar(DG.drawOne(DG.source.races) ); },
   armor: function(type){
     var armorType = "";
-     if (type === "servant"){ armorType = DG.drawOne(DG.stock.servantArmors); }
-     else if (type === "mercenary"){ armorType = DG.drawOne(DG.stock.mercenaryArmors); }
-     else if (DG.includes( DG.stock.unarmoredClasses, HR.stats.class)) { armorType = DG.drawOne( DG.stock.servantArmors ); } 
-     else if (DG.includes( DG.stock.lightArmoredClasses, HR.stats.class)) { armorType = DG.drawOne( DG.stock.lightArmors ); } 
-     else if (DG.includes( DG.stock.heavyArmoredClasses, HR.stats.class)) { armorType = DG.drawOne( DG.stock.allArmors ); }
-     else { armorType = DG.drawOne(DG.stock.mercenaryArmors); } // missed a class?
+     if (type === "servant"){ armorType = DG.drawOne(DG.source.servantArmors); }
+     else if (type === "mercenary"){ armorType = DG.drawOne(DG.source.mercenaryArmors); }
+     else if (DG.includes( DG.source.unarmoredClasses, HR.stats.class)) { armorType = DG.drawOne( DG.source.servantArmors ); }
+     else if (DG.includes( DG.source.lightArmoredClasses, HR.stats.class)) { armorType = DG.drawOne( DG.source.lightArmors ); }
+     else if (DG.includes( DG.source.mediumArmoredClasses, HR.stats.class)) { armorType = DG.drawOne( DG.source.mediumArmors ); }
+     else if (DG.includes( DG.source.heavyArmoredClasses, HR.stats.class)) { armorType = DG.drawOne( DG.source.allArmors ); }
+     else { armorType = DG.drawOne(DG.source.mercenaryArmors); } // missed a class?
      return DG.capFirstChar(armorType);
   },
-  conBonus: function(){ 
+  conBonus: function(){
     var con = HR.stats.con;
     var b
     switch (con){
-      case 3: 
+      case 3:
       case 4:
-      case 5: 
-        b = -2; 
+      case 5:
+        b = -2;
         break;
       case 6:
       case 7:
-      case 8: 
-        b = -1; 
+      case 8:
+        b = -1;
         break;
       case 9:
       case 10:
       case 11:
-      case 12: 
-        b = 0; 
+      case 12:
+        b = 0;
         break;
-      case 13: 
+      case 13:
       case 14:
-      case 15: 
-        b = +1; 
+      case 15:
+        b = +1;
         break;
       case 16:
-      case 17: 
-        b = +2; 
+      case 17:
+        b = +2;
         break;
-      case 18: 
-        b = +3; 
+      case 18:
+        b = +3;
         break;
       default: console.log("Found no bonus for constitution of " + b);
     }
@@ -208,23 +254,26 @@ HR = {
     else if (type === "mercenary") {HR.stats.hp = DG.roll1d6() + 1;}
     else{
       for (var die = 1; die <= HR.stats.level; die++){
-        if (DG.includes(["Barbarian", "Fighter", "Ranger", "Paladin"],HR.stats.class))
+        if (DG.includes(DG.source.fighteClasses,HR.stats.class))
         { HR.stats.hp +=  DG.rollDie(1,8);}
         else { HR.stats.hp +=  DG.roll1d6(); }
       }
     }
     HR.stats.hp += HR.stats.level * HR.conBonus();
     if (HR.stats.hp < 1){HR.stats.hp = 1;}
-    return HR.stats.hp; 
+    return HR.stats.hp;
   },
   weapons: function(type){
     if (type === "servant") {
-      return DG.drawOne(["Knife", "Dagger", "Fists", "Fists", "Handaxe", "Staff", "Cudgel", "Club"]);
-    } else if (DG.includes(["Wizard", "Sorceror", "Warlock", "Illusionist"],HR.stats.class)){
-      return DG.drawOne([ "Daggers", "Staff", "Staff, Dagger"]);
+      return DG.drawOne(DG.source.servantWeapons);
+    } else if (DG.includes(DG.source.mageClasses,HR.stats.class)){
+      return DG.drawOne(DG.source.mageWeapons);
+    } else if (DG.includes(DG.source.druidClasses,HR.stats.class)){
+      return DG.drawOne(DG.source.druidWeapons);
+    } else if (DG.includes(DG.source.monkClasses,HR.stats.class)){
+      return DG.drawOne(DG.source.monkWeapons);
     } else {
-      // will need to split out druids and monks, but for now...
-      return DG.stock.weaponSet(); } 
+      return DG.source.weaponSet(); }
   },
 
   oneGuy: function(){
@@ -251,5 +300,6 @@ $( document ).ready(function() {
 
   $("#generate1d6").on("click", function(){HR.generate1d6guys();});
   $("#add10").on("click", function(){HR.add10guys();});
+  $("#hyperborea").on("click", function(){DG.setSource($("#hyperborea").is(':checked'))})
 
 });

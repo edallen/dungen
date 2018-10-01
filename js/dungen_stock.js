@@ -2,12 +2,28 @@
 
 DG.stock = {
      servantArmors: ["unarmored", "helmet", "hide", "gambeson", "leather", "unarmored"],
-     mercenaryArmors: ["unarmored", "just helmet", "hide", "gambeson",  "gambeson", "studded leather", "leather", "leather", "scale", "chainmail", "scale", "chainmail", "half plate"],
+     mercenaryArmors: ["unarmored", "helmet", "hide", "gambeson",  "gambeson", "studded leather", "leather", "leather", "scale", "chainmail", "scale", "chainmail", "half plate"],
      lightArmors: ["unarmored", "hide", "gambeson", "gambeson", "studded leather", "leather", 'leather','studded leather'],
-     allArmors: ["unarmored", "just helmet", "hide", "gambeson",  "leather",  "studded leather", "scale", "chainmail",  "chainmail", "scale", "scale","chainmail", "half plate", "plate"],
-     unarmoredClasses: [ "Mage", "Shaman", "Sorceror", "Illusionist",  "Warlock", "Monk"],
-     lightArmoredClasses: ["Ranger", "Assassin", "Thief", "Barbarian", 'Druid', "Bard"],
-     heavyArmoredClasses: ["Fighter", "Paladin", "Cleric"],
+     mediumArmors: ["unarmored", "helmet", "hide", "gambeson",  "leather",  "studded leather", "chainmail", "chainmail"],
+     allArmors: ["unarmored", "helmet", "hide", "gambeson",  "leather",  "studded leather", "chainmail", "scale", "scale", "chainmail", "half plate", "plate"],
+     unarmoredClasses: [ "mage", "shaman", "sorceror", "illusionist", "warlock", "monk"],
+     lightArmoredClasses: ["assassin", "thief",  'druid'],
+     mediumArmoredClasses: ["ranger", "barbarian", "bard"],
+     heavyArmoredClasses: ["fighter", "paladin", "cleric"],
+     humanWeightedPcRaces: [
+     "human",
+     "human",
+     "human",
+     "human",
+     "human",
+     "human",
+     "dwarf", 'elf',
+     "dwarf", 'elf',
+     'halfling','half-elf','gnome','half-orc'],
+     unweightedPcRaces: [
+     "human",
+     "dwarf", 'elf',
+     'halfling','half-elf','gnome','half-orc'],
   // The class list is heavily weighted towards the original 3 + 1
   characterClasses: [
     "fighter",
@@ -1348,10 +1364,10 @@ DG.stock = {
     'Cursed'
   ],
   weaponSet: function (){return DG.wiki(DG.drawOne(DG.stock.weaponSets));},
-  weaponSets: ["{{oneHandWeapon}} and Shield", 
-  "{{throwingWeapon}}, {{oneHandWeapon}} and Shield", 
+  weaponSets: ["{{oneHandWeapon}} and Shield",
+  "{{throwingWeapon}}, {{oneHandWeapon}} and Shield",
   "{{twoHandWeapon}}",
-  "{{throwingWeapon}}, {{oneHandWeapon}}",  
+  "{{throwingWeapon}}, {{oneHandWeapon}}",
   "{{twoHandWeapon}}, {{oneHandWeapon}}",
   "{{oneHandWeapon}} and {{oneHandWeapon}}",
   "{{missileWeapon}}, {{oneHandWeapon}}"],
@@ -1460,7 +1476,7 @@ DG.stock = {
     "Falchion"
   ],
   twoHandWeapons: [
-    "Katana", 
+    "Katana",
     "Great sword",
     "Great sword",
     "Zweihander Flamberge",
@@ -2674,4 +2690,61 @@ DG.wild = {
     "Forest"
   ]
 
+};
+
+DG.stock.hyperborea = {
+  unarmoredClasses: [ "mage", "cryomancer", "pyromancer","necromancer","priest","illusionist","witch","monk"],
+  lightArmoredClasses: ["assassin", "shaman", "thief",'purloiner','scout','legerdemainist'],
+  mediumArmoredClasses:["bard", "warlock", 'druid', "huntsman"],
+  heavyArmoredClasses: ["fighter", "paladin", "cleric", "runegraver", "cataphract", "ranger", "berserker", "barbarian"],
+  races: [
+    "Common",
+    "Amazon",
+    "Atlantean",
+    "Esquimaux",
+    "Hyperborean",
+    "Ixian",
+    "Kelt",
+    "Kimmeri-Kelt",
+    "Pict",
+    "Half-blood Pict",
+    "Viking",
+    "Other race"
+  ],
+characterClasses: [
+ "fighter",
+ "fighter",
+ "fighter",
+ "barbarian",
+ "barserker",
+ "cataphract",
+ "huntsman",
+ "ranger",
+ "paladin",
+ "warlock",
+ "mage",
+ "mage",
+ "mage",
+ "illusionist",
+ "cryomancer",
+ "pyromancer",
+ "necromancer",
+ "witch",
+ "cleric",
+ "cleric",
+ "cleric",
+ "druid",
+ "monk",
+ "priest",
+ "runegraver",
+ "shaman",
+ "thief",
+ "thief",
+ "thief",
+ "assassin",
+ "bard",
+ "legerdemainist",
+ "purloiner",
+ "scout"
+],
 };
