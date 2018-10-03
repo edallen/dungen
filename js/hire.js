@@ -7,7 +7,7 @@ DG.setupHyperborea = function(){
   DG.source.mageClasses = DG.stock.hyperborea.mageClasses;
   DG.source.druidClasses = ["druid"];
   DG.source.monkClasses = ["monk"];
-  DG.source.unarmoredClasses = DG.stock.unarmoredClasses;
+  DG.source.unarmoredClasses = DG.stock.hyperborea.unarmoredClasses;
   DG.source.lightArmoredClasses = DG.stock.hyperborea.lightArmoredClasses;
   DG.source.mediumArmoredClasses = DG.stock.hyperborea.mediumArmoredClasses;
   DG.source.heavyArmoredClasses = DG.stock.hyperborea.heavyArmoredClasses;
@@ -69,7 +69,7 @@ DG.source.servantSkills = [
     "Cook",
     "Trapper",
     "Scholar",
-    "Stablehand",
+    "Muleteer",
     "Crafter",
     "Barber Surgeon",
     "Dogsbody",
@@ -262,7 +262,7 @@ HR = {
     else if (type === "mercenary") {HR.stats.hp = DG.roll1d6() + 1;}
     else{
       for (var die = 1; die <= HR.stats.level; die++){
-        if (DG.includes(DG.source.fighteClasses,HR.stats.class))
+        if (DG.includes(DG.source.fighterClasses,HR.stats.class))
         { HR.stats.hp +=  DG.rollDie(1,8);}
         else { HR.stats.hp +=  DG.roll1d6(); }
       }
