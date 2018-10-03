@@ -50,7 +50,7 @@ DG.organizations = [
   'circle',
   'city',
   'clan',
-  "company",
+  'company',
   'congregation',
   'confederation',
   'corporation',
@@ -92,7 +92,7 @@ DG.organizations = [
   'sisters',
   'slaves',
   'society',
-  'sorcerors',
+  'sorcerers',
   'syndicate',
   'school',
   'scholars',
@@ -275,6 +275,7 @@ DG.names = {
     "amin",
     "aisa",
     "ala",
+    "ara",
     "ana",
     "and",
     "anic",
@@ -329,6 +330,8 @@ DG.names = {
     "is",
     "ian",
     "iam",
+    'in',
+    'ina',
     'ix',
     "kar",
     "kal",
@@ -354,6 +357,7 @@ DG.names = {
     "nor",
     "nos",
     'o',
+    'or',
     "omor",
     "omir",
     "ond",
@@ -368,6 +372,7 @@ DG.names = {
     "ril",
     "rond",
     'ron',
+    'rok',
     'san',
     'sark',
     'sen',
@@ -392,6 +397,7 @@ DG.names = {
     "vil",
     "voss",
     "vela",
+    'ven',
     "vend",
     "vita",
     "vis",
@@ -433,6 +439,7 @@ DG.names = {
     "{{placeName,c}} {{dungeonPlace,c}}"
   ],
   bossTypes: [
+    "beast",
     "lich",
     "wizard",
     "vampire",
@@ -442,6 +449,7 @@ DG.names = {
     "dragon",
     "overlord",
     "goddess",
+    "tyrant",
     "king",
     "god",
     "cult"
@@ -1014,13 +1022,15 @@ DG.names = {
     "{{darkColor,c}}",
     "{{scaryAdjective,c}}",
     'bald',
+
+    'blind',
+    'blunt',
+    'bold',
     'hairy',
     'fat',
     'tall',
     'short',
     'ugly',
-    'blunt',
-    'bold',
     'slow',
     'strong',
     'daring',
@@ -1056,7 +1066,6 @@ DG.names = {
     'blue-cheek',
     'honest',
     'loser',
-    'blind',
     'dreamer',
     'rabbit',
     'knife',
@@ -1114,6 +1123,8 @@ DG.names = {
     "New ",
     "Fort ",
     "Castle ",
+    "High ",
+    "Dark ",
     "Port ",
     "Mount ",
     "",
@@ -1163,6 +1174,7 @@ DG.names = {
     "beneath {{placeName}}",
     "in the valley of {{placeName}}",
     "under the Mountain of {{oldCharName}}",
+    "on the peak of Mount {{oldCharName}}",
     "beneath the ruins of {{placeName}}",
     "in the {{bodyPart}} of the god {{oldCharName}}"
   ],
@@ -1218,7 +1230,10 @@ DG.names = {
   ],
   firstNames: [
     "{{oldCharName}}",
-    "{{oldCharName}}"
+    "{{oldCharName}}",
+    "{{oldCharName}}",
+    "{{oldCharName}}",
+    "{{historicalFirstName}}"
   ],
   historicalFirstNames: [
     "{{angloSaxonMaleName}}",
@@ -1385,7 +1400,7 @@ DG.placeSuffix = function () {
 };
 
 DG.affiliationName = function () {
-  if (DG.rollThree() && DG.data.organizations.length > 0){
+  if (DG.rollTwo() && DG.data.organizations.length > 0){
     return DG.drawOne(DG.data.organizations);
   }
   if (DG.rollDie(1,20) < DG.data.organizations.length){
@@ -1480,6 +1495,10 @@ DG.bossType = function (cap) {
 
 DG.oldCharName = function (cap) {
   var string = DG.wiki(DG.drawOne(DG.names.begin) + DG.drawOne(DG.names.end)); // needs to build a good string, placeholder
+  return DG.toCase(string, cap);
+};
+DG.historicalFirstName = function (cap) {
+  var string = DG.wiki(DG.drawOne(DG.names.historicalFirstNames)); // needs to build a good string, placeholder
   return DG.toCase(string, cap);
 };
 
