@@ -268,7 +268,7 @@ HR = {
       }
     }
     HR.stats.hp += HR.stats.level * HR.conBonus();
-    if (HR.stats.hp < 1){HR.stats.hp = HR.stats.level;}
+    if (HR.stats.hp < HR.stats.level){HR.stats.hp = HR.stats.level;}
     return HR.stats.hp;
   },
   weapons: function(type){
