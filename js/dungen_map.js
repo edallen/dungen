@@ -4,6 +4,8 @@ DG.data= {
   historicalNames: false,
   settlements: [],
   organizations: [],
+  monster_relations: [],
+  wandering_monsters: [],
   nodes: [],
   edges: [],
   notes: '',
@@ -92,6 +94,7 @@ DG.digDungeon = function (locationType) {
   DG.data.edges = [];
   DG.data.organizations = [];
   DG.data.settlements = [];
+  DG.data.monster_relations = [];
   DG.data.monsters = {};
   DG.monsterHold = undefined;
   DG.data.locationType = locationType;
@@ -109,7 +112,7 @@ DG.digDungeon = function (locationType) {
   DG.loadMapImage();
 
   DG.initNetwork();
-  $("#notes").val(DG.data.notes);
+  DG.ui.populateNotesFields();
 };
 
 DG.loadMapImage = function(){
@@ -427,21 +430,8 @@ DG.initNetwork = function () {
 
 };
 
+// TODO Need to make this DRY with same method in dungen_graph
 
-DG.replaceText = function (textFrom, textTo) {
-  var len = DG.data.nodes.length;
-
-  function replaceAll(findVal, replaceVal, str) {
-    return str.replace(new RegExp(findVal, 'g'), replaceVal);
-  }
-
-  for (i = 0; i < len; i++) {
-    DG.data.nodes[i].title = replaceAll(textFrom, textTo, DG.data.nodes[i].title)
-  }
-  DG.data.notes = replaceAll(textFrom, textTo, DG.data.notes);
-  $("#notes").val(DG.data.notes);
-  DG.fillKey();
-};
 
 DG.nameNode = function(nodeNum){
   return "" + (nodeNum);

@@ -68,23 +68,80 @@ replaceButton.addEventListener("click", function () {
 });
 
 $('#notes').change(function () {
-  DG.data.notes = $(this).val()
+  DG.data.notes = $(this).val();
 });
-$("#notes").on("clearText", function () {
-  $(this).val('');
+
+$('#settlements').change(function () {
+  DG.data.settlements = $(this).val().split("\n");
 });
+
+$('#wandering_monsters').change(function () {
+  DG.data.wandering_monsters = $(this).val().split("\n");
+});
+
+$('#organizations').change(function () {
+  DG.data.organizations = $(this).val().split("\n");
+});
+
+$('#monster_relations').change(function () {
+  DG.data.monster_relations = $(this).val().split("\n");
+});
+
+// $("#notes").on("clearText", function () {
+//   $(this).val('');
+//   DG.data.notes = $(this).val();
+// });
+
 $("body").on("click", "#reroll_node_title", function () {
   var contents = DG.brToLf(DG.makeContents(DG.data.dungeonLevel));
   console.log(contents);
   $('textarea#location_description').html(contents);
 });
 
-
 function populateUI() {
   DG.ui.populateSavedSelect();
 }
 
 DG.ui = {
+  populateMonsterRelations: function() {
+    $("#monster_relations").val(DG.monsterRelationsNote());
+    DG.data.monster_relations = $("#monster_relations").val().split("\n");
+  },
+  populateWanderingMonsters: function() {
+    $("#wandering_monsters").val(DG.wanderingMonstersNote());
+    DG.data.wandering_monsters = $("#wandering_monsters").val().split("\n");
+  },
+  populateOrganizations: function() {
+    $("#organizations").val(DG.organizationsNote());
+    DG.data.organizations = $("#organizations").val().split("\n");
+  },
+  populateSettlements: function() {
+    $("#settlements").val(DG.settlementsNote());
+    DG.data.settlements = $("#settlements").val().split("\n");
+  },
+  populateNotesFields: function () {
+    $("#notes").val(DG.data.notes);
+    DG.ui.populateSettlements();
+    DG.ui.populateMonsterRelations();
+    DG.ui.populateWanderingMonsters();
+    DG.ui.populateOrganizations();
+  },
+  loadNotesFields: function () {
+    $("#notes").val(DG.data.notes);
+    DG.ui.loadDataNote(DG.data.monster_relations,$("#monster_relations"));
+    DG.ui.loadDataNote(DG.data.wandering_monsters, $("#wandering_monsters"));
+    DG.ui.loadDataNote(DG.data.organizations,$("#organizations"));
+    DG.ui.loadDataNote(DG.data.settlements, $("#settlements"));
+  },
+  loadDataNote: function (data,jq_note) {
+    var len = data.length;
+    var noteText = "";
+    for (var s = 0; s < len; s ++) {
+      var dataLine = data[s];
+      noteText += dataLine + '\n' ;
+    }
+    jq_note.val(noteText);
+  },
   populateSavedSelect: function () {
     // populate the saved dungeons select
     var dungeonSelect = document.getElementById("saved");
@@ -132,10 +189,13 @@ DG.ui = {
     if (dungeonData !== "unloaded") {
       var savedData = JSON.parse(dungeonData);
       DG.data = $.extend(DG.data, savedData);
+      DG.updateSettlementsData(DG.data.settlements);
       DG.initNetwork();
       document.getElementById("dungeon_name").text = selectedKey;
       document.getElementById("dungeon_name").value = selectedKey;
-      $("#notes").val(DG.data.notes);
+      DG.ui.loadNotesFields();
+
+
       // update styles loaded from saved dungeons, without losing styles that are actually set
       DG.data.style = $.extend(DG.data.style, DG.data.defaultStyle);
       DG.data.style = $.extend(DG.data.style, savedData.style);
@@ -160,7 +220,8 @@ DG.ui = {
   importDungeon: function () {
     var dungeonData = $("#export-import").val();
     DG.data = JSON.parse(dungeonData);
+    DG.updateSettlementsData(DG.data.settlements);
     DG.initNetwork();
-    $("#notes").val(DG.data.notes);
+    DG.ui.loadNotesFields();
   } //import a file previously exported
 }

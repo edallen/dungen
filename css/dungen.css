@@ -12,8 +12,8 @@ div#positioner {
 div#dungeon.graph{
     float: left;
     margin-left: 10px;
-    width:90%;
-    height: 80%;
+    width: 80vw;
+    height: 60vw;
 }
 
 div#dungeon.map_nodes{
@@ -33,7 +33,7 @@ canvas#dungeon_map{
 
 table#dungeon_key{ clear: both;
                   width:90%; }
-				  
+
 /* h1 {
   font: 700 36px/0.5 'Alegreya', Arial, serif;
 }

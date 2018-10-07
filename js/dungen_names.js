@@ -1249,96 +1249,6 @@ DG.names = {
 
 };
 
-DG.localityDescription = function(){;
-  var direction = DG.wiki("{{travelTime}} {{travelMode}} to the {{compassDirection}}")
-  var prosperity = DG.wiki("{{prosperity}}")
-  var population = DG.population();
-
-  return {'population': population, 'prosperity': prosperity, 'direction': direction }
-};
-
-DG.travelMode = function(){
-  return DG.wiki(DG.drawOne(DG.names.travelModes));
-}
-DG.compassDirection = function(){
-  var string = DG.drawOne(DG.names.compassDirections); // needs to build a good string, placeholder
-  return string;
-};
-
-DG.settlementSize = function(){
-  var string = DG.drawOne(DG.settlementSizes); // needs to build a good string, placeholder
-  return string;
-};
-
-DG.settlementSizes = [
-  "small",
-  "small",
-  "small",
-  "midsized",
-  "small",
-  "midsized",
-  "small",
-  "midsized",
-  "large",
-  "vast"
-];
-DG.population = function(){
-  var population = DG.rollPareto(0.7, 40);
-  return population;
-};
-
-DG.prosperity = function(){
-  var string = DG.drawOne(DG.prosperities); // needs to build a good string, placeholder
-  return string;
-};
-
-DG.prosperities = [
-  "thriving",
-  "rich",
-  "opulent",
-  "wealthy",
-  "decaying",
-  "corrupt",
-  "stagnant",
-  "stagnant",
-  "growing",
-  "booming",
-  "divided",
-  "besieged",
-  "oppressed",
-  "surviving",
-  "shrinking",
-  "impoverished",
-  "impoverished",
-  "declining",
-  "barren",
-  "middling",
-  "haunted",
-  "accursed",
-  "gutted",
-  "half burnt",
-  "riven by vendetta",
-  "ordinary",
-  "middling",
-  "ordinary",
-  "economically mixed",
-  "destitute",
-  "destitute",
-  "bankrupt",
-  "depleted",
-  "poverty-stricken",
-  "ruined",
-  "damaged",
-  "wartorn",
-  "recovering",
-  "poor",
-  "poor",
-  "well off",
-  "prosperous",
-  "strapped"
-];
-
-
 DG.dwarfPrefix = function(){
   var string = DG.drawOne(DG.names.dwarfPrefixes); // needs to build a good string, placeholder
   return string;
@@ -1511,10 +1421,110 @@ DG.settlementName = function (cap) {
 
 DG.newSettlementName =  function () {
   var name = DG.toCase(DG.wiki(DG.drawOne(DG.names.settlementNames)),'c'); // needs to build a good string, placeholder
-  //side effect, caching name & description
-  DG.data.settlements.push([name, DG.localityDescription()]);
+  var localityDescription = DG.localityDescription();
+  var note = DG.settlementArrayToNote([name,localityDescription]);
+  // side effect, cache the settlement in the settlements list
+  DG.data.settlements.push(note);
+  // and update list display of settlements
+  DG.ui.populateSettlements();
+  // Return the name for use with a character
   return name;
 };
+
+DG.settlementArrayToNote = function (settlementArray){
+  var description = "population: " + settlementArray[1].population + ", " + settlementArray[1].prosperity + ', ' + settlementArray[1].direction;
+  var note = settlementArray[0] + ", " + description + '.';
+  return note;
+};
+
+DG.localityDescription = function(){;
+  var direction = DG.wiki("{{travelTime}} {{travelMode}} to the {{compassDirection}}")
+  var prosperity = DG.wiki("{{prosperity}}")
+  var population = DG.population();
+
+  return {'population': population, 'prosperity': prosperity, 'direction': direction }
+};
+
+DG.travelMode = function(){
+  return DG.wiki(DG.drawOne(DG.names.travelModes));
+}
+DG.compassDirection = function(){
+  var string = DG.drawOne(DG.names.compassDirections); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.settlementSize = function(){
+  var string = DG.drawOne(DG.settlementSizes); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.settlementSizes = [
+  "small",
+  "small",
+  "small",
+  "midsized",
+  "small",
+  "midsized",
+  "small",
+  "midsized",
+  "large",
+  "vast"
+];
+DG.population = function(){
+  var population = DG.rollPareto(0.7, 40);
+  return population;
+};
+
+DG.prosperity = function(){
+  var string = DG.drawOne(DG.prosperities); // needs to build a good string, placeholder
+  return string;
+};
+
+DG.prosperities = [
+  "thriving",
+  "rich",
+  "opulent",
+  "wealthy",
+  "decaying",
+  "corrupt",
+  "stagnant",
+  "stagnant",
+  "growing",
+  "booming",
+  "divided",
+  "besieged",
+  "oppressed",
+  "surviving",
+  "shrinking",
+  "impoverished",
+  "impoverished",
+  "declining",
+  "barren",
+  "middling",
+  "haunted",
+  "accursed",
+  "gutted",
+  "half burnt",
+  "riven by vendetta",
+  "ordinary",
+  "middling",
+  "ordinary",
+  "economically mixed",
+  "destitute",
+  "destitute",
+  "bankrupt",
+  "depleted",
+  "poverty-stricken",
+  "ruined",
+  "damaged",
+  "wartorn",
+  "recovering",
+  "poor",
+  "poor",
+  "well off",
+  "prosperous",
+  "strapped"
+];
 
 DG.placeName = function (cap) {
   var string = DG.oldCharName(cap); // needs to build a good string, placeholder

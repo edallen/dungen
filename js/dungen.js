@@ -1,5 +1,5 @@
 // Ed Allen, started November 08, 2014
-// 
+//
 // utility added to Array, bad to change primitive prototypes but Array is
 // hard to subclass
 Array.prototype.remove = function () {
@@ -30,9 +30,9 @@ var DG = {
   dungeonLevel: 0,
   monsterTreasureMultiplier: 1,
 
-  clearNotes: function () {
-    $("#notes").trigger("clearText");
-  },
+  // clearNotes: function () {
+  //   $("#notes").trigger("clearText");
+  // },
   scrollToKey: function () {
     var tablePosition = $("#dungeon_key").position();
     var scrollTop = tablePosition.top - 50;
@@ -115,9 +115,9 @@ var DG = {
       matchValue = match[1];
       matchSplit = matchValue.split(",");
       matchFunc = matchSplit[0];
-  
+
       if (typeof(DG[matchFunc]) === "function"){
- 
+
         replaceText = DG.wiki(DG[matchFunc].apply(DG,matchSplit.slice(1)));
       } else {
         console.log("broken");
@@ -167,16 +167,9 @@ var DG = {
     // used by map to add relationships as node are added.
     if (DG.monsterHold !== undefined) {
        if(DG.rollFour()){
-         var newNote = DG.newRelationship(DG.monsterHold)  + "\n";
-         var marker = "End of Monster Relations";
-         if (DG.data.notes.indexOf(marker) === -1 ){
-           DG.data.notes +=  newNote;
-         }
-         else
-         {
-           DG.data.notes = DG.data.notes.replace(marker, newNote + marker)
-         }
-         $("#notes").val(DG.data.notes);
+           var newNote = DG.newRelationship(DG.monsterHold)  + "\n";
+           DG.data.monster_relations.push(newNote);
+           DG.ui.populateMonsterRelations();
        }
     }
   },
@@ -462,7 +455,7 @@ var DG = {
     }
 
 
-    // side effect - adjust monster multiplier for treasure    
+    // side effect - adjust monster multiplier for treasure
     DG.updateMonsterTreasureMultiplier(monsterLevel, monsterCount, monsterType);
     return monsters;
   },
@@ -557,7 +550,7 @@ var DG = {
   },
 
   detailNpcs: function (monsterLevel, monsterCount, monsterType, wrap) {
-    
+
     var npcBlock = "";
     for (var n = 0; n < monsterCount; n++) {
       npcBlock += DG.wiki(DG.characterName()) + ': ';
@@ -878,45 +871,50 @@ var DG = {
 
   },
   populateNotes: function () {
-    return DG.wiki(DG.drawOne(DG.names.dungeonNames)) +"\n\n" +
-      DG.wanderingMonstersNote() + "\n" +
-      DG.relationsNote() + "\n\n" +
-      DG.organizationsNote() + '\n\n' +
-      DG.settlementsNote();
+    return DG.wiki(DG.drawOne(DG.names.dungeonNames)) +"\n\n"
+  },
+  updateSettlementsData: function(settlements){
+    // need to convert saved data structure settlements listings to array of strings
+    // while keeping newer saved strings as strings
+    // so settlements can be added manually
+    var convertedSettlements = [];
+    var len = settlements.length;
+    for (var s = 0; s < len; s ++) {
+      if (typeof(settlements[s]) === "string") {
+        convertedSettlements.push(settlements[s]);
+      } else {
+        convertedSettlements.push(DG.settlementArrayToNote(settlements[s]));
+      }
+    }
+    DG.data.settlements = convertedSettlements;
   },
 
   settlementsNote: function () {
     if (DG.data.settlements.length < 3 ){
-      DG.newSettlementName('c');
-      DG.newSettlementName('c');
-      DG.newSettlementName('c');
+      DG.newSettlementName();
+      DG.newSettlementName();
+      DG.newSettlementName();
     }
-    var note ="Settlements in the area:\n";
+    var note = "";
     var len = DG.data.settlements.length;
     for (var s = 0; s < len; s ++) {
       var sett = DG.data.settlements[s];
-      var sdata = sett[1];
-      var description = "population: " + sdata.population + ", " + sdata.prosperity + ', ' + sdata.direction;
-      note += sett[0] + ", " + description + '.\n' ; }
-    note += "End of Settlements\n"
+      note += sett + '\n' ; }
     return note;
   },
-
   organizationsNote: function () {
     if (DG.data.organizations.length < 3 ){
       DG.newAffiliationName('c');
       DG.newAffiliationName('c');
     }
-    var note = "Organizations with interests or members in the dungeon:\n";
+    var note = "";
     var len = DG.data.organizations.length;
     for (var s = 0; s < len; s ++) {
       note += DG.capFirstChar(DG.data.organizations[s]) +'\n';}
-    note += "End of Organizations\n"
     return note;
   },
-
   wanderingMonstersNote: function () {
-    var monsterList = "Wandering Monsters\n";
+    var monsterList = "";
     var monsterCount = 0;
     if(DG.isMap) { monsterCount = 4 + DG.rollDie(1, 8) } else {
       monsterCount = Math.round(DG.data.nodes.length / 6) + 1;
@@ -927,15 +925,14 @@ var DG = {
         monsterCount += 1
       }
     }
-
     for (var i = 1; i <= monsterCount; i += 1) {
       monsterList += ("" + i + ": " + DG.randomMonsters(DG.data.dungeonLevel, false) + "\n");
       DG.addMonstersToList();
     }
     return monsterList;
   },
-  relationsNote: function () {
-    var relationsList = "Monster Relations\n";
+  monsterRelationsNote: function () {
+    var relationsList = "";
     var relationship = "";
     var monster = {};
     // before this method need to have a hash of rolled monsters to their number
@@ -956,7 +953,6 @@ var DG = {
     // get a relation compatible with it as the subject
     // Get a target compatible with the relationship from this level or "another level"
     // concatenate the phrase and add it to the list
-    relationsList += "End of Monster Relations\n"
     return relationsList;
   },
   newRelationship: function(monster){
@@ -1001,6 +997,27 @@ var DG = {
 
 };
 
+DG.replaceText = function (textFrom, textTo) {
+  var len = DG.data.nodes.length;
 
-
-
+  function replaceAll(findVal, replaceVal, str) {
+    return str.replace(new RegExp(findVal, 'g'), replaceVal);
+  }
+  function arrayReplaceAll(findVal, replaceVal, array) {
+    var arrLen = array.length;
+    for (var element = 0; element < arrLen; element++) {
+      array[element] = replaceAll(findVal, replaceVal, array[element]);
+    }
+    return array;
+  }
+  for (i = 0; i < len; i++) {
+    DG.data.nodes[i].title = replaceAll(textFrom, textTo, DG.data.nodes[i].title)
+  }
+  DG.data.notes = replaceAll(textFrom, textTo, DG.data.notes);
+  DG.data.organizations = arrayReplaceAll(textFrom, textTo, DG.data.organizations);
+  DG.data.wandering_monsters = arrayReplaceAll(textFrom, textTo, DG.data.wandering_monsters);
+  DG.data.monster_relations = arrayReplaceAll(textFrom, textTo, DG.data.monster_relations);
+  DG.data.settlements = arrayReplaceAll(textFrom, textTo, DG.data.settlements);
+  DG.ui.loadNotesFields();
+  DG.fillKey();
+};

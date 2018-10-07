@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
   <title>DunGen Dungeon Generator</title>
@@ -8,7 +9,7 @@
 </head>
 <body>
 
-<h3 style="padding-left: 50px">  <b>DunGen</b> <small>Pointcrawl Dungeon Generator by Ed Allen  </small></h3> Related generators:<a href="dunmap.html">DunMap</a> and <a href="hire.html">Hiring Hall</a>, Contact me: @edallen on Twitter, +EdAllen on G+, & blog <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a>
+<h3 style="padding-left: 50px">  <b>DunGen</b> <small>Pointcrawl Dungeon Generator by Ed Allen, v. 2.0  </small></h3> Related generators:<a href="dunmap.html">DunMap</a> and <a href="hire.html">Hiring Hall</a>, Contact me: @edallen on Twitter, +EdAllen on G+, & blog <a href="http://geekruminations.blogspot.com">Ruminations of a Geek</a>
 <button id="scroll-to-key" class="fixed-nav">Key</button>
 <button id= "scroll-to-top" class="fixed-nav" style="display: none">Top</button>
 <div class="container-fluid">
@@ -33,7 +34,7 @@
     <option value="branch_loops" >Branched with loops</option>
     <option value="branch" >Branched</option>
     <!-- <option value="mixed" >Mixed</option> -->
-    <option value="grid" >Grid</option> 
+    <option value="grid" >Grid</option>
 	<option value="random" >Random</option>
 	<option value="triangles" >Triangles</option>
   </select>
@@ -43,7 +44,7 @@
   <button class= "btn-small" id="regenerate">Generate</button>
   <button class= "btn-small" id="wilds">Wilds</button>
   <label for="dungeon_name">Name for save </label><input id="dungeon_name" placeholder="Name the dungeon" />
-  <button class= "btn-small" id="save" >Save</button>  
+  <button class= "btn-small" id="save" >Save</button>
   <select id="saved" >
      <option>Saved Dungeons</option>
   </select>
@@ -59,37 +60,39 @@
 
   <div id="table-holder">
     <table class = "dungen table table-bordered" id="dungeon_key"></table>
-   
   </div>
 
-  <div id="footer_notes" style="clear: both"><label for="notes">Notes</label><br>
-    <textarea id="notes" cols='120' rows='10' ></textarea></div>
-  <h3>Re-skin</h3> 
+  <div id="footer_notes" style="clear: both">
+    <br><label for="wandering_monsters">Wandering Monsters</label><br>
+    <textarea id="wandering_monsters" cols='120' rows='10' ></textarea>
+    <br><label for="notes">Notes</label><br>
+    <textarea id="notes" cols='120' rows='6' ></textarea>
+    <br><label for="monster_relations">Relationships between Monster Groups</label><br>
+    <textarea id="monster_relations" cols='120' rows='6' ></textarea>
+    <br><label for="organizations">Organizations Involved</label><br>
+    <textarea id="organizations" cols='120' rows='6' ></textarea>
+    <br><label for="settlements">Settlements Nearby</label><br>
+    <textarea id="settlements" cols='120' rows='6'></textarea>
+  </div>
+  <h3>Re-skin</h3>
   <p>Re-skin creatures or replace other repeating text in room descriptions and notes - there is no Undo so be careful.</p>
   Replace <input id="text_from"/> with <input id="text_to"/> in Notes and all Location Descriptions. <button id="replace">Re-skin</button>
   <h3>Import and Export</h3>
     <button id="export" style="margin-right: 20px">Export</button>
     <button id="import">Import</button>
-    <p> Export dumps the data for the current dungeon into the field below. Copy and paste into an email or a file to move to another computer. 
+    <p> Export dumps the data for the current dungeon into the field below. Copy and paste into an email or a file to move to another computer.
     Paste into the field there and click Import to load it. Careful editing in this field is possible. Save with a name on the destination computer.</p>
     <textarea id="export-import" cols='120' rows='10' ></textarea></div>
   </div>
   <br>
 
-<p>To manually save and use the dungeon outside this page, copy the text of the room contents table and notes field and paste into another file, 
-and use the Download Image button on Chrome or the right click menu to save the image as a PNG. 
-If you need to clear all cached data in your browser for some reason, please export if you'll want to use a dungeon in DunGen again or manually save of any dungeons you care about first. 
+<p>To manually save and use the dungeon outside this page, copy the text of the room contents table and notes field and paste into another file,
+and use the Download Image button on Chrome or the right click menu to save the image as a PNG.
+If you need to clear all cached data in your browser for some reason, please export if you'll want to use a dungeon in DunGen again or manually save of any dungeons you care about first.
 DunGen saves to your browser's "LocalStorage" not to a server. <b>Clearing all LocalStorage will wipe out any saved and edited dungeons.</b></p>
 
-<h3>New features and plans</h3>
-<p>More name roots, so there should be more variety, settlement names get some geographical references added in like "bridge" and "hill". There is a new NPC
-naming pattern that makes organizations they are affiliated with for some of them. There are two new lists in the Notes field, one of nearby settlements and
-one of organizations, both stock from NPC generation or a few a put in if no NPCs generated any. The settlements don't integrate right with the Wilds yet, still acting like a dungeon. I intend to
-have some of the Wilds nodes generate as settlements with names and not have it put in the distance/direction references. Put in a minor tweak to suppress some magic staves and shift them to wands
-  to make the odds work out better. Historical name lists are expanded in the data but temporarily disabled while I work out a UI element to toggle them.</p>
-
 <p>
-Comments welcome at the Ruminations blog linked above or on G+. If you like hacking, take a look at the dungen_stock.js file first. 
+Comments welcome at the Ruminations blog linked above or on G+. If you like hacking, take a look at the dungen_stock.js file first.
 It's pretty easy to customize content there. DunGen is now up on <a href ='https://github.com/edallen/dungen'>Github</a>.
 </p>
 
