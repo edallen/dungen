@@ -167,9 +167,9 @@ var DG = {
     // used by map to add relationships as node are added.
     if (DG.monsterHold !== undefined) {
        if(DG.rollFour()){
-           var newNote = DG.newRelationship(DG.monsterHold)  + "\n";
+           var newNote = DG.newRelationship(DG.monsterHold);
            DG.data.monster_relations.push(newNote);
-           DG.ui.populateMonsterRelations();
+           DG.ui.loadNotesFields();
        }
     }
   },

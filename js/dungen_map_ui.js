@@ -293,6 +293,15 @@ DG.ui = {
     DG.ui.loadDataNote(DG.data.organizations,$("#organizations"));
     DG.ui.loadDataNote(DG.data.settlements, $("#settlements"));
   },
+  loadDataNote: function (data,jq_note) {
+    var len = data.length;
+    var noteText = "";
+    for (var s = 0; s < len; s ++) {
+      var dataLine = data[s];
+      noteText += dataLine + '\n' ;
+    }
+    jq_note.val(noteText);
+  },
   deleteDungeon: function () {
     var dungeonSelect = document.getElementById("saved");
     var selectedKey = dungeonSelect.options[dungeonSelect.selectedIndex].text;
