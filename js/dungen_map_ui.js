@@ -320,8 +320,13 @@ DG.ui = {
   importDungeon: function () {
     var dungeonData = $("#export-import").val();
     DG.data = JSON.parse(dungeonData);
+    $("#map_url").val(DG.data.imageSource);
     DG.updateSettlementsData(DG.data.settlements);
+    DG.loadMapImage();
     DG.initNetwork();
+    document.getElementById("dungeon_name").text = "imported";
+    document.getElementById("dungeon_name").value = "imported";
     DG.ui.loadNotesFields();
+    DG.data.style = $.extend(DG.data.style, DG.data.defaultStyle);
   } //import a file previously exported
 }
