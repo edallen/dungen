@@ -427,6 +427,8 @@ DG.randomNodeLabel = function () {
   }
 };
 
+
+
 DG.randomEdgeLabel = function () {
   if (DG.data.locationType == "wilds") {
     return this.drawOne(this.wild.edgeLabels);

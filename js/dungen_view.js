@@ -337,6 +337,7 @@ DG.themeBox = function () {
           DG.data.nodeTable = DG.filterListByTags(DG.stock.nodeLabels, nodeTags);
           DG.data.edgeTags = edgeTags;
           DG.data.edgeTable = DG.filterListByTags(DG.stock.edgeLabels, edgeTags);
+          DG.data.detailsTable = DG.filterListByTags(DG.stock.details, nodeTags);
         }
       },
       all: {

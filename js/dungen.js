@@ -279,7 +279,13 @@ var DG = {
   },
   randomOddity: function (dungeonLevel) {
     // ignoring dungeonLevel for now
-    return DG.drawOne(DG.stock.oddities) + "<br>";
+    if (DG.data.detailsTable  === undefined ){
+      return DG.drawOne(DG.stock.details).description + "<br>";
+    }
+    if (DG.data.detailsTable.length > 0 ){
+      return DG.drawOne(DG.data.detailsTable).description + "<br>";
+    }
+    return DG.drawOne(DG.stock.details).description + "<br>";
   },
   randomHook: function () {
     var hook = "Hook: " + DG.drawOne(DG.stock.hookItems) + "<br>";
