@@ -240,6 +240,9 @@ var DG = {
 
     if (DG.rollOne()) {
       contents += DG.randomOddity(dungeonLevel);
+      if (DG.rollTwo()) {
+        contents += DG.randomOddity(dungeonLevel);
+      }
     }
     if (DG.rollOne()) {
       contents += DG.randomTrap(dungeonLevel);
