@@ -10,6 +10,8 @@ DG.stock = {
      lightArmoredClasses: ["assassin", "thief",  'druid'],
      mediumArmoredClasses: ["ranger", "barbarian", "bard"],
      heavyArmoredClasses: ["fighter", "paladin", "cleric"],
+     fighterClasses: ["barbarian", "fighter", "paladin", "ranger"],
+     mageClasses: ["mage","sorcerer", "illusionist","warlock"],
      humanWeightedPcRaces: [
      "human",
      "human",

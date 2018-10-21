@@ -1413,8 +1413,12 @@ DG.historicalFirstName = function (cap) {
 };
 
 DG.settlementName = function (cap) {
+  var settlement;
+  var settlmentName;
   if (DG.rollThree() && DG.data.settlements.length > 0){
-    return DG.drawOne(DG.data.settlements)[0];
+    settlement =  DG.drawOne(DG.data.settlements);
+    settlementName = settlement.split(",")[0]
+    return settlementName;
   }
   return DG.newSettlementName();
 };
@@ -1426,7 +1430,9 @@ DG.newSettlementName =  function () {
   // side effect, cache the settlement in the settlements list
   DG.data.settlements.push(note);
   // and update list display of settlements
-  DG.ui.populateSettlements();
+  if(DG.hasOwnProperty('ui')){
+    DG.ui.populateSettlements();
+  }
   // Return the name for use with a character
   return name;
 };
