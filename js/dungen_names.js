@@ -1417,7 +1417,7 @@ DG.settlementName = function (cap) {
   var settlmentName;
   if (DG.rollThree() && DG.data.settlements.length > 0){
     settlement =  DG.drawOne(DG.data.settlements);
-    settlementName = settlement.split(",")[0]
+    settlementName = settlement.split(",")[0];
     return settlementName;
   }
   return DG.newSettlementName();
@@ -1431,7 +1431,7 @@ DG.newSettlementName =  function () {
   DG.data.settlements.push(note);
   // and update list display of settlements
   if(DG.hasOwnProperty('ui')){
-    DG.ui.populateSettlements();
+    DG.ui.displaySettlements();
   }
   // Return the name for use with a character
   return name;

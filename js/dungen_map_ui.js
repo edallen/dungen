@@ -68,7 +68,7 @@ $('#notes').change(function () {
 });
 
 $('#settlements').change(function () {
-  DG.data.settlements = $(this).val().split("\n");
+  DG.data.settlements = DG.splitToArray($(this).val());
 });
 
 $('#wandering_monsters').change(function () {
@@ -277,7 +277,10 @@ DG.ui = {
   },
   populateSettlements: function() {
     $("#settlements").val(DG.settlementsNote());
-    DG.data.settlements = $("#settlements").val().split("\n");
+    DG.data.settlements = DG.splitToArray($("#settlements").val());
+  },
+  displaySettlements: function() {
+    DG.ui.loadDataNote(DG.data.settlements, $("#settlements"));
   },
   populateNotesFields: function () {
     $("#notes").val(DG.data.notes);

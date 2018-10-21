@@ -52,6 +52,9 @@ var DG = {
   includes: function(array,element){
     if ($.inArray(element,array) > -1) { return true; } else { return false; }
   },
+  splitToArray: function(list){return list.split("\n").filter(function(e){ return e.replace(/(\r\n|\n|\r)/gm,"")});
+  },
+
   // Randomization Utilities -----------------------------------------------------------------
   rollDie: function (start, size) {
     return Math.floor(Math.random() * (size)) + start;
@@ -905,7 +908,9 @@ var DG = {
     var len = DG.data.settlements.length;
     for (var s = 0; s < len; s ++) {
       var sett = DG.data.settlements[s];
-      note += sett + '\n' ; }
+      if (sett != ''){
+        note += sett + '\n' ; }
+      }
     return note;
   },
   organizationsNote: function () {
