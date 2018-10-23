@@ -20,6 +20,7 @@ Array.prototype.remove = function () {
 
 var DG = {
   data: {},
+  source: {},
   nodesDataSet: "uninitialized",
   edgesDataSet: "uninitialized",
   // Shared variables
@@ -300,6 +301,17 @@ var DG = {
   randomNpcClass: function () {
     return DG.drawOne(DG.stock.characterClasses);
   },
+  drawNpcClassHand: function () {
+    if (DG.source === undefined){ DG.source = {} };
+    DG.source.NpcClasses = ["fighter"];
+    var handSize = DG.rollDie(1, 8);
+    for(var i=0; i < handSize; i++){
+      DG.source.NpcClasses.push(DG.drawOne(DG.stock.characterClasses));
+    }
+  },
+  randomNpcClassFromHand: function () {
+    return DG.drawOne(DG.source.NpcClasses);
+  },
   randomRelationship: function (intel, targetInt, plurality) {
     // simple at first
     // Then introduce int
@@ -562,7 +574,7 @@ var DG = {
   },
 
   detailNpcs: function (monsterLevel, monsterCount, monsterType, wrap) {
-
+    DG.drawNpcClassHand()
     var npcBlock = "";
     for (var n = 0; n < monsterCount; n++) {
       npcBlock += DG.wiki(DG.characterName()) + ': ';
@@ -590,7 +602,7 @@ var DG = {
       } else {
         npcBlock += " "
       }
-      npcBlock += DG.randomNpcClass() + " ";
+      npcBlock += DG.randomNpcClassFromHand() + " ";
       var npcLevel = DG.getNpcLevel(monsterLevel);
       npcBlock += npcLevel;
       if (npcLevel > DG.rollDie(0, 10)) {
