@@ -404,6 +404,7 @@ var DG = {
         }
       }
     }
+    DG.data.lastMonsterLevel = monsterLevel;
     monsterType = DG.selectMonster(monsterLevel);
 
 
@@ -441,6 +442,9 @@ var DG = {
     }
     if (DG.rollOne()) {
       monsterName = demonicPrefix + monsterName;
+    }
+    if (DG.rollTwo()) {
+      monsterName = monsterName + " " + DG.randomPosture(monsterType);
     }
     if (wrap) {
       monsters = "M: "
@@ -489,7 +493,18 @@ var DG = {
     }
     return DG.drawOne(DG.stock.allAttitudes);
   },
-
+  randomPosture: function (monsterType) {
+    if (monsterType.name === "adventurer") {
+      return DG.drawOne(DG.stock.adventurerPostures);
+    }
+    if (monsterType.int > 5 && DG.data.lastMonsterLevel <= DG.data.dungeonLevel +1 ){
+      return DG.drawOne(DG.stock.minionPostures);
+    }
+    if (monsterType.int > 9 && DG.data.lastMonsterLevel > DG.data.dungeonLevel +1 ){
+      return DG.drawOne(DG.stock.bossPostures);
+    }
+    return DG.drawOne(DG.stock.creaturePostures);
+  },
   shouldDetailNpcs: function (monsterType) {
     return DG.tagMatch(monsterType.tags, ["adventurer", "overlord", "npc"]);
   },

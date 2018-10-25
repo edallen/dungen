@@ -415,7 +415,18 @@ DG.stock = {
       'evading capture',
       'just arrived by magic',
       'on the way out'],
-  creaturePostures: [],
+  creaturePostures: [
+      'eating',
+      'lurking in ambush',
+      'sleeping',
+      'threatening',
+      'guarding',
+      'hunting',
+      'hiding',
+      'resting',
+      'pacing',
+      'playing',
+      'watching'],
   bossPostures: [
     'giving orders',
     'resting',
@@ -764,6 +775,8 @@ DG.stock = {
       {name: "centipede", int: 1, tags: ['vermin', 'insect']},
       {name: "stirge", int: 1, tags: ['vermin', 'insect', 'chaos', 'weird', 'flying']},
       {name: "skeleton", int: 3, tags: ['undead', 'chaos']},
+      {name: "least demonspawn", plural: "least demonspawn", int: 8, tags: ['chaos','demon','weird']},
+      {name: "damned soul", plural: "damned soul", int: 9, tags: ['chaos','devil','weird']},
       {name: "giant tick", int: 1, tags: ['vermin', 'insect']},
       {name: "rabid dog", int: 4, tags: ['vermin', 'mammal', 'animal']},
       {name: "tunnel wolf", plural: "tunnel wolves", int: 6, tags: ['mammal', 'animal', 'goblin', 'stealthy']},
@@ -776,6 +789,8 @@ DG.stock = {
     ], //level 1
     [
       {name: "zombie", int: 3, tags: ['undead', 'chaos']},
+      {name: "demonspawn", int: 9, tags: ['weird', 'chaos', 'demon']},
+      {name: 'lemure', int: 5, tags: ['devil','weird','chaos']},
       {name: "servitor", int: 10, tags: ['human', 'humanoid', 'law', 'npc']},
       {name: "gray dwarf", plural: "gray dwarves", int: 9, tags: ['humanoid', 'underdark']},
       {name: "wererat", int: 10, tags: ['human', 'lycanthrope', 'stealthy', 'chaos', 'humanoid']},
