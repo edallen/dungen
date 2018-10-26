@@ -404,7 +404,7 @@ var DG = {
         }
       }
     }
-    DG.data.lastMonsterLevel = monsterLevel;
+    DG.data.lastMonsterLevel = monsterLevel;// for comparing to dungeonLevel for posture list selection
     monsterType = DG.selectMonster(monsterLevel);
 
 
@@ -462,6 +462,10 @@ var DG = {
       tags: monsterType.tags
     };
     if (DG.shouldDetailNpcs(monsterType)) {
+      if (DG.rollTwo()) {
+        attitude = DG.randomAttitude(monsterType);
+        monsters += " " + attitude;
+      }
       monsters += " " + monsterName;
       if (wrap) {
         monsters += ":<br>";
@@ -472,11 +476,14 @@ var DG = {
     } else {
       if (DG.rollTwo()) {
         attitude = DG.randomAttitude(monsterType);
-        monsters += " " + attitude;
+        monsters += " " + attitude + " " + monsterName;
       } else if (DG.rollThree() && monsterCount > 1) {
         singletonAttitude = ", one is " + DG.randomAttitude(monsterType);
+        monsters += " " + monsterName + singletonAttitude;
       }
-      monsters += " " + monsterName + singletonAttitude;
+      else {
+          monsters += " " + monsterName;
+      }
       if (wrap) {
         monsters += "<br>";
       }

@@ -117,12 +117,15 @@ DG.organizations = [
 ];
 DG.organizationTopics = [
   "the {{color}} {{thematicNoun}}",
+  "the {{thematicNoun}}",
   "the {{color}} {{iconicNoun}}",
   "the {{lastName}}s",
   "{{settlementName}}",
+  "{{scaryAdjective}} {{settlementName}}",
   "{{scaryAdjective}} {{oldCharName}}",
   "the {{scaryAdjective}} {{thematicNoun}}",
-  "the {{scaryAdjective}} {{iconicNoun}}"
+  "the {{scaryAdjective}} {{iconicNoun}}",
+  "the {{iconicNoun}}"
 ];
 
 DG.nicknamePatterns = [
@@ -149,6 +152,20 @@ DG.nicknames = [
   'warhound',
   'blackblade',
   'strongbow',
+  'the hairy',
+  'blackheart',
+  'the boneless',
+  'the unavoidable',
+  'the fart',
+  'firefart',
+  'the spider',
+  'the brave',
+  'the dog',
+  'crusher',
+  'bull',
+  'bear',
+  'smoke',
+  "the {{scaryAdjective}}",
   'the dire',
   'the huntsman',
   'the tall',
@@ -490,7 +507,7 @@ DG.names = {
     "mad",
     'mindbending',
     'monstrous',
-    "nightmarish",
+    "nightmare",
     'noxious',
     'ominous',
     'pain bringing',
