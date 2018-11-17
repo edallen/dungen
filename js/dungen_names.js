@@ -1061,7 +1061,7 @@ DG.names = {
     'bent',
     'big',
     'blind',
-    'bloody handed'
+    'bloody handed',
     'blue-cheek',
     'blunt',
     'bold',
