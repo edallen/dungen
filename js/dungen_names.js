@@ -139,7 +139,9 @@ DG.nicknamePatterns = [
   "the {{theNameWord,c}}",
   "{{nickname,c}}"
 ];
-
+DG.familyRelation = function(){
+  return DG.wiki(DG.drawOne(DG.stock.relatives));
+};
 DG.nicknames = [
   "hairybreeks",
   "longshanks",

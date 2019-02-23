@@ -89,7 +89,7 @@ DG.digDungeon = function (locationType) {
   var levelSelect = document.getElementById("level");
 
   var dungeonLevelSelected = levelSelect.options[levelSelect.selectedIndex].value;
-
+  DG.nameTheDungeon();
   DG.data.nodes = [];
   DG.data.edges = [];
   DG.data.organizations = [];
@@ -107,11 +107,9 @@ DG.digDungeon = function (locationType) {
     DG.data.dungeonLevel = parseInt(dungeonLevelSelected);
   }
   DG.setBaseMonsters();
-  DG.data.notes = DG.populateNotes();
-
   DG.loadMapImage();
-
   DG.initNetwork();
+  DG.data.notes = DG.populateNotes();
   DG.ui.populateNotesFields();
 };
 

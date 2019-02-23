@@ -500,6 +500,7 @@ var DG = {
     }
     return DG.drawOne(DG.stock.allAttitudes);
   },
+  randomAvgIntAttitude: function(){ return DG.randomAttitude(10)},
   randomPosture: function (monsterType) {
     if (monsterType.name === "adventurer") {
       return DG.drawOne(DG.stock.adventurerPostures);
@@ -761,7 +762,7 @@ var DG = {
     return item;
   },
   potion: function (treasureLevel){
-   return "Potion of " + DG.drawOne(DG.stock.potions);
+   return "Potion of " + DG.wiki(DG.drawOne(DG.stock.potions));
   },
   randomMinorMagicItem: function (treasureLevel) { // will need much more detail later and more items in big hoards
     var item = DG.wiki(DG.drawOne(DG.stock.minorMagicItems));
@@ -917,7 +918,15 @@ var DG = {
 
   },
   populateNotes: function () {
-    return DG.wiki(DG.drawOne(DG.names.dungeonNames)) +"\n\n"
+    return DG.theDungeonName() +"\n\n" + DG.adventureHook() +"\n\n"
+  },
+  nameTheDungeon: function() {
+    var dungeonName = DG.wiki(DG.drawOne(DG.names.dungeonNames));
+    DG.data.dungeonName = dungeonName;
+    return dungeonName;
+  },
+  theDungeonName: function () {
+    return DG.data.dungeonName;
   },
   updateSettlementsData: function(settlements){
     // need to convert saved data structure settlements listings to array of strings
@@ -1068,4 +1077,16 @@ DG.replaceText = function (textFrom, textTo) {
   DG.data.settlements = arrayReplaceAll(textFrom, textTo, DG.data.settlements);
   DG.ui.loadNotesFields();
   DG.fillKey();
+};
+
+DG.adventureHook = function(){
+  return DG.wiki(DG.drawOne(DG.stock.adventureHooks))
+}
+
+DG.randomSettlement = function() {
+  return DG.settlementName("c");
+};
+
+DG.randomOrganization = function() {
+  return DG.drawOne(DG.data.organizations);
 };

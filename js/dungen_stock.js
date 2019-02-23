@@ -1,6 +1,16 @@
 //This file is the stocking data
 
 DG.stock = {
+     adventureHooks: ["Going through the papers of a PC's deceased {{familyRelation}}, the PC found a map to {{theDungeonName}}.",
+     "A fortune teller in {{randomSettlement}} told a PC that they would confront their fate in {{theDungeonName}}.",
+     "A {{familyRelation}} of a member of {{randomOrganization}} asks the PCs to find their lost relative.",
+     "Following tracks from an ambushed caravan, the party discovers the entrance to {{theDungeonName}}.",
+     "The wizard {{firstName,c}} hired the party to retrieve the {{randomMagicItem, DG.treasureLevel}} from {{theDungeonName}}. Place this item.",
+     "The {{book}} found in another dungeon leads the party to {{theDungeonName}}.",
+     "A strange, shared dream brought the characters together in {{randomSettlement}}, where they learned they were all dreaming of {{theDungeonName}}.",
+     "The head man of {{randomSettlement}} hired the party to halt the depredations by monsters that raid from {{theDungeonName}}.",
+     ""
+     ],
      servantArmors: ["unarmored", "helmet", "hide", "gambeson", "leather", "unarmored"],
      mercenaryArmors: ["unarmored", "helmet", "hide", "gambeson",  "gambeson", "studded leather", "leather", "leather", "scale", "chainmail", "scale", "chainmail", "half plate"],
      lightArmors: ["unarmored", "hide", "gambeson", "gambeson", "studded leather", "leather", 'leather','studded leather'],
@@ -12,6 +22,16 @@ DG.stock = {
      heavyArmoredClasses: ["fighter", "paladin", "cleric"],
      fighterClasses: ["barbarian", "fighter", "paladin", "ranger"],
      mageClasses: ["mage","sorcerer", "illusionist","warlock"],
+     relatives: ["father",
+     "brother",
+     "cousin",
+     "uncle",
+     "mentor",
+     "sister",
+     "mother",
+     "aunt",
+     "grandfather",
+     "grandmother"],
      humanWeightedPcRaces: [
      "human",
      "human",
@@ -807,6 +827,7 @@ DG.stock = {
       {name: "hobgoblin", int: 10, tags: ['goblin', 'chaos', 'humanoid']},
       {name: "giant weasel", int: 5, tags: ['mammal', 'animal', 'stealthy']},
       {name: "big lizard", int: 3, tags: ['animal', 'reptile']},
+      {name: "giant frog", int: 3, tags: ['animal', 'reptile']}, //yeah, I know, amphibian
       {name: "beast man", plural: 'beast men', int: 10, tags: ['humanoid', 'weird', 'chaos']},
       {name: "lizard man", plural: 'lizard men', int: 3, tags: ['humanoid', 'reptile']},
       {name: "berserker", int: 10, tags: ['chaos', 'human', 'humanoid']},

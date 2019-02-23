@@ -93,6 +93,7 @@ DG.digDungeon = function (locationType) {
   var selectedSize = "5,5";
   var dungeonLevelSelected = levelSelect.options[levelSelect.selectedIndex].value;
   var selectedPattern = patternSelect.options[patternSelect.selectedIndex].value;
+  DG.nameTheDungeon();
   DG.data.nodes = [];
   DG.data.edges = [];
   DG.data.organizations = [];
@@ -112,10 +113,7 @@ DG.digDungeon = function (locationType) {
   DG.minRooms = parseInt(selectedSize.split(",")[0]);
   DG.maxRooms = parseInt(selectedSize.split(",")[1]);
   DG.setRandomRoomCount();
-
   DG.makeRooms();
-  DG.data.notes = DG.populateNotes();
-
   switch (selectedPattern) {
     case "branch":
       DG.linkStrats.branchLink(DG.allNodeIds());
@@ -140,6 +138,7 @@ DG.digDungeon = function (locationType) {
     default:
   }
   DG.initNetwork();
+  DG.data.notes = DG.populateNotes();
   DG.ui.populateNotesFields();
 };
 // Nodes and Linkage ------------------------------------------------------------------------
@@ -381,32 +380,6 @@ DG.initNetwork = function () {
   DG.fillKey();
 };
 
-// DG.replaceText = function (textFrom, textTo) {
-//   var len = DG.data.nodes.length;
-//
-//   function replaceAll(findVal, replaceVal, str) {
-//     return str.replace(new RegExp(findVal, 'g'), replaceVal);
-//   }
-//   function arrayReplaceAll(findVal, replaceVal, array) {
-//     var arrLen = array.length;
-//     for (var element = 0; element < arrLen; element++) {
-//       array[element] = replaceAll(findVal, replaceVal, array[element]);
-//     }
-//     return array;
-//   }
-//   for (i = 0; i < len; i++) {
-//     DG.data.nodes[i].title = replaceAll(textFrom, textTo, DG.data.nodes[i].title)
-//   }
-//   DG.data.notes = replaceAll(textFrom, textTo, DG.data.notes);
-//   DG.data.organizations = arrayReplaceAll(textFrom, textTo, DG.data.organizations);
-//   DG.data.wandering_monsters = arrayReplaceAll(textFrom, textTo, DG.data.wandering_monsters);
-//   DG.data.monster_relations = arrayReplaceAll(textFrom, textTo, DG.data.monster_relations);
-//   DG.data.settlements = arrayReplaceAll(textFrom, textTo, DG.data.settlements);
-//
-//   DG.ui.populateNotesFields();
-//   DG.fillKey();
-// };
-
 DG.nameNode = function (nodeNum) {
   return "" + (nodeNum) + ": " + DG.randomNodeLabel()
 };
@@ -426,8 +399,6 @@ DG.randomNodeLabel = function () {
     return DG.drawOne(DG.stock.nodeLabels).label;
   }
 };
-
-
 
 DG.randomEdgeLabel = function () {
   if (DG.data.locationType == "wilds") {
