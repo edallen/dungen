@@ -1,10 +1,10 @@
 //breaking out usage at page initialization to this file
 
 $( document ).ready(function() {
-   
+
    postLoadInitialize();
 });
-	 
+
 
 function postLoadInitialize(){
    var ua = window.navigator.userAgent;
