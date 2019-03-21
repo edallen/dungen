@@ -1075,7 +1075,7 @@ DG.stock = {
     {label: 'Crown', value: "X"},
     {label: 'Tiara', value: "X"},
     {label: 'Jewelled bone', value: "X"},
-    {label: 'Illumianted book', value: "X"},
+    {label: 'Illuminated book', value: "X"},
     {label: 'Ornate scroll case', value: "X"},
     {label: 'Jewelled box', value: "X"},
     {label: 'Statuette', value: "X"},
